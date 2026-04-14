@@ -7,9 +7,9 @@ const route = useRoute()
 <template>
   <el-container class="app-container">
     <el-header class="app-header">
-      <div class="logo">
-        <el-icon :size="28" color="#c00000"><StarFilled /></el-icon>
-        <span class="logo-text">国家安全教育平台</span>
+      <div class="logo" @click="$router.push('/')">
+        <el-icon :size="24" color="#c00000"><StarFilled /></el-icon>
+        <span class="logo-text">国家安全教育</span>
       </div>
       <el-menu
         :default-active="route.path"
@@ -21,12 +21,8 @@ const route = useRoute()
         active-text-color="#c00000"
         :ellipsis="false"
       >
-        <el-menu-item index="/">
-          <el-icon><HomeFilled /></el-icon> 首页大盘
-        </el-menu-item>
-        <el-menu-item index="/knowledge">
-          <el-icon><Reading /></el-icon> 知识库
-        </el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
+        <el-menu-item index="/knowledge">知识</el-menu-item>
       </el-menu>
     </el-header>
     <el-main class="app-main">
@@ -37,7 +33,7 @@ const route = useRoute()
       </router-view>
     </el-main>
     <el-footer class="app-footer">
-      <p>© 2026 国家安全教育专题平台 · 统筹发展与安全</p>
+      <p>© 2026 国家安全专题教育平台</p>
     </el-footer>
   </el-container>
 </template>
@@ -53,46 +49,51 @@ const route = useRoute()
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #c00000;
+  border-bottom: 1px solid #eee;
   background: #ffffff;
-  padding: 0 40px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 0 15px;
+  height: 60px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  cursor: pointer;
 }
 
 .logo-text {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: #c00000;
-  letter-spacing: 1px;
+  white-space: nowrap;
 }
 
 .nav-menu {
   border-bottom: none;
-  height: 100%;
+  height: 60px;
+}
+
+:deep(.el-menu-item) {
+  padding: 0 10px;
+  font-size: 0.95rem;
 }
 
 .app-main {
   flex: 1;
-  padding: 30px;
-  background: #fcfcfc;
+  padding: 20px 15px;
+  background: #fff;
 }
 
 .app-footer {
   text-align: center;
   color: #909399;
-  border-top: 1px solid #ebeef5;
-  height: auto;
-  padding: 20px;
-  background: #fff;
+  font-size: 0.8rem;
+  padding: 15px;
+  background: #fafafa;
 }
 
 .fade-enter-active,
@@ -103,5 +104,17 @@ const route = useRoute()
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (min-width: 768px) {
+  .app-header {
+    padding: 0 40px;
+  }
+  .logo-text {
+    font-size: 1.3rem;
+  }
+  .app-main {
+    padding: 30px 40px;
+  }
 }
 </style>

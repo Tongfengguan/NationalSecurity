@@ -12,6 +12,7 @@ const domainsData: Record<string, any> = {
   'political': {
     name: '政治安全',
     icon: 'UserFilled',
+    img: 'https://images.unsplash.com/photo-1541872703-74c5e443d1f9?auto=format&fit=crop&q=80&w=800',
     definition: '政治安全是指国家政权、主权、政治制度、政治秩序以及意识形态不受威胁、侵犯、破坏和控制的状态。',
     keyPoints: [
       '政权安全和制度安全是核心',
@@ -23,6 +24,7 @@ const domainsData: Record<string, any> = {
   'homeland': {
     name: '国土安全',
     icon: 'MapLocation',
+    img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800',
     definition: '国土安全是指领土完整、国家统一、边疆边境、领空、海洋权益等不受侵犯或免于威胁的状态。',
     keyPoints: [
       '领土完整、国家统一是底线',
@@ -34,7 +36,8 @@ const domainsData: Record<string, any> = {
   'military': {
     name: '军事安全',
     icon: 'Promotion',
-    definition: '军事安全是指国家不受外部军事入侵和战争威胁的状态，以及保障这种状态的能力。',
+    img: 'https://images.unsplash.com/photo-1508103501740-8456f4d85e78?auto=format&fit=crop&q=80&w=800',
+    definition: '军事安全是指国家不受外部军事入侵 and 战争威胁的状态，以及保障这种状态的能力。',
     keyPoints: [
       '建设巩固国防和强大军队',
       '确保“能打仗、打胜仗”',
@@ -45,6 +48,7 @@ const domainsData: Record<string, any> = {
   'economic': {
     name: '经济安全',
     icon: 'TrendCharts',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
     definition: '经济安全是指国家经济基础稳固、经济主权独立、经济运行平稳、经济发展可持续的状态。',
     keyPoints: [
       '国家安全的物质基础',
@@ -56,6 +60,7 @@ const domainsData: Record<string, any> = {
   'cultural': {
     name: '文化安全',
     icon: 'Collection',
+    img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800',
     definition: '文化安全是指国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
     keyPoints: [
       '维护意识形态安全',
@@ -67,6 +72,7 @@ const domainsData: Record<string, any> = {
   'social': {
     name: '社会安全',
     icon: 'Management',
+    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800',
     definition: '社会安全是指防范、消除、控制直接威胁社会公共秩序和人民群众生命财产安全的各类风险。',
     keyPoints: [
       '维护社会和谐稳定',
@@ -78,6 +84,7 @@ const domainsData: Record<string, any> = {
   'tech': {
     name: '科技安全',
     icon: 'Monitor',
+    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
     definition: '科技安全是指科技体系完整有效，核心技术安全可控，国家核心利益不受外部科技优势损害。',
     keyPoints: [
       '解决“卡脖子”问题，实现高水平科技自立自强',
@@ -89,6 +96,7 @@ const domainsData: Record<string, any> = {
   'cyber': {
     name: '网络安全',
     icon: 'Lock',
+    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800',
     definition: '网络安全是指网络空间主权不受侵犯，网络基础设施、信息系统及数据受到有效保护。',
     keyPoints: [
       '维护网络空间主权，防范网络攻击',
@@ -100,6 +108,7 @@ const domainsData: Record<string, any> = {
   'ecology': {
     name: '生态安全',
     icon: 'Sunny',
+    img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800',
     definition: '生态安全是指生态环境能够支撑国家生存和发展的基本状态，环境风险处于可控范围。',
     keyPoints: [
       '守住生态保护红线',
@@ -111,6 +120,7 @@ const domainsData: Record<string, any> = {
   'resource': {
     name: '资源安全',
     icon: 'Operation',
+    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=800',
     definition: '资源安全是指国家发展所需的自然资源（能源、矿产、水、土地等）能够持续、稳定、及时、足量供应。',
     keyPoints: [
       '确保能源安全和重要矿产资源供应',
@@ -122,6 +132,7 @@ const domainsData: Record<string, any> = {
   'nuclear': {
     name: '核安全',
     icon: 'Warning',
+    img: 'https://images.unsplash.com/photo-1517420812313-8001a889944c?auto=format&fit=crop&q=80&w=800',
     definition: '核安全是指对核设施、核材料采取保护措施，防止核事故、核扩散及核恐怖主义。',
     keyPoints: [
       '坚持“安全第一”，确保核能和平利用',
@@ -133,6 +144,7 @@ const domainsData: Record<string, any> = {
   'overseas': {
     name: '海外利益安全',
     icon: 'Ship',
+    img: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=800',
     definition: '海外利益安全是指国家在海外的公民、机构、企业、资产及正当权益不受威胁和侵害。',
     keyPoints: [
       '提升海外安全保障能力',
@@ -144,6 +156,7 @@ const domainsData: Record<string, any> = {
   'bio': {
     name: '生物安全',
     icon: 'FirstAidKit',
+    img: 'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&q=80&w=800',
     definition: '生物安全是指国家有效防范和应对危险生物因子威胁，保障人民生命健康和生态系统平衡。',
     keyPoints: [
       '防控重大新发突发传染病',
@@ -155,6 +168,7 @@ const domainsData: Record<string, any> = {
   'space': {
     name: '太空安全',
     icon: 'Compass',
+    img: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&q=80&w=800',
     definition: '太空安全是指国家在太空领域的资产、活动及权益不受威胁，拥有进入、利用和控制太空的能力。',
     keyPoints: [
       '维护太空主权和和平利用空间权利',
@@ -166,6 +180,7 @@ const domainsData: Record<string, any> = {
   'deepsea': {
     name: '深海安全',
     icon: 'Odometer',
+    img: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=800',
     definition: '深海安全是指国家在深海区域的探索、开发、利用及相关权益不受侵犯。',
     keyPoints: [
       '提升深海进入、深海探测和深海开发能力',
@@ -177,6 +192,7 @@ const domainsData: Record<string, any> = {
   'polar': {
     name: '极地安全',
     icon: 'Place',
+    img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?auto=format&fit=crop&q=80&w=800',
     definition: '极地安全是指国家在南极、北极地区的科学考察、资源利用及相关权益得到保障。',
     keyPoints: [
       '参与极地国际治理和规则制定',
@@ -196,17 +212,19 @@ const goBack = () => {
 
 <template>
   <div class="domain-detail" v-if="currentDomain">
-    <el-page-header @back="goBack" class="header">
+    <el-page-header @back="goBack" title="返回" class="header">
       <template #content>
-        <div class="header-content">
-          <el-icon :size="24" color="#c00000"><component :is="currentDomain.icon" /></el-icon>
-          <span class="header-title">{{ currentDomain.name }}</span>
-        </div>
+        <span class="header-title">{{ currentDomain.name }}</span>
       </template>
     </el-page-header>
 
     <div class="main-content">
-      <el-card class="content-card">
+      <div class="detail-banner" :style="{ backgroundImage: `url(${currentDomain.img})` }">
+        <div class="banner-overlay"></div>
+        <el-icon :size="48" color="#fff" class="banner-icon"><component :is="currentDomain.icon" /></el-icon>
+      </div>
+
+      <el-card class="content-card" shadow="never">
         <div class="section">
           <h2 class="section-title">领域定义</h2>
           <p class="definition-text">{{ currentDomain.definition }}</p>
@@ -224,10 +242,6 @@ const goBack = () => {
           </ul>
         </div>
       </el-card>
-      
-      <div class="action-bar">
-        <el-button type="primary" size="large" @click="goBack" plain round>返回首页</el-button>
-      </div>
     </div>
   </div>
   <div v-else class="not-found">
@@ -241,57 +255,63 @@ const goBack = () => {
 
 <style scoped>
 .domain-detail {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .header {
-  margin-bottom: 30px;
-  padding: 15px;
+  margin-bottom: 20px;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  padding: 10px 0;
 }
 
 .header-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #303133;
-}
-
-.main-content {
-  margin-top: 20px;
-}
-
-.content-card {
-  padding: 30px;
-  border-top: 4px solid #c00000;
-  border-radius: 8px;
-}
-
-.section {
-  margin-bottom: 30px;
-}
-
-.section-title {
-  font-size: 1.3rem;
   color: #c00000;
+}
+
+.detail-banner {
+  position: relative;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+}
+
+.banner-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.content-card {
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  color: #c00000;
+  margin-bottom: 15px;
+  border-left: 3px solid #c00000;
+  padding-left: 10px;
 }
 
 .definition-text {
-  font-size: 1.1rem;
-  line-height: 1.8;
+  font-size: 0.95rem;
+  line-height: 1.6;
   color: #303133;
-  text-indent: 2em;
 }
 
 .points-list {
@@ -302,23 +322,20 @@ const goBack = () => {
 .point-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
   color: #606266;
 }
 
 .point-icon {
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
-.action-bar {
-  margin-top: 40px;
-  text-align: center;
-}
-
-.not-found {
-  padding-top: 100px;
+@media (min-width: 768px) {
+  .detail-banner {
+    height: 250px;
+  }
 }
 </style>
