@@ -35,10 +35,10 @@ const navigateToDomain = (id: string) => {
       <div class="page-content">
         <h1 class="main-title">总体国家安全观</h1>
         <p class="main-subtitle">坚持以人民安全为宗旨</p>
-        <div class="scroll-indicator">
-          <span>向下划动探索领域</span>
-          <el-icon class="ani-bounce"><ArrowDownBold /></el-icon>
-        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span>向下划动探索领域</span>
+        <el-icon class="ani-bounce"><ArrowDownBold /></el-icon>
       </div>
     </section>
 
