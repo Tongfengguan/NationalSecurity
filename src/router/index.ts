@@ -14,9 +14,10 @@ const router = createRouter({
       component: () => import('@/pages/KnowledgeBase.vue')
     },
     {
-      path: '/quiz',
-      name: 'quiz',
-      component: () => import('@/pages/Quiz.vue')
+      path: '/domain/:id',
+      name: 'domain-detail',
+      component: () => import('@/pages/DomainDetail.vue'),
+      props: true
     }
   ]
 })

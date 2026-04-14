@@ -27,9 +27,6 @@ const route = useRoute()
         <el-menu-item index="/knowledge">
           <el-icon><Reading /></el-icon> 知识库
         </el-menu-item>
-        <el-menu-item index="/quiz">
-          <el-icon><Checked /></el-icon> 知识测评
-        </el-menu-item>
       </el-menu>
     </el-header>
     <el-main class="app-main">
