@@ -27,7 +27,7 @@ const route = useRoute()
     </el-header>
     <el-main class="app-main">
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition name="slide-fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
@@ -86,6 +86,7 @@ const route = useRoute()
   flex: 1;
   padding: 20px 15px;
   background: #fff;
+  overflow-x: hidden;
 }
 
 .app-footer {
@@ -96,13 +97,22 @@ const route = useRoute()
   background: #fafafa;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
+/* 丝滑的滑动淡入动画 */
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(-20px);
   opacity: 0;
 }
 
