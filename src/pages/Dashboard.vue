@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const domains = [
-  { name: '政治安全', icon: 'UserFilled', desc: '根本' },
-  { name: '国土安全', icon: 'MapLocation', desc: '基础' },
-  { name: '军事安全', icon: 'Promotion', desc: '保障' },
-  { name: '经济安全', icon: 'TrendCharts', desc: '基础' },
-  { name: '文化安全', icon: 'Collection', desc: '支撑' },
-  { name: '社会安全', icon: 'Management', desc: '依托' },
-  { name: '科技安全', icon: 'Monitor', desc: '关键' },
-  { name: '网络安全', icon: 'Lock', desc: '阵地' },
-  { name: '生态安全', icon: 'Sunny', desc: '底线' },
-  { name: '资源安全', icon: 'Operation', desc: '要素' },
-  { name: '核安全', icon: 'Warning', desc: '特殊' },
-  { name: '海外利益安全', icon: 'Ship', desc: '拓展' },
-  { name: '太空安全', icon: 'Compass', desc: '新型' },
-  { name: '深海安全', icon: 'Odometer', desc: '新型' },
-  { name: '极地安全', icon: 'Place', desc: '新型' },
-  { name: '生物安全', icon: 'FirstAidKit', desc: '新型' },
+  { id: 'political', name: '政治安全', icon: 'UserFilled', desc: '根本' },
+  { id: 'homeland', name: '国土安全', icon: 'MapLocation', desc: '基础' },
+  { id: 'military', name: '军事安全', icon: 'Promotion', desc: '保障' },
+  { id: 'economic', name: '经济安全', icon: 'TrendCharts', desc: '基础' },
+  { id: 'cultural', name: '文化安全', icon: 'Collection', desc: '支撑' },
+  { id: 'social', name: '社会安全', icon: 'Management', desc: '依托' },
+  { id: 'tech', name: '科技安全', icon: 'Monitor', desc: '关键' },
+  { id: 'cyber', name: '网络安全', icon: 'Lock', desc: '阵地' },
+  { id: 'ecology', name: '生态安全', icon: 'Sunny', desc: '底线' },
+  { id: 'resource', name: '资源安全', icon: 'Operation', desc: '要素' },
+  { id: 'nuclear', name: '核安全', icon: 'Warning', desc: '特殊' },
+  { id: 'overseas', name: '海外利益安全', icon: 'Ship', desc: '拓展' },
+  { id: 'bio', name: '生物安全', icon: 'FirstAidKit', desc: '新型' },
+  { id: 'space', name: '太空安全', icon: 'Compass', desc: '新型' },
+  { id: 'deepsea', name: '深海安全', icon: 'Odometer', desc: '新型' },
+  { id: 'polar', name: '极地安全', icon: 'Place', desc: '新型' },
 ]
+
+const navigateToDomain = (id: string) => {
+  router.push(`/domain/${id}`)
+}
 </script>
 
 <template>
@@ -31,8 +37,8 @@ const domains = [
     <div class="domain-grid">
       <h2 class="section-title">国家安全 16 个重点领域</h2>
       <el-row :gutter="20">
-        <el-col :xs="12" :sm="8" :md="6" :lg="4" v-for="item in domains" :key="item.name" class="domain-col">
-          <el-card shadow="hover" class="domain-card">
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" v-for="item in domains" :key="item.id" class="domain-col">
+          <el-card shadow="hover" class="domain-card" @click="navigateToDomain(item.id)">
             <el-icon :size="32" color="#c00000">
               <component :is="item.icon" />
             </el-icon>
@@ -116,6 +122,7 @@ const domains = [
   padding: 20px 0;
   transition: all 0.3s;
   border: 1px solid #ebeef5;
+  cursor: pointer;
 }
 
 .domain-card:hover {
