@@ -1,11 +1,19 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0f172a;
+  color-scheme: light;
+  --bg-color: #f5f7fa;
+  --header-bg: #ffffff;
+  --text-main: #303133;
+  --text-secondary: #606266;
+  --primary-red: #c00000; /* 中国红 */
+  --accent-gold: #ffde00; /* 辅助金色 */
+  --border-color: #dcdfe6;
+  
+  color: var(--text-main);
+  background-color: var(--bg-color);
 
   font-synthesize: none;
   text-rendering: optimizeLegibility;
@@ -15,17 +23,30 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #0f172a; /* Force dark navy background */
+  background-color: var(--bg-color);
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.05), transparent 25%);
+    linear-gradient(135deg, rgba(192, 0, 0, 0.02) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(192, 0, 0, 0.02) 25%, transparent 25%);
+  background-size: 40px 40px;
 }
 
 #app {
   width: 100%;
   margin: 0 auto;
+}
+
+/* Override Element Plus Red */
+.el-button--primary {
+  --el-button-bg-color: var(--primary-red) !important;
+  --el-button-border-color: var(--primary-red) !important;
+  --el-button-hover-bg-color: #e60000 !important;
+  --el-button-hover-border-color: #e60000 !important;
+}
+
+.el-menu--horizontal {
+  --el-menu-active-color: var(--primary-red) !important;
+  --el-menu-hover-bg-color: rgba(192, 0, 0, 0.05) !important;
 }

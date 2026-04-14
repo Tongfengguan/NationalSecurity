@@ -4,20 +4,26 @@ import { ref, computed } from 'vue'
 const questions = [
   {
     id: 1,
-    text: 'What is the core of national security?',
-    options: ['Economic Development', 'Political Security', 'Military Strength', 'Cultural Prosperity'],
+    text: '总体国家安全观的核心是什么？',
+    options: ['经济安全', '政治安全', '军事安全', '社会安全'],
     answer: 1
   },
   {
     id: 2,
-    text: 'Which day is the National Security Education Day?',
-    options: ['April 15', 'May 1', 'October 1', 'December 4'],
-    answer: 0
+    text: '全民国家安全教育日是哪一天？',
+    options: ['3月15日', '4月15日', '10月1日', '12月4日'],
+    answer: 1
   },
   {
     id: 3,
-    text: 'Who has the responsibility and obligation to maintain national security?',
-    options: ['Only the military', 'Only government officials', 'Every citizen and organization', 'Only the police'],
+    text: '维护国家安全的首要任务是？',
+    options: ['保障主权独立', '维护政治安全', '促进经济发展', '加强国防建设'],
+    answer: 1
+  },
+  {
+    id: 4,
+    text: '国家安全机关受理公民和组织举报电话是？',
+    options: ['110', '120', '12339', '12345'],
     answer: 2
   }
 ]
@@ -57,54 +63,56 @@ const restart = () => {
 
 <template>
   <div class="quiz-container">
-    <h1 class="page-title">Security Awareness Quiz</h1>
+    <div class="page-header">
+      <h1 class="page-title">国家安全知识测评</h1>
+      <p>通过测试检验你的国家安全意识</p>
+    </div>
     
-    <el-card class="quiz-card" shadow="never" v-if="!showResult">
-      <div class="progress">
-        Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}
-        <el-progress :percentage="((currentQuestionIndex + 1) / questions.length) * 100" :show-text="false" color="#10b981" />
+    <el-card class="quiz-card" v-if="!showResult">
+      <div class="progress-info">
+        <span>第 {{ currentQuestionIndex + 1 }} 题 / 共 {{ questions.length }} 题</span>
+        <el-progress :percentage="((currentQuestionIndex + 1) / questions.length) * 100" :show-text="false" color="#c00000" />
       </div>
       
       <h2 class="question-text">{{ currentQuestion.text }}</h2>
       
-      <div class="options">
+      <div class="options-list">
         <div 
           v-for="(option, index) in currentQuestion.options" 
           :key="index"
-          class="option-btn"
-          :class="{ 'selected': selectedOption === index }"
+          class="option-item"
+          :class="{ 'is-selected': selectedOption === index }"
           @click="selectOption(index)"
         >
-          <span class="option-letter">{{ String.fromCharCode(65 + index) }}</span>
-          {{ option }}
+          <div class="option-indicator">{{ String.fromCharCode(65 + index) }}</div>
+          <div class="option-content">{{ option }}</div>
         </div>
       </div>
       
-      <div class="actions">
+      <div class="card-footer">
         <el-button 
           type="primary" 
           size="large" 
           @click="submitAnswer" 
           :disabled="selectedOption === null"
+          round
         >
-          {{ currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz' }}
+          {{ currentQuestionIndex < questions.length - 1 ? '下一题' : '查看结果' }}
         </el-button>
       </div>
     </el-card>
 
-    <el-card class="result-card" shadow="never" v-else>
-      <div class="result-content">
-        <el-progress type="dashboard" :percentage="(score / questions.length) * 100" color="#10b981">
-          <template #default="{ percentage }">
-            <span class="percentage-value">{{ percentage }}%</span>
-            <span class="percentage-label">Score</span>
+    <el-card class="result-card" v-else>
+      <div class="result-wrap">
+        <el-result
+          :icon="score === questions.length ? 'success' : 'info'"
+          :title="score === questions.length ? '满分！国家安全意识极强' : '测评结束'"
+          :sub-title="`你的最终得分是：${(score / questions.length) * 100} 分 (${score}/${questions.length})`"
+        >
+          <template #extra>
+            <el-button type="primary" @click="restart" round>重新测评</el-button>
           </template>
-        </el-progress>
-        
-        <h2 class="result-title">Quiz Completed!</h2>
-        <p class="result-desc">You answered {{ score }} out of {{ questions.length }} questions correctly.</p>
-        
-        <el-button type="primary" @click="restart" class="mt-4">Try Again</el-button>
+        </el-result>
       </div>
     </el-card>
   </div>
@@ -116,116 +124,83 @@ const restart = () => {
   margin: 0 auto;
 }
 
-.page-title {
-  margin-bottom: 24px;
-  font-size: 1.8rem;
-  color: #f8fafc;
+.page-header {
   text-align: center;
+  margin-bottom: 30px;
 }
 
-.quiz-card, .result-card {
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+.page-title {
+  color: #c00000;
+  font-size: 2rem;
+  margin-bottom: 5px;
 }
 
-.progress {
-  color: #94a3b8;
-  margin-bottom: 24px;
-  font-size: 0.9rem;
+.quiz-card {
+  border-top: 4px solid #c00000;
+}
+
+.progress-info {
+  margin-bottom: 30px;
+  color: #909399;
 }
 
 .question-text {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  color: #303133;
   margin-bottom: 30px;
-  color: #f8fafc;
 }
 
-.options {
+.options-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 15px;
+  margin-bottom: 40px;
 }
 
-.option-btn {
-  padding: 16px 20px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
+.option-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  color: #cbd5e1;
-  font-size: 1.1rem;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
 }
 
-.option-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
+.option-item:hover {
+  background: #fdfafb;
+  border-color: #f5c2c2;
 }
 
-.option-btn.selected {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: #10b981;
-  color: #10b981;
+.option-item.is-selected {
+  background: rgba(192, 0, 0, 0.05);
+  border-color: #c00000;
+  color: #c00000;
 }
 
-.option-letter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.option-indicator {
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  border-radius: 50%;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
 }
 
-.selected .option-letter {
-  background: #10b981;
+.is-selected .option-indicator {
+  background: #c00000;
   color: #fff;
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.result-content {
+.card-footer {
   text-align: center;
+}
+
+.result-wrap {
   padding: 40px 0;
-}
-
-.percentage-value {
-  display: block;
-  font-size: 28px;
-  font-weight: bold;
-  color: #f8fafc;
-}
-
-.percentage-label {
-  display: block;
-  font-size: 14px;
-  color: #94a3b8;
-  margin-top: 4px;
-}
-
-.result-title {
-  margin-top: 24px;
-  font-size: 1.8rem;
-  color: #f8fafc;
-}
-
-.result-desc {
-  color: #94a3b8;
-  font-size: 1.1rem;
-  margin-top: 8px;
-}
-
-.mt-4 {
-  margin-top: 24px;
 }
 </style>
