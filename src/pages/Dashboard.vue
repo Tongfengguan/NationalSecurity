@@ -101,7 +101,7 @@ const navigateToDomain = (id: string) => {
         <div class="reveal-mask">
           <div class="action-btn delay-4">
             <div class="magnetic-btn">
-              <span class="btn-text">查阅机密档案</span>
+              <span class="btn-text">详情</span>
               <div class="btn-circle"><el-icon><Right /></el-icon></div>
             </div>
           </div>
