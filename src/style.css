@@ -1,86 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Inter:wght@400;600&display=swap');
 
 :root {
-  /* 极致简约的黑白灰配色，摒弃大红大紫 */
-  --bg-color: #000000;
-  --text-primary: #ffffff;
-  --text-secondary: #888888;
-  --accent-color: #ffffff;
-  --border-color: #222222;
+  --primary-red: #a80000; /* 庄重的中国红 */
+  --bg-color: #fcfcfc;    /* 清爽的象牙白 */
+  --text-main: #1a1a1a;   /* 极高对比度的深灰 */
+  --text-sub: #666666;
+  --card-bg: #ffffff;
+  --border-color: #eeeeee;
   
-  --font-serif: 'Noto Serif SC', 'Songti SC', serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  --font-serif: 'Noto Serif SC', serif;
+  --font-sans: 'Inter', sans-serif;
   
-  --ease-slow: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-* {
-  box-sizing: border-box;
+  --transition-premium: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 body {
   margin: 0;
-  font-family: var(--font-sans);
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* 真正的“高级感”来源于留白和极其克制的动画 */
-.fade-up {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1.2s var(--ease-slow), transform 1.2s var(--ease-slow);
-  will-change: transform, opacity;
-}
-
-.is-visible .fade-up {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-
-/* 极简按钮 */
-.btn-minimal {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
   padding: 0;
-  position: relative;
-  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-.btn-minimal::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: var(--text-primary);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.6s var(--ease-slow);
+/* 顶部导航修复：不再搞那些透明反色，回归实体、稳重的样式 */
+.app-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.btn-minimal:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+/* 高级进场动效 - 炫技点：极简且绝对可靠 */
+@keyframes premiumReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  animation: premiumReveal 0.8s var(--transition-premium) forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* 自定义卡片阴影：所谓高级就是细节的阴影处理 */
+.premium-shadow {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  transition: all 0.4s var(--transition-premium);
+}
+
+.premium-shadow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(168,0,0,0.08);
 }

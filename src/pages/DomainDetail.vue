@@ -89,7 +89,7 @@ const domainsData: Record<string, any> = {
   'overseas': {
     name: '海外利益安全',
     img: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=1200',
-    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁和侵害。',
+    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁 and 侵害。',
     keyPoints: ['提升保障能力', '保护海外公民', '维护合法权益', '应对跨境犯罪'],
     chinaPractice: '实施撤侨等重大行动，保护了海外同胞生命安全，体现了“中国脚步走到哪里，保护就跟到哪里”。'
   },
@@ -127,12 +127,6 @@ const currentDomain = computed(() => domainsData[props.id] || null)
 
 onMounted(() => {
   window.scrollTo(0, 0)
-  
-  // 简单的进场动画触发
-  setTimeout(() => {
-    const reveals = document.querySelectorAll('.fade-up')
-    reveals.forEach(el => el.classList.add('is-visible'))
-  }, 100)
 })
 
 const goBack = () => {
@@ -141,150 +135,175 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="detail-wrapper" v-if="currentDomain">
-    
-    <!-- 极简导航返回 -->
-    <nav class="detail-nav fade-up delay-1">
-      <button class="btn-minimal" @click="goBack">
-        <el-icon><ArrowLeft /></el-icon> 返回
-      </button>
-    </nav>
-
-    <main class="detail-main">
-      <header class="detail-header">
-        <h1 class="domain-title serif fade-up delay-2">{{ currentDomain.name }}</h1>
+  <div class="detail-page" v-if="currentDomain">
+    <main class="detail-container">
+      
+      <header class="detail-header reveal">
+        <button class="back-btn" @click="goBack">
+          <el-icon><ArrowLeft /></el-icon> <span>返回</span>
+        </button>
+        <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
+        <div class="line"></div>
       </header>
 
-      <div class="hero-image-container fade-up delay-3">
-        <img :src="currentDomain.img" :alt="currentDomain.name" />
-      </div>
-
-      <div class="content-grid">
-        <div class="text-block fade-up delay-1">
-          <h3 class="block-label">定义</h3>
-          <p class="block-text">{{ currentDomain.definition }}</p>
+      <section class="visual-section reveal delay-1">
+        <div class="img-frame">
+          <img :src="currentDomain.img" :alt="currentDomain.name" />
         </div>
+      </section>
 
-        <div class="text-block fade-up delay-2">
-          <h3 class="block-label">核心要义</h3>
-          <ul class="block-list">
-            <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
-          </ul>
-        </div>
+      <section class="content-section">
+        <div class="info-grid">
+          <div class="info-block reveal delay-2">
+            <span class="label">领域定义</span>
+            <p>{{ currentDomain.definition }}</p>
+          </div>
+          
+          <div class="info-block reveal delay-3">
+            <span class="label">核心要义</span>
+            <ul class="point-list">
+              <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
+            </ul>
+          </div>
 
-        <div class="text-block fade-up delay-3">
-          <h3 class="block-label">中国实践</h3>
-          <p class="block-text">{{ currentDomain.chinaPractice }}</p>
+          <div class="info-block practice-block reveal delay-4">
+            <span class="label">中国实践</span>
+            <div class="practice-content">
+              <el-icon color="#a80000"><StarFilled /></el-icon>
+              <p>{{ currentDomain.chinaPractice }}</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
     </main>
-
   </div>
 </template>
 
 <style scoped>
-.detail-wrapper {
-  min-height: 100vh;
+.detail-page {
   background-color: var(--bg-color);
-  color: var(--text-primary);
-  padding: 120px 40px 100px 40px;
+  min-height: 100vh;
+  padding: 140px 40px 100px 40px;
+  color: var(--text-main);
+}
+
+.detail-container {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .serif { font-family: var(--font-serif); }
-
-.detail-nav {
-  max-width: 1200px;
-  margin: 0 auto 60px auto;
-}
-
-.detail-main {
-  max-width: 1200px;
-  margin: 0 auto;
-}
 
 .detail-header {
   margin-bottom: 60px;
 }
 
+.back-btn {
+  background: none; border: none;
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text-sub);
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+  padding: 0;
+}
+
+.back-btn:hover { color: var(--primary-red); }
+
 .domain-title {
-  font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 300;
-  letter-spacing: 0.1em;
+  font-size: clamp(3rem, 7vw, 5rem);
   margin: 0;
-  line-height: 1;
+  letter-spacing: 0.1em;
 }
 
-.hero-image-container {
-  width: 100%;
-  height: 60vh;
-  overflow: hidden;
+.line {
+  width: 80px; height: 5px;
+  background: var(--primary-red);
+  margin-top: 30px;
+}
+
+.visual-section {
   margin-bottom: 80px;
-  border-radius: 4px;
 }
 
-.hero-image-container img {
+.img-frame {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(80%);
+  height: 50vh;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #eee;
 }
 
-.content-grid {
+.img-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 60px;
 }
 
-.text-block {
-  border-top: 1px solid var(--border-color);
-  padding-top: 30px;
+.info-block {
+  border-top: 1px solid #eee;
+  padding-top: 25px;
 }
 
-.block-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  color: var(--text-secondary);
+.practice-block {
+  grid-column: span 2;
+  background: #fffdfd;
+  padding: 30px;
+  border: 1px solid #f9f0f0;
+  border-radius: 12px;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--primary-red);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  margin: 0 0 20px 0;
-  font-weight: 400;
 }
 
-.block-text {
-  font-size: 1.1rem;
+.info-block p {
+  font-size: 1.15rem;
   line-height: 1.8;
-  color: var(--text-primary);
-  margin: 0;
+  color: #333;
 }
 
-.block-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.point-list {
+  list-style: none; padding: 0; margin: 0;
 }
 
-.block-list li {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 15px;
-  color: var(--text-primary);
+.point-list li {
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+  padding-left: 20px;
   position: relative;
-  padding-left: 15px;
 }
 
-.block-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 10px;
-  width: 4px;
-  height: 4px;
-  background-color: var(--text-secondary);
-  border-radius: 50%;
+.point-list li::before {
+  content: '■';
+  position: absolute; left: 0; top: 4px;
+  font-size: 0.6rem; color: var(--primary-red);
+}
+
+.practice-content {
+  display: flex; gap: 15px; align-items: flex-start;
+}
+
+.practice-content p {
+  margin: 0; font-style: italic; color: #444;
 }
 
 @media (max-width: 900px) {
-  .detail-wrapper { padding: 100px 20px 60px 20px; }
-  .content-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-image-container { height: 40vh; margin-bottom: 40px; }
+  .detail-page { padding: 120px 20px 60px 20px; }
+  .info-grid { grid-template-columns: 1fr; gap: 40px; }
+  .practice-block { grid-column: span 1; }
+  .img-frame { height: 35vh; }
 }
 </style>
