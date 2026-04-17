@@ -8,6 +8,9 @@ const props = defineProps<{
 
 const router = useRouter()
 
+// 核心修正：获取基准路径
+const base = import.meta.env.BASE_URL
+
 const domainsData: Record<string, any> = {
   'political': {
     name: '政治安全',
@@ -25,23 +28,23 @@ const domainsData: Record<string, any> = {
   },
   'military': {
     name: '军事安全',
-    img: '/static/军事安全.jpg',
+    img: `${base}static/军事安全.jpg`,
     definition: '国家不受外部军事入侵和战争威胁的状态，以及保障这种状态的能力。',
     keyPoints: ['建设强大军队', '确保能打仗打胜仗', '防范武装颠覆', '保护军事设施安全'],
     chinaPractice: '实施强军战略，研制出歼-20、国产航母等大国重器，现代化军事体系确保了我国具备慑止战争的底气。'
   },
   'economic': {
     name: '经济安全',
-    img: '/static/经济安全.jpg',
+    img: `${base}static/经济安全.jpg`,
     definition: '国家经济基础稳固、经济主权独立、经济运行平稳、经济发展可持续的状态。',
     keyPoints: ['国家安全的物质基础', '保障国家经济主权', '防范金融风险', '确保能源和产业链安全'],
     chinaPractice: '中国坚持稳中求进，构建“双循环”新发展格局，实施关键核心技术攻关，确保产业链供应链自主可控。'
   },
   'cultural': {
     name: '文化安全',
-    img: '/static/文化安全.jpg',
+    img: `${base}static/文化安全.jpg`,
     definition: '国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
-    keyPoints: ['维护意识形态安全', '弘扬传统文化', '抵制文化侵蚀', '增强国家软实力'],
+    keyPoints: ['维护意识形态安全', '弘弘传统文化', '抵制文化侵蚀', '增强国家软实力'],
     chinaPractice: '弘扬社会主义核心价值观，实施中华优秀传统文化传承发展工程，建设具有强大凝聚力的社会主义意识形态。'
   },
   'social': {
@@ -81,7 +84,7 @@ const domainsData: Record<string, any> = {
   },
   'nuclear': {
     name: '核安全',
-    img: '/static/核安全.jpg',
+    img: `${base}static/核安全.jpg`,
     definition: '对核设施、核材料采取保护措施，防止核事故、核扩散及核恐怖主义。',
     keyPoints: ['坚持安全第一', '核能和平利用', '强化核应急', '防范核恐怖威胁'],
     chinaPractice: '中国自主研发的“华龙一号”核电技术达到世界最高安全标准，保持了优异的核安全记录。'
@@ -138,7 +141,7 @@ const goBack = () => {
   <div class="detail-page" v-if="currentDomain">
     <main class="detail-container">
       
-      <header class="detail-header reveal">
+      <header class="detail-header">
         <button class="back-btn" @click="goBack">
           <el-icon><ArrowLeft /></el-icon> <span>返回首页</span>
         </button>
@@ -146,7 +149,7 @@ const goBack = () => {
         <div class="line"></div>
       </header>
 
-      <section class="visual-section reveal delay-1">
+      <section class="visual-section">
         <div class="img-frame">
           <img :src="currentDomain.img" :alt="currentDomain.name" />
         </div>
@@ -154,19 +157,19 @@ const goBack = () => {
 
       <section class="content-section">
         <div class="info-grid">
-          <div class="info-block reveal delay-2">
+          <div class="info-block">
             <span class="label">领域定义</span>
             <p>{{ currentDomain.definition }}</p>
           </div>
           
-          <div class="info-block reveal delay-3">
+          <div class="info-block">
             <span class="label">核心要义</span>
             <ul class="point-list">
               <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
             </ul>
           </div>
 
-          <div class="info-block practice-block reveal delay-4">
+          <div class="info-block practice-block">
             <span class="label">中国实践</span>
             <div class="practice-content">
               <el-icon color="#a80000"><StarFilled /></el-icon>

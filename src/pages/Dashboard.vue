@@ -4,21 +4,23 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// 核心修正：使用 public 目录下的绝对路径
+// 核心修正：适配 GitHub Pages 的 Base 路径
+const base = import.meta.env.BASE_URL
+
 const domainSections = [
   {
     title: '核心支柱',
     items: [
       { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1200', size: 'large' },
       { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800', size: 'medium' },
-      { id: 'military', name: '军事安全', en: 'Military', img: '/static/军事安全.jpg', size: 'small' }
+      { id: 'military', name: '军事安全', en: 'Military', img: `${base}static/军事安全.jpg`, size: 'small' }
     ]
   },
   {
     title: '民生防线',
     items: [
-      { id: 'economic', name: '经济安全', en: 'Economic', img: '/static/经济安全.jpg', size: 'medium' },
-      { id: 'cultural', name: '文化安全', en: 'Cultural', img: '/static/文化安全.jpg', size: 'small' },
+      { id: 'economic', name: '经济安全', en: 'Economic', img: `${base}static/经济安全.jpg`, size: 'medium' },
+      { id: 'cultural', name: '文化安全', en: 'Cultural', img: `${base}static/文化安全.jpg`, size: 'small' },
       { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800', size: 'medium' },
       { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', size: 'large' }
     ]
@@ -29,7 +31,7 @@ const domainSections = [
       { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200', size: 'large' },
       { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', size: 'small' },
       { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800', size: 'medium' },
-      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: '/static/核安全.jpg', size: 'medium' }
+      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: `${base}static/核安全.jpg`, size: 'medium' }
     ]
   },
   {
@@ -97,7 +99,6 @@ const navigateToDomain = (id: string) => {
             <div class="card-info">
               <span class="card-en">{{ item.en }}</span>
               <h3 class="card-name">{{ item.name }}</h3>
-              <!-- 显式详情文字，针对移动端常驻 -->
               <div class="card-details-label">
                 <span>查看详情</span>
                 <el-icon><Right /></el-icon>
@@ -248,7 +249,6 @@ const navigateToDomain = (id: string) => {
   font-weight: 700;
 }
 
-/* 核心修复：详情字样样式 */
 .card-details-label {
   display: flex;
   align-items: center;
@@ -256,7 +256,7 @@ const navigateToDomain = (id: string) => {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--gold-dust);
-  opacity: 1; /* 默认可见 */
+  opacity: 1;
   transition: all 0.3s;
 }
 
@@ -318,11 +318,6 @@ const navigateToDomain = (id: string) => {
   .card-large, .card-medium, .card-small {
     flex: 1 1 100%;
     height: 240px;
-  }
-  
-  .domain-card:nth-child(even) {
-    margin-top: 0;
-    margin-left: 0;
   }
   
   .card-name { font-size: 1.4rem; }

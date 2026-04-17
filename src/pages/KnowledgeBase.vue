@@ -10,14 +10,14 @@ onMounted(() => {
   <div class="knowledge-page">
     <main class="content-limit">
       
-      <header class="page-header reveal">
+      <header class="page-header">
         <h1 class="title serif">国家安全知识档案</h1>
         <p class="subtitle">汇聚法律体系与核心总体观</p>
         <div class="red-bar"></div>
       </header>
 
       <div class="info-list">
-        <section class="info-card reveal delay-1">
+        <section class="info-card">
           <div class="card-side">01</div>
           <div class="card-main">
             <h3>基本定义</h3>
@@ -25,7 +25,7 @@ onMounted(() => {
           </div>
         </section>
 
-        <section class="info-card reveal delay-2">
+        <section class="info-card">
           <div class="card-side">02</div>
           <div class="card-main">
             <h3>总体国家安全观</h3>
@@ -33,7 +33,7 @@ onMounted(() => {
           </div>
         </section>
 
-        <section class="info-card reveal delay-3">
+        <section class="info-card">
           <div class="card-side">03</div>
           <div class="card-main">
             <h3>法律体系</h3>
@@ -41,7 +41,7 @@ onMounted(() => {
           </div>
         </section>
 
-        <section class="info-card reveal delay-1">
+        <section class="info-card">
           <div class="card-side">04</div>
           <div class="card-main">
             <h3>公民法定义务</h3>
@@ -56,7 +56,7 @@ onMounted(() => {
         </section>
       </div>
 
-      <div class="report-box reveal delay-2">
+      <div class="report-box">
         <div class="report-header">国家安全机关举报受理平台</div>
         <div class="report-num serif">12339</div>
         <div class="report-site">www.12339.gov.cn</div>
