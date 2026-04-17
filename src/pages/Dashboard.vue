@@ -222,12 +222,16 @@ const navigateToDomain = (id: string) => {
 
 .scroll-prompt {
   position: absolute;
-  bottom: 50px; left: 40px;
+  bottom: 30px; 
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   font-size: 0.8rem;
   letter-spacing: 2px;
+  opacity: 0.8;
 }
 
 .mouse-icon {
