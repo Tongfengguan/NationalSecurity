@@ -96,7 +96,7 @@ onMounted(() => {
 .knowledge-container {
   min-height: 100vh;
   background-color: var(--bg-cream);
-  padding-top: 100px;
+  padding-top: 120px; /* 增加留白，确保不被 Header 遮挡 */
 }
 
 .knowledge-content {
