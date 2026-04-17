@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const observer = ref<IntersectionObserver | null>(null)
+const activeIndex = ref(0) // 当前处于第几屏
 
 const domains = [
   { id: 'political', name: '政治安全', en: 'POLITICAL', desc: '政权安全和制度安全是核心，坚持党的领导，捍卫国家根本制度。', img: 'https://images.unsplash.com/photo-1541872703-74c5e443d1f9?auto=format&fit=crop&q=80&w=1600' },
@@ -29,9 +30,11 @@ onMounted(() => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible')
+        const index = parseInt(entry.target.getAttribute('data-index') || '0')
+        activeIndex.value = index
       }
     })
-  }, { threshold: 0.35 })
+  }, { threshold: 0.5 })
 
   const sections = document.querySelectorAll('.editorial-section')
   sections.forEach(s => observer.value?.observe(s))
@@ -44,18 +47,36 @@ onUnmounted(() => {
 const navigateToDomain = (id: string) => {
   router.push(`/domain/${id}`)
 }
+
+const scrollToSection = (index: number) => {
+  const sections = document.querySelectorAll('.editorial-section')
+  sections[index]?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <template>
   <div class="scroller-container">
     
-    <!-- 序幕：极简全屏电影级海报 -->
-    <section class="editorial-section hero-section">
+    <!-- 侧边极简进度导航 - 炫技点：实时追踪 -->
+    <div class="side-indicator">
+      <div 
+        v-for="(_, i) in (domains.length + 2)" 
+        :key="i"
+        class="nav-dot"
+        :class="{ active: activeIndex === i }"
+        @click="scrollToSection(i)"
+      >
+        <span class="dot-num" v-if="activeIndex === i">{{ i < 10 ? '0' + i : i }}</span>
+      </div>
+    </div>
+
+    <!-- 序幕 -->
+    <section class="editorial-section hero-section" data-index="0">
       <div class="cinematic-bg"></div>
       <div class="ambient-glow"></div>
       
       <div class="hero-content">
-        <div class="reveal-mask"><div class="top-tag delay-1">N S E P · 2 0 2 6</div></div>
+        <div class="reveal-mask"><div class="top-tag delay-1">NATIONAL SECURITY · 2026</div></div>
         <div class="reveal-mask"><h1 class="hero-title delay-2 font-serif">总体国家安全观</h1></div>
         <div class="expand-line delay-3"></div>
         <div class="reveal-mask">
@@ -64,40 +85,35 @@ const navigateToDomain = (id: string) => {
       </div>
       
       <div class="scroll-down-hint">
-        <span class="vertical-text">SCROLL DOWN</span>
+        <span class="vertical-text">EXPLORE</span>
         <div class="line-indicator"></div>
       </div>
     </section>
 
-    <!-- 16个领域：Awwwards 级排版 -->
+    <!-- 16个领域 -->
     <section 
       v-for="(item, index) in domains" 
       :key="item.id" 
       class="editorial-section domain-section"
+      :data-index="index + 1"
       @click="navigateToDomain(item.id)"
     >
-      <!-- 背景：极慢缩放动画增加沉浸感 -->
       <div class="image-wrapper">
         <div class="bg-image" :style="{ backgroundImage: `url(${item.img})` }"></div>
         <div class="bg-gradient-mask"></div>
       </div>
       
-      <!-- 巨大的背景水印数字 -->
       <div class="watermark-num">{{ index + 1 < 10 ? '0'+(index+1) : index+1 }}</div>
       
-      <!-- 左下角的核心内容区 -->
       <div class="domain-content">
         <div class="reveal-mask"><div class="domain-en-tag delay-1">{{ item.en }}</div></div>
         <div class="reveal-mask"><h2 class="domain-title delay-2 font-serif">{{ item.name }}</h2></div>
-        
         <div class="expand-line delay-3 line-gold"></div>
-        
         <div class="reveal-mask">
           <div class="domain-desc-box delay-4">
             <p>{{ item.desc }}</p>
           </div>
         </div>
-        
         <div class="reveal-mask">
           <div class="action-btn delay-4">
             <div class="magnetic-btn">
@@ -109,20 +125,18 @@ const navigateToDomain = (id: string) => {
       </div>
     </section>
     
-    <!-- 终章：极简留白 -->
-    <section class="editorial-section footer-section">
-      <div class="ambient-glow" style="top: 20%; left: 20%;"></div>
+    <!-- 终章 -->
+    <section class="editorial-section footer-section" :data-index="domains.length + 1">
       <div class="footer-content">
         <div class="reveal-mask"><h2 class="hero-title delay-1"><span class="font-serif">安而不忘危</span></h2></div>
         <div class="expand-line delay-2" style="width: 100px; margin: 30px auto;"></div>
-        <div class="reveal-mask">
-          <p class="delay-3" style="color: #999; letter-spacing: 2px;">国家安全机关举报受理热线</p>
-        </div>
-        <div class="reveal-mask">
-          <h3 class="giant-num delay-4">12339</h3>
-        </div>
+        <div class="reveal-mask"><p class="delay-3" style="color: #666; letter-spacing: 4px;">国家安全机关举报受理热线</p></div>
+        <div class="reveal-mask"><h3 class="giant-num delay-4">12339</h3></div>
         <div class="reveal-mask delay-4 mt-10">
-          <button class="outline-btn" @click.stop="$router.push('/knowledge')">返回官方档案库</button>
+          <button class="premium-link-btn" @click.stop="$router.push('/knowledge')">
+            <span>进入档案库</span>
+            <el-icon><Collection /></el-icon>
+          </button>
         </div>
       </div>
     </section>
@@ -136,11 +150,45 @@ const navigateToDomain = (id: string) => {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   background-color: var(--bg-dark);
-  margin: -20px -15px; /* Offset global padding */
+  margin: -20px -15px;
 }
 
-.scroller-container::-webkit-scrollbar {
-  display: none;
+/* 侧边刻度导航 */
+.side-indicator {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-dot {
+  width: 2px;
+  height: 20px;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+}
+
+.nav-dot.active {
+  background: var(--gold-accent);
+  height: 40px;
+}
+
+.dot-num {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold-accent);
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .editorial-section {
@@ -156,275 +204,126 @@ const navigateToDomain = (id: string) => {
   cursor: pointer;
 }
 
-.font-serif {
-  font-family: var(--font-serif);
-}
+.font-serif { font-family: var(--font-serif); }
 
-/* ====== 英雄屏 ====== */
-.hero-section {
-  background: var(--bg-dark);
-  cursor: default;
-}
-
-.cinematic-bg {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at center, rgba(138, 11, 11, 0.2) 0%, var(--bg-dark) 80%);
-}
-
-.hero-content {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  color: var(--text-light);
-  padding: 0 30px;
-}
-
-.top-tag {
-  font-size: 0.8rem;
-  letter-spacing: 8px;
-  color: var(--gold-accent);
-  margin-bottom: 20px;
-}
-
-.hero-title {
-  font-size: 4.5rem;
-  font-weight: 600;
-  letter-spacing: 12px;
-  margin: 0;
-  color: var(--text-light);
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.hero-section .expand-line {
-  margin: 30px auto;
-  max-width: 400px;
-}
-
-.hero-desc {
-  font-size: 1rem;
-  letter-spacing: 4px;
-  line-height: 2;
-  color: #a0a0a0;
-}
-
-.scroll-down-hint {
-  position: absolute;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 0.6;
-  z-index: 10;
-}
-
-.vertical-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-size: 0.7rem;
-  letter-spacing: 4px;
-  margin-bottom: 15px;
-}
-
-.line-indicator {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, var(--text-light) 50%, transparent);
-  animation: slide-down 2s ease-in-out infinite;
-}
-
-@keyframes slide-down {
-  0% { transform: translateY(-20px); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translateY(20px); opacity: 0; }
-}
-
-/* ====== 领域屏 ====== */
+/* 背景深度优化 */
 .image-wrapper {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  overflow: hidden;
 }
 
 .bg-image {
   width: 100%; height: 100%;
   background-size: cover;
   background-position: center;
-  transform: scale(1.1);
-  transition: transform 10s linear;
+  transform: scale(1.15);
+  transition: transform 12s var(--ease-in-out);
 }
 
-.is-visible .bg-image {
-  transform: scale(1);
-}
+.is-visible .bg-image { transform: scale(1); }
 
 .bg-gradient-mask {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(135deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.6) 40%, transparent 100%);
+  background: linear-gradient(135deg, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.8) 100%);
+}
+
+/* 文字视差位移 - 炫技点 */
+.domain-content {
+  position: absolute;
+  left: 10%;
+  bottom: 12%;
+  z-index: 10;
+  max-width: 600px;
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.is-visible .domain-content {
+  transform: translateY(-10px);
+}
+
+.hero-section { background: var(--bg-dark); cursor: default; }
+
+.hero-title {
+  font-size: 5rem;
+  font-weight: 600;
+  letter-spacing: 20px;
+  margin: 0;
+  text-shadow: 0 0 50px rgba(138, 11, 11, 0.3);
 }
 
 .watermark-num {
   position: absolute;
   right: -5%;
-  bottom: -10%;
-  font-size: 35vw;
+  bottom: -5%;
+  font-size: 30vw;
   font-weight: 900;
-  line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 2px rgba(255,255,255,0.05);
-  font-family: var(--font-sans);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.03);
   pointer-events: none;
   z-index: 1;
-  transition: all 1s var(--ease-out-expo);
-  transform: translateX(100px);
+  transition: transform 1.5s var(--ease-out-expo);
+  transform: translateX(50px);
 }
 
-.is-visible .watermark-num {
-  transform: translateX(0);
-}
-
-.domain-content {
-  position: absolute;
-  left: 8%;
-  bottom: 15%;
-  z-index: 10;
-  max-width: 600px;
-}
-
-.domain-en-tag {
-  font-size: 0.75rem;
-  letter-spacing: 6px;
-  color: var(--gold-accent);
-  margin-bottom: 10px;
-  font-family: var(--font-sans);
-}
-
-.domain-title {
-  font-size: 4rem;
-  margin: 0;
-  letter-spacing: 8px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-}
-
-.line-gold {
-  margin: 20px 0;
-  max-width: 80%;
-}
-
-.domain-desc-box {
-  margin-bottom: 40px;
-}
-
-.domain-desc-box p {
-  font-size: 1rem;
-  line-height: 1.8;
-  letter-spacing: 1px;
-  color: #cccccc;
-}
-
-/* 高级交互按钮 */
-.action-btn {
-  display: inline-block;
-}
+.is-visible .watermark-num { transform: translateX(0); }
 
 .magnetic-btn {
   display: flex;
   align-items: center;
   gap: 15px;
   cursor: pointer;
-  transition: transform 0.3s var(--ease-out-expo);
-}
-
-.magnetic-btn:hover {
-  transform: translateX(10px);
-}
-
-.btn-text {
-  font-size: 0.85rem;
-  letter-spacing: 3px;
-  font-weight: 600;
-  text-transform: uppercase;
+  transition: all 0.4s var(--ease-out-expo);
 }
 
 .btn-circle {
-  width: 45px; height: 45px;
+  width: 50px; height: 50px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s var(--ease-out-expo);
+  transition: all 0.4s var(--ease-out-expo);
 }
 
 .magnetic-btn:hover .btn-circle {
   background: var(--primary-red);
   border-color: var(--primary-red);
+  transform: rotate(-45deg);
 }
 
-/* ====== 终章 ====== */
-.footer-section {
-  background: var(--bg-dark);
-  text-align: center;
-  cursor: default;
-}
-
-.footer-content {
-  position: relative;
-  z-index: 10;
-}
-
-.giant-num {
-  font-size: 6rem;
-  font-weight: 900;
-  margin: 0;
-  letter-spacing: 10px;
-  color: var(--primary-red);
-  text-shadow: 0 0 40px rgba(138, 11, 11, 0.4);
-}
-
-.outline-btn {
-  background: transparent;
-  border: 1px solid var(--gold-accent);
-  color: var(--gold-accent);
-  padding: 12px 30px;
-  font-size: 0.8rem;
+.premium-link-btn {
+  background: var(--primary-red);
+  border: none;
+  color: white;
+  padding: 15px 40px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.9rem;
   letter-spacing: 4px;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.4s;
 }
 
-.outline-btn:hover {
-  background: var(--gold-accent);
+.premium-link-btn:hover {
+  background: white;
   color: var(--bg-dark);
 }
 
-.mt-10 { margin-top: 40px; }
+.giant-num {
+  font-size: 8rem;
+  font-weight: 900;
+  color: var(--primary-red);
+  letter-spacing: 15px;
+}
 
-/* ====== 响应式适配 ====== */
 @media (max-width: 768px) {
-  .hero-title { font-size: 2.8rem; letter-spacing: 6px; }
-  .hero-desc { font-size: 0.85rem; }
-  
-  .bg-gradient-mask {
-    background: linear-gradient(180deg, transparent 0%, rgba(5,5,5,0.8) 50%, rgba(5,5,5,0.95) 100%);
-  }
-  
-  .domain-content {
-    left: 20px; right: 20px;
-    bottom: 10%;
-  }
-  
-  .domain-title { font-size: 2.5rem; letter-spacing: 4px; }
-  .domain-desc-box p { font-size: 0.9rem; }
-  
-  .watermark-num {
-    top: 15%; bottom: auto;
-    right: 5%;
-    font-size: 40vw;
-  }
-  
+  .hero-title { font-size: 2.5rem; letter-spacing: 8px; }
+  .side-indicator { right: 15px; }
+  .nav-dot { height: 10px; }
+  .nav-dot.active { height: 25px; }
   .giant-num { font-size: 4rem; }
+  .domain-title { font-size: 3rem; }
 }
 </style>

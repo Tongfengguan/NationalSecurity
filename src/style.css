@@ -17,6 +17,18 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* 电影级胶片颗粒感纹理 - 炫技点：增加页面质感 */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04; /* 极低透明度，若隐若现 */
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  filter: contrast(150%) brightness(100%);
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
