@@ -8,36 +8,36 @@ const domainSections = [
   {
     title: '核心支柱',
     items: [
-      { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1493106819501-66d381c466f1?w=1200', size: 'large' },
-      { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800', size: 'medium' },
-      { id: 'military', name: '军事安全', en: 'Military', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=800', size: 'small' }
+      { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1200', size: 'large' },
+      { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800', size: 'medium' },
+      { id: 'military', name: '军事安全', en: 'Military', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1625217527288-93919c09660a?w=800', size: 'small' }
     ]
   },
   {
     title: '民生防线',
     items: [
-      { id: 'economic', name: '经济安全', en: 'Economic', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800', size: 'medium' },
-      { id: 'cultural', name: '文化安全', en: 'Cultural', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800', size: 'small' },
-      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800', size: 'medium' },
-      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', size: 'large' }
+      { id: 'economic', name: '经济安全', en: 'Economic', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1548331553-9031737e96b8?w=800', size: 'medium' },
+      { id: 'cultural', name: '文化安全', en: 'Cultural', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473444473528-96759000465d?w=800', size: 'small' },
+      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800', size: 'medium' },
+      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800', size: 'large' }
     ]
   },
   {
     title: '前沿阵地',
     items: [
-      { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200', size: 'large' },
+      { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200', size: 'large' },
       { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', size: 'small' },
-      { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800', size: 'medium' },
+      { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800', size: 'medium' },
       { id: 'nuclear', name: '核安全', en: 'Nuclear', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517420812313-8001a889944c?w=1200', size: 'medium' }
     ]
   },
   {
     title: '新型新疆域',
     items: [
-      { id: 'overseas', name: '海外利益', en: 'Overseas', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=800', size: 'medium' },
-      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=800', size: 'small' },
-      { id: 'space', name: '太空安全', en: 'Space', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=1200', size: 'large' },
-      { id: 'deepsea', name: '深海安全', en: 'Deep Sea', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800', size: 'medium' },
+      { id: 'overseas', name: '海外利益', en: 'Overseas', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800', size: 'medium' },
+      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1579154236594-c148f179fa7a?w=800', size: 'small' },
+      { id: 'space', name: '太空安全', en: 'Space', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200', size: 'large' },
+      { id: 'deepsea', name: '深海安全', en: 'Deep Sea', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=800', size: 'medium' },
       { id: 'polar', name: '极地安全', en: 'Polar', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=800', size: 'small' }
     ]
   }
