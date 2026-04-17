@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
@@ -12,198 +12,122 @@ const domainsData: Record<string, any> = {
   'political': {
     name: '政治安全',
     icon: 'UserFilled',
-    img: 'https://images.unsplash.com/photo-1541872703-74c5e443d1f9?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1541872703-74c5e443d1f9?auto=format&fit=crop&q=80&w=1200',
     definition: '政治安全是指国家政权、主权、政治制度、政治秩序以及意识形态不受威胁、侵犯、破坏和控制的状态。',
-    keyPoints: [
-      '政权安全和制度安全是核心',
-      '必须坚持党的领导，维护中国特色社会主义制度',
-      '防范和打击各种渗透、颠覆、破坏活动',
-      '维护意识形态安全，筑牢政治防线'
-    ]
+    keyPoints: ['政权安全和制度安全是核心', '必须坚持党的领导', '防范各种渗透、颠覆活动', '维护意识形态安全']
   },
   'homeland': {
     name: '国土安全',
     icon: 'MapLocation',
-    img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1200',
     definition: '国土安全是指领土完整、国家统一、边疆边境、领空、海洋权益等不受侵犯或免于威胁的状态。',
-    keyPoints: [
-      '领土完整、国家统一是底线',
-      '防范和打击一切分裂国家的活动',
-      '保障陆地边境和领空安全',
-      '维护国家海洋权益'
-    ]
+    keyPoints: ['领土完整是底线', '打击分裂活动', '保障陆海空主权安全', '维护海洋权益']
   },
   'military': {
     name: '军事安全',
     icon: 'Promotion',
-    img: 'https://images.unsplash.com/photo-1508103501740-8456f4d85e78?auto=format&fit=crop&q=80&w=800',
-    definition: '军事安全是指国家不受外部军事入侵 and 战争威胁的状态，以及保障这种状态的能力。',
-    keyPoints: [
-      '建设巩固国防和强大军队',
-      '确保“能打仗、打胜仗”',
-      '防范和抵御侵略，制止武装颠覆',
-      '维护军事利益、设施和秘密安全'
-    ]
+    img: 'https://images.unsplash.com/photo-1508103501740-8456f4d85e78?auto=format&fit=crop&q=80&w=1200',
+    definition: '军事安全是指国家不受外部军事入侵和战争威胁的状态，以及保障这种状态的能力。',
+    keyPoints: ['建设强大军队', '确保能打仗打胜仗', '防范武装颠覆', '保护军事设施安全']
   },
   'economic': {
     name: '经济安全',
     icon: 'TrendCharts',
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
     definition: '经济安全是指国家经济基础稳固、经济主权独立、经济运行平稳、经济发展可持续的状态。',
-    keyPoints: [
-      '国家安全的物质基础',
-      '维护基本经济制度，保障国家经济主权',
-      '防范金融风险，维护金融安全',
-      '保障粮食、能源、资源以及产业链供应链安全'
-    ]
+    keyPoints: ['国家安全的物质基础', '保障国家经济主权', '防范金融风险', '确保能源和产业链安全']
   },
   'cultural': {
     name: '文化安全',
     icon: 'Collection',
-    img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1200',
     definition: '文化安全是指国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
-    keyPoints: [
-      '维护意识形态安全',
-      '弘扬中华优秀传统文化，抵制不良文化侵蚀',
-      '增强国家文化软实力和文化影响力',
-      '保障国民文化权益'
-    ]
+    keyPoints: ['维护意识形态安全', '弘扬传统文化', '抵制文化侵蚀', '增强国家软实力']
   },
   'social': {
     name: '社会安全',
     icon: 'Management',
-    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=1200',
     definition: '社会安全是指防范、消除、控制直接威胁社会公共秩序和人民群众生命财产安全的各类风险。',
-    keyPoints: [
-      '维护社会和谐稳定',
-      '严厉打击恐怖主义、黑恶势力及重大刑事犯罪',
-      '提高公共安全保障能力',
-      '有效处置突发社会安全事件'
-    ]
+    keyPoints: ['维护社会和谐稳定', '打击恐怖主义', '提高公共安全能力', '处置突发社会事件']
   },
   'tech': {
     name: '科技安全',
     icon: 'Monitor',
-    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
     definition: '科技安全是指科技体系完整有效，核心技术安全可控，国家核心利益不受外部科技优势损害。',
-    keyPoints: [
-      '解决“卡脖子”问题，实现高水平科技自立自强',
-      '强化国家战略科技力量',
-      '提升科技创新能力和核心竞争力',
-      '保障科技人才、科研设施和知识产权安全'
-    ]
+    keyPoints: ['解决卡脖子问题', '实现科技自强', '提升核心竞争力', '保护知识产权']
   },
   'cyber': {
     name: '网络安全',
     icon: 'Lock',
-    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
     definition: '网络安全是指网络空间主权不受侵犯，网络基础设施、信息系统及数据受到有效保护。',
-    keyPoints: [
-      '维护网络空间主权，防范网络攻击',
-      '保护关键信息基础设施安全',
-      '加强个人信息保护和重要数据安全管理',
-      '净化网络生态，维护网络秩序'
-    ]
+    keyPoints: ['维护网空主权', '保护基础设施', '数据安全管理', '净化网络生态']
   },
   'ecology': {
     name: '生态安全',
     icon: 'Sunny',
-    img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1200',
     definition: '生态安全是指生态环境能够支撑国家生存和发展的基本状态，环境风险处于可控范围。',
-    keyPoints: [
-      '守住生态保护红线',
-      '积极应对气候变化',
-      '保障大气、水、土壤安全',
-      '保护生物多样性，建设美丽中国'
-    ]
+    keyPoints: ['守住保护红线', '应对气候变化', '保障大气土壤安全', '保护生物多样性']
   },
   'resource': {
     name: '资源安全',
     icon: 'Operation',
-    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=1200',
     definition: '资源安全是指国家发展所需的自然资源（能源、矿产、水、土地等）能够持续、稳定、及时、足量供应。',
-    keyPoints: [
-      '确保能源安全和重要矿产资源供应',
-      '提高资源利用效率，推进节约集约利用',
-      '加强资源战略储备',
-      '完善多元资源供应体系'
-    ]
+    keyPoints: ['确保能源供应', '提高利用效率', '战略储备建设', '多元供应体系']
   },
   'nuclear': {
     name: '核安全',
     icon: 'Warning',
-    img: 'https://images.unsplash.com/photo-1517420812313-8001a889944c?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1517420812313-8001a889944c?auto=format&fit=crop&q=80&w=1200',
     definition: '核安全是指对核设施、核材料采取保护措施，防止核事故、核扩散及核恐怖主义。',
-    keyPoints: [
-      '坚持“安全第一”，确保核能和平利用',
-      '强化核应急能力和放射性废物管理',
-      '防范核恐怖主义威胁',
-      '履行核不扩散国际义务'
-    ]
+    keyPoints: ['坚持安全第一', '核能和平利用', '强化核应急', '防范核恐怖威胁']
   },
   'overseas': {
     name: '海外利益安全',
     icon: 'Ship',
-    img: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=1200',
     definition: '海外利益安全是指国家在海外的公民、机构、企业、资产及正当权益不受威胁和侵害。',
-    keyPoints: [
-      '提升海外安全保障能力',
-      '保护“走出去”的中国公民和机构安全',
-      '维护国家在海外的合法权益',
-      '应对国际恐怖主义和跨境犯罪威胁'
-    ]
+    keyPoints: ['提升保障能力', '保护海外公民', '维护合法权益', '应对跨境犯罪']
   },
   'bio': {
     name: '生物安全',
     icon: 'FirstAidKit',
-    img: 'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&q=80&w=1200',
     definition: '生物安全是指国家有效防范和应对危险生物因子威胁，保障人民生命健康和生态系统平衡。',
-    keyPoints: [
-      '防控重大新发突发传染病',
-      '防治动植物疫情，保障粮食安全',
-      '加强实验室生物安全管理',
-      '防范外来物种入侵，保护生态系统'
-    ]
+    keyPoints: ['防控传染病', '保障粮食安全', '实验室管理', '防范物种入侵']
   },
   'space': {
     name: '太空安全',
     icon: 'Compass',
-    img: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&q=80&w=1200',
     definition: '太空安全是指国家在太空领域的资产、活动及权益不受威胁，拥有进入、利用和控制太空的能力。',
-    keyPoints: [
-      '维护太空主权和和平利用空间权利',
-      '防止太空军备竞赛和外空武器化',
-      '保护卫星等空间基础设施安全',
-      '提升空间资产保护和防御能力'
-    ]
+    keyPoints: ['维护太空主权', '防止外空武器化', '保护基础设施', '提升防御能力']
   },
   'deepsea': {
     name: '深海安全',
     icon: 'Odometer',
-    img: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=1200',
     definition: '深海安全是指国家在深海区域的探索、开发、利用及相关权益不受侵犯。',
-    keyPoints: [
-      '提升深海进入、深海探测和深海开发能力',
-      '维护深海资源开发利用权利',
-      '保障深海设施和科学考察安全',
-      '参与深海国际治理'
-    ]
+    keyPoints: ['提升探测能力', '维护开发权益', '保障考查安全', '参与国际治理']
   },
   'polar': {
     name: '极地安全',
     icon: 'Place',
-    img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?auto=format&fit=crop&q=80&w=800',
+    img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?auto=format&fit=crop&q=80&w=1200',
     definition: '极地安全是指国家在南极、北极地区的科学考察、资源利用及相关权益得到保障。',
-    keyPoints: [
-      '参与极地国际治理和规则制定',
-      '保护极地生态环境，应对极地气候变化',
-      '维护极地科研、航行和资源合理利用权利',
-      '提升极地保障和应急救援能力'
-    ]
+    keyPoints: ['参与极地治理', '保护生态环境', '维护航行权利', '提升应急保障']
   }
 }
 
 const currentDomain = computed(() => domainsData[props.id] || null)
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 
 const goBack = () => {
   router.push('/')
@@ -211,131 +135,175 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="domain-detail" v-if="currentDomain">
-    <el-page-header @back="goBack" title="返回" class="header">
-      <template #content>
-        <span class="header-title">{{ currentDomain.name }}</span>
-      </template>
-    </el-page-header>
+  <div class="detail-container" v-if="currentDomain">
+    <div class="dynamic-grid-bg"></div>
+    
+    <header class="detail-header">
+      <button class="back-link" @click="goBack">
+        <el-icon><ArrowLeft /></el-icon> 返回档案
+      </button>
+    </header>
 
-    <div class="main-content">
-      <div class="detail-banner" :style="{ backgroundImage: `url(${currentDomain.img})` }">
-        <div class="banner-overlay"></div>
-        <el-icon :size="48" color="#fff" class="banner-icon"><component :is="currentDomain.icon" /></el-icon>
+    <main class="detail-content">
+      <div class="top-hero" :style="{ backgroundImage: `url(${currentDomain.img})` }">
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+          <span class="category-tag">重点领域档案</span>
+          <h1 class="domain-title">{{ currentDomain.name }}</h1>
+        </div>
       </div>
 
-      <el-card class="content-card" shadow="never">
-        <div class="section">
-          <h2 class="section-title">领域定义</h2>
-          <p class="definition-text">{{ currentDomain.definition }}</p>
+      <div class="dossier-card">
+        <div class="card-section">
+          <h3 class="section-label">领域定义</h3>
+          <p class="definition">{{ currentDomain.definition }}</p>
         </div>
         
-        <el-divider />
-        
-        <div class="section">
-          <h2 class="section-title">核心要点</h2>
-          <ul class="points-list">
-            <li v-for="(point, index) in currentDomain.keyPoints" :key="index" class="point-item">
-              <el-icon color="#c00000" class="point-icon"><CaretRight /></el-icon>
-              <span>{{ point }}</span>
+        <div class="ornament-divider"></div>
+
+        <div class="card-section">
+          <h3 class="section-label">核心要义</h3>
+          <ul class="points">
+            <li v-for="point in currentDomain.keyPoints" :key="point">
+              {{ point }}
             </li>
           </ul>
         </div>
-      </el-card>
-    </div>
-  </div>
-  <div v-else class="not-found">
-    <el-result icon="warning" title="未找到相关领域" sub-title="请返回首页重新选择">
-      <template #extra>
-        <el-button type="primary" @click="goBack">返回首页</el-button>
-      </template>
-    </el-result>
+      </div>
+    </main>
   </div>
 </template>
 
 <style scoped>
-.domain-detail {
-  max-width: 800px;
+.detail-container {
+  min-height: 100vh;
+  padding-top: 60px;
+  background-color: var(--bg-cream);
+}
+
+.detail-header {
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 20px 40px;
 }
 
-.header {
-  margin-bottom: 20px;
-  background: #fff;
-  padding: 10px 0;
+.back-link {
+  background: none; border: none;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0.6; transition: opacity 0.3s;
+  letter-spacing: 1px;
 }
 
-.header-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #c00000;
+.back-link:hover { opacity: 1; color: var(--primary-red); }
+
+.detail-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 100px 40px;
 }
 
-.detail-banner {
-  position: relative;
-  height: 180px;
+.top-hero {
+  height: 400px;
+  border-radius: 0;
   background-size: cover;
   background-position: center;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.banner-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
-}
-
-.banner-icon {
   position: relative;
-  z-index: 1;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
 }
 
-.content-card {
-  border-radius: 12px;
-  border: 1px solid #f0f0f0;
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7));
 }
 
-.section-title {
-  font-size: 1.1rem;
-  color: #c00000;
-  margin-bottom: 15px;
-  border-left: 3px solid #c00000;
-  padding-left: 10px;
+.hero-text {
+  position: absolute;
+  bottom: 40px; left: 40px;
+  color: white;
 }
 
-.definition-text {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #303133;
+.category-tag {
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
-.points-list {
+.domain-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 10px 0 0 0;
+  letter-spacing: 5px;
+}
+
+.dossier-card {
+  background: white;
+  margin-top: -50px;
+  position: relative;
+  z-index: 10;
+  padding: 60px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.05);
+}
+
+.section-label {
+  font-size: 0.8rem;
+  color: var(--primary-red);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.definition {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.ornament-divider {
+  width: 100%; height: 1px;
+  background: #eee;
+  margin: 40px 0;
+  position: relative;
+}
+
+.ornament-divider::after {
+  content: '';
+  width: 40px; height: 3px;
+  background: var(--gold-accent);
+  position: absolute;
+  top: -1px; left: 0;
+}
+
+.points {
   list-style: none;
   padding: 0;
 }
 
-.point-item {
+.points li {
+  font-size: 1.1rem;
+  padding: 12px 0;
+  border-bottom: 1px solid #f9f9f9;
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 12px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #606266;
+  align-items: center;
+  gap: 15px;
 }
 
-.point-icon {
-  margin-top: 4px;
+.points li::before {
+  content: '·';
+  color: var(--gold-accent);
+  font-weight: bold;
 }
 
-@media (min-width: 768px) {
-  .detail-banner {
-    height: 250px;
-  }
+@media (max-width: 768px) {
+  .detail-content { padding: 0 20px 60px 20px; }
+  .top-hero { height: 250px; }
+  .domain-title { font-size: 2rem; }
+  .dossier-card { padding: 30px; }
+  .definition { font-size: 1rem; }
 }
 </style>
