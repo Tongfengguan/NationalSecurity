@@ -8,11 +8,6 @@ const props = defineProps<{
 
 const router = useRouter()
 
-// 核心修正：显式获取本地图片路径
-const getLocalImage = (filename: string) => {
-  return new URL(`../static/${filename}`, import.meta.url).href
-}
-
 const domainsData: Record<string, any> = {
   'political': {
     name: '政治安全',
@@ -30,21 +25,21 @@ const domainsData: Record<string, any> = {
   },
   'military': {
     name: '军事安全',
-    img: getLocalImage('军事安全.jpg'),
+    img: '/static/军事安全.jpg',
     definition: '国家不受外部军事入侵和战争威胁的状态，以及保障这种状态的能力。',
     keyPoints: ['建设强大军队', '确保能打仗打胜仗', '防范武装颠覆', '保护军事设施安全'],
     chinaPractice: '实施强军战略，研制出歼-20、国产航母等大国重器，现代化军事体系确保了我国具备慑止战争的底气。'
   },
   'economic': {
     name: '经济安全',
-    img: getLocalImage('经济安全.jpg'),
+    img: '/static/经济安全.jpg',
     definition: '国家经济基础稳固、经济主权独立、经济运行平稳、经济发展可持续的状态。',
     keyPoints: ['国家安全的物质基础', '保障国家经济主权', '防范金融风险', '确保能源和产业链安全'],
     chinaPractice: '中国坚持稳中求进，构建“双循环”新发展格局，实施关键核心技术攻关，确保产业链供应链自主可控。'
   },
   'cultural': {
     name: '文化安全',
-    img: getLocalImage('文化安全.jpg'),
+    img: '/static/文化安全.jpg',
     definition: '国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
     keyPoints: ['维护意识形态安全', '弘扬传统文化', '抵制文化侵蚀', '增强国家软实力'],
     chinaPractice: '弘扬社会主义核心价值观，实施中华优秀传统文化传承发展工程，建设具有强大凝聚力的社会主义意识形态。'
@@ -86,7 +81,7 @@ const domainsData: Record<string, any> = {
   },
   'nuclear': {
     name: '核安全',
-    img: getLocalImage('核安全.jpg'),
+    img: '/static/核安全.jpg',
     definition: '对核设施、核材料采取保护措施，防止核事故、核扩散及核恐怖主义。',
     keyPoints: ['坚持安全第一', '核能和平利用', '强化核应急', '防范核恐怖威胁'],
     chinaPractice: '中国自主研发的“华龙一号”核电技术达到世界最高安全标准，保持了优异的核安全记录。'
@@ -145,7 +140,7 @@ const goBack = () => {
       
       <header class="detail-header reveal">
         <button class="back-btn" @click="goBack">
-          <el-icon><ArrowLeft /></el-icon> <span>返回</span>
+          <el-icon><ArrowLeft /></el-icon> <span>返回首页</span>
         </button>
         <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
         <div class="line"></div>

@@ -4,26 +4,22 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// 核心修正：显式获取本地图片路径
-const getLocalImage = (filename: string) => {
-  return new URL(`../static/${filename}`, import.meta.url).href
-}
-
+// 核心修正：使用 public 目录下的绝对路径
 const domainSections = [
   {
     title: '核心支柱',
     items: [
       { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1200', size: 'large' },
       { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800', size: 'medium' },
-      { id: 'military', name: '军事安全', en: 'Military', img: getLocalImage('军事安全.jpg'), size: 'small' }
+      { id: 'military', name: '军事安全', en: 'Military', img: '/static/军事安全.jpg', size: 'small' }
     ]
   },
   {
     title: '民生防线',
     items: [
-      { id: 'economic', name: '经济安全', en: 'Economic', img: getLocalImage('经济安全.jpg'), size: 'medium' },
-      { id: 'cultural', name: '文化安全', en: 'Cultural', img: getLocalImage('文化安全.jpg'), size: 'small' },
-      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800', size: 'medium' },
+      { id: 'economic', name: '经济安全', en: 'Economic', img: '/static/经济安全.jpg', size: 'medium' },
+      { id: 'cultural', name: '文化安全', en: 'Cultural', img: '/static/文化安全.jpg', size: 'small' },
+      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800', size: 'medium' },
       { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', size: 'large' }
     ]
   },
@@ -33,14 +29,14 @@ const domainSections = [
       { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200', size: 'large' },
       { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', size: 'small' },
       { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800', size: 'medium' },
-      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: getLocalImage('核安全.jpg'), size: 'medium' }
+      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: '/static/核安全.jpg', size: 'medium' }
     ]
   },
   {
     title: '新型新疆域',
     items: [
       { id: 'overseas', name: '海外利益', en: 'Overseas', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800', size: 'medium' },
-      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1579154236594-c148f179fa7a?w=800', size: 'small' },
+      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=800', size: 'small' },
       { id: 'space', name: '太空安全', en: 'Space', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200', size: 'large' },
       { id: 'deepsea', name: '深海安全', en: 'Deep Sea', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=800', size: 'medium' },
       { id: 'polar', name: '极地安全', en: 'Polar', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=800', size: 'small' }
@@ -55,7 +51,7 @@ onMounted(() => {
         entry.target.classList.add('is-visible')
       }
     })
-  }, { threshold: 0.15 })
+  }, { threshold: 0.1 })
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
 })
@@ -79,7 +75,6 @@ const navigateToDomain = (id: string) => {
       </div>
     </header>
 
-    <!-- 叙事化流式布局 -->
     <div class="narrative-flow">
       <div v-for="section in domainSections" :key="section.title" class="flow-section">
         
@@ -102,14 +97,17 @@ const navigateToDomain = (id: string) => {
             <div class="card-info">
               <span class="card-en">{{ item.en }}</span>
               <h3 class="card-name">{{ item.name }}</h3>
-              <div class="card-arrow"><el-icon><Right /></el-icon></div>
+              <!-- 显式详情文字，针对移动端常驻 -->
+              <div class="card-details-label">
+                <span>查看详情</span>
+                <el-icon><Right /></el-icon>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 举报入口 -->
     <footer class="footer-cta reveal">
       <div class="cta-inner">
         <h2 class="serif">安而不忘危</h2>
@@ -135,7 +133,7 @@ const navigateToDomain = (id: string) => {
 .serif { font-family: var(--font-serif); }
 
 .hero-header {
-  height: 80vh;
+  height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,12 +224,13 @@ const navigateToDomain = (id: string) => {
 .card-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
 }
 
 .card-info {
   position: absolute;
   bottom: 25px; left: 25px;
+  right: 25px;
   color: white;
   z-index: 5;
 }
@@ -245,20 +244,25 @@ const navigateToDomain = (id: string) => {
 
 .card-name {
   font-size: 1.6rem;
-  margin: 5px 0 0 0;
+  margin: 5px 0 10px 0;
   font-weight: 700;
 }
 
-.card-arrow {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.4s var(--transition-fluid);
+/* 核心修复：详情字样样式 */
+.card-details-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold-dust);
+  opacity: 1; /* 默认可见 */
+  transition: all 0.3s;
 }
 
-.domain-card:hover .card-arrow {
-  opacity: 1; transform: translateX(0);
+.domain-card:hover .card-details-label {
+  transform: translateX(5px);
+  color: white;
 }
 
 .domain-card:hover .card-image-box img {
@@ -306,19 +310,19 @@ const navigateToDomain = (id: string) => {
 }
 
 @media (max-width: 768px) {
-  .hero-header { height: 60vh; }
-  .hero-title { font-size: 3rem; letter-spacing: 0.05em; }
+  .hero-header { height: 50vh; }
+  .hero-title { font-size: 2.8rem; letter-spacing: 0.05em; }
   
   .asym-grid { gap: 15px; }
   
   .card-large, .card-medium, .card-small {
     flex: 1 1 100%;
-    height: 220px;
+    height: 240px;
   }
   
   .domain-card:nth-child(even) {
-    margin-top: -10px;
-    margin-left: 20px;
+    margin-top: 0;
+    margin-left: 0;
   }
   
   .card-name { font-size: 1.4rem; }
