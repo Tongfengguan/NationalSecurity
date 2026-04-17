@@ -1,135 +1,214 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const activeNames = ref(['1'])
+
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 </script>
 
 <template>
-  <div class="knowledge-base">
-    <div class="page-header">
-      <h1 class="page-title">国家安全知识百科</h1>
-      <p class="desc">学习国家安全知识，增强国家安全意识</p>
-    </div>
+  <div class="knowledge-container">
+    <div class="dynamic-grid-bg"></div>
     
-    <el-collapse v-model="activeNames" class="custom-collapse">
-      <el-collapse-item name="1">
-        <template #title>
-          <div class="collapse-title"><el-icon><Flag /></el-icon> 什么是国家安全？</div>
-        </template>
-        <div class="content">
-          根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。
-        </div>
-      </el-collapse-item>
+    <div class="knowledge-content">
+      <header class="page-header reveal-text is-visible">
+        <span class="category-label">国家安全 · 官方档案</span>
+        <h1 class="main-title">国家安全知识百科</h1>
+        <div class="ornament-line"></div>
+      </header>
 
-      <el-collapse-item name="2">
-        <template #title>
-          <div class="collapse-title"><el-icon><Promotion /></el-icon> 总体国家安全观</div>
-        </template>
-        <div class="content">
-          总体国家安全观由习近平总书记在2014年4月15日提出。强调以人民安全为宗旨，以政治安全为根本，以经济安全为基础，以军事、文化、社会安全为保障，以促进国际安全为依托，走出一条中国特色国家安全道路。
-        </div>
-      </el-collapse-item>
+      <div class="dossier-list">
+        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.1s">
+          <div class="item-header">
+            <el-icon><Flag /></el-icon>
+            <h3>国家安全定义</h3>
+          </div>
+          <div class="item-body">
+            根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。
+          </div>
+        </section>
 
-      <el-collapse-item name="3">
-        <template #title>
-          <div class="collapse-title"><el-icon><Stamp /></el-icon> 公民的义务</div>
-        </template>
-        <div class="content">
-          <ul class="duty-list">
-            <li>遵守宪法、法律法规关于国家安全的有关规定；</li>
-            <li>及时报告危害国家安全活动的线索；</li>
-            <li>如实提供所知悉的涉及危害国家安全活动的证据；</li>
-            <li>为国家安全工作提供便利条件或者其他协助；</li>
-            <li>向国家安全机关、公安机关和有关军事机关提供必要的支持和协助；</li>
-            <li>保守所知悉的国家秘密。</li>
-          </ul>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.2s">
+          <div class="item-header">
+            <el-icon><Promotion /></el-icon>
+            <h3>总体国家安全观</h3>
+          </div>
+          <div class="item-body">
+            由习近平总书记在2014年4月15日首次提出。其核心是以人民安全为宗旨，以政治安全为根本，以经济安全为基础，以军事、文化、社会安全为保障，以促进国际安全为依托，走出一条中国特色国家安全道路。
+          </div>
+        </section>
 
-    <div class="hotline-card">
-      <el-icon :size="40"><PhoneFilled /></el-icon>
-      <div class="hotline-text">
-        <div class="label">国家安全机关举报受理电话</div>
-        <div class="number">12339</div>
+        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.3s">
+          <div class="item-header">
+            <el-icon><Stamp /></el-icon>
+            <h3>公民法定义务</h3>
+          </div>
+          <div class="item-body">
+            <ul class="premium-list">
+              <li>遵守宪法、法律法规关于国家安全的规定</li>
+              <li>及时报告危害国家安全活动的线索</li>
+              <li>如实提供所知悉的涉及危害国家安全活动的证据</li>
+              <li>为国家安全工作提供便利条件或者其他协助</li>
+              <li>向国家安全机关、公安机关提供必要的支持</li>
+              <li>保守所知悉的国家秘密</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <div class="report-section reveal-text is-visible" style="transition-delay: 0.4s">
+        <div class="report-card">
+          <div class="report-label">国家安全机关受理举报热线</div>
+          <div class="report-number">12339</div>
+          <p class="report-hint">维护国家安全 · 人人有责</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.knowledge-base {
+.knowledge-container {
+  min-height: 100vh;
+  background-color: var(--bg-cream);
+  padding-top: 100px; /* 修复导航栏遮挡 */
+}
+
+.knowledge-content {
   max-width: 900px;
   margin: 0 auto;
+  padding: 0 40px 100px 40px;
 }
 
 .page-header {
+  margin-bottom: 60px;
   text-align: center;
-  margin-bottom: 40px;
 }
 
-.page-title {
-  color: #c00000;
-  font-size: 2.2rem;
-  margin-bottom: 10px;
+.category-label {
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: var(--primary-red);
+  opacity: 0.7;
 }
 
-.desc {
-  color: #909399;
-}
-
-.custom-collapse {
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-}
-
-.collapse-title {
-  padding-left: 20px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #303133;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.content {
-  padding: 20px 40px;
-  line-height: 1.8;
-  color: #606266;
-  font-size: 1.05rem;
-}
-
-.duty-list {
-  padding-left: 20px;
-}
-
-.hotline-card {
-  margin-top: 40px;
-  background: #c00000;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(192, 0, 0, 0.2);
-}
-
-.hotline-text .label {
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
-
-.hotline-text .number {
-  font-size: 2.4rem;
+.main-title {
+  font-size: 3rem;
   font-weight: 900;
+  margin: 15px 0;
+  letter-spacing: 8px;
+  color: #1a1a1a;
 }
 
-:deep(.el-collapse-item__header.is-active) {
-  color: #c00000;
+.ornament-line {
+  width: 60px;
+  height: 3px;
+  background: var(--gold-accent);
+  margin: 0 auto;
+}
+
+.dossier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.dossier-item {
+  background: white;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+  border-left: 4px solid var(--primary-red);
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  color: var(--primary-red);
+}
+
+.item-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+}
+
+.item-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+  text-align: justify;
+}
+
+.premium-list {
+  padding-left: 20px;
+  list-style: none;
+}
+
+.premium-list li {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.premium-list li::before {
+  content: '·';
+  position: absolute;
+  left: -15px;
+  color: var(--gold-accent);
+  font-weight: bold;
+}
+
+.report-section {
+  margin-top: 80px;
+}
+
+.report-card {
+  background: var(--primary-red);
+  color: white;
+  padding: 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-card::after {
+  content: '12339';
+  position: absolute;
+  font-size: 12rem;
+  font-weight: 900;
+  bottom: -40px;
+  right: -20px;
+  opacity: 0.05;
+}
+
+.report-label {
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  opacity: 0.8;
+}
+
+.report-number {
+  font-size: 5rem;
+  font-weight: 900;
+  margin: 10px 0;
+  letter-spacing: 10px;
+}
+
+.report-hint {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .knowledge-content { padding: 0 20px 60px 20px; }
+  .main-title { font-size: 1.8rem; letter-spacing: 4px; }
+  .dossier-item { padding: 25px; }
+  .report-number { font-size: 3rem; }
+  .report-card { padding: 30px; }
 }
 </style>
