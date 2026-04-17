@@ -8,7 +8,7 @@ const route = useRoute()
   <el-container class="app-container">
     <el-header class="app-header">
       <div class="logo" @click="$router.push('/')">
-        <el-icon :size="20" color="#8b0000"><StarFilled /></el-icon>
+        <el-icon :size="20" color="#fff"><StarFilled /></el-icon>
         <span class="logo-text">国家安全教育</span>
       </div>
       <div class="nav-links">
@@ -37,14 +37,19 @@ const route = useRoute()
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(253, 253, 251, 0.8);
-  backdrop-filter: blur(20px);
+  background: transparent;
   padding: 0 40px;
-  height: 60px;
+  height: 80px;
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  mix-blend-mode: difference;
+  pointer-events: none; /* Let clicks pass through if needed, but we need links to work */
+}
+
+/* Re-enable pointer events for interactive elements */
+.logo, .nav-links {
+  pointer-events: auto;
 }
 
 .logo {
@@ -57,7 +62,7 @@ const route = useRoute()
 .logo-text {
   font-size: 1rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #fff;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -69,16 +74,16 @@ const route = useRoute()
 
 .nav-link {
   text-decoration: none;
-  color: #1a1a1a;
+  color: #fff;
   font-size: 0.9rem;
   letter-spacing: 1px;
-  opacity: 0.5;
+  opacity: 0.6;
   transition: all 0.3s;
 }
 
 .nav-link:hover, .nav-link.active {
   opacity: 1;
-  color: #8b0000;
+  color: #fff;
 }
 
 .app-main {
