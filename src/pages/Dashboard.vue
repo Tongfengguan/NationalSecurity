@@ -4,28 +4,37 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const observer = ref<IntersectionObserver | null>(null)
-const activeIndex = ref(0) // 侧边进度追踪
+const activeIndex = ref(0)
 
-// 获取基准路径
 const base = import.meta.env.BASE_URL
+const isProd = import.meta.env.PROD
+
+// 性能优化：动态图片压缩与代理
+const getOptimizedImage = (url: string) => {
+  if (!isProd) return url
+  // 如果是本地路径，由于部署在 GitHub Pages，需要拼接完整域名给代理
+  const fullUrl = url.startsWith('http') ? url : `https://tongfengguan.github.io${url}`
+  // 使用 weserv 代理：强制转 webp，限制宽度，品质 80
+  return `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&output=webp&w=1920&q=80`
+}
 
 const domains = [
-  { id: 'political', name: '政治安全', en: 'POLITICAL', desc: '政权安全和制度安全是核心，坚持党的领导，捍卫国家根本制度。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1600' },
-  { id: 'homeland', name: '国土安全', en: 'HOMELAND', desc: '国家统一、边境领空领海不受侵犯，是生存与发展的基本底线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
+  { id: 'political', name: '政治安全', en: 'POLITICAL', desc: '政权安全和制度安全是核心，坚持党的领导，捍卫国家根本制度。', img: 'https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1600' },
+  { id: 'homeland', name: '国土安全', en: 'HOMELAND', desc: '国家统一、边境领空领海不受侵犯，是生存与发展的基本底线。', img: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
   { id: 'military', name: '军事安全', en: 'MILITARY', desc: '强军兴军，铸就捍卫国家主权与和平的坚固钢铁长城。', img: `${base}static/military.jpg` },
   { id: 'economic', name: '经济安全', en: 'ECONOMIC', desc: '国计民生所在，保障产业链供应链与金融体系的自主可控。', img: `${base}static/economic.jpg` },
   { id: 'cultural', name: '文化安全', en: 'CULTURAL', desc: '坚定文化自信，弘扬中华优秀传统文化，抵御不良侵蚀。', img: `${base}static/cultural.jpg` },
-  { id: 'social', name: '社会安全', en: 'SOCIAL', desc: '防范化解重大风险，打击违法犯罪，维护社会和谐稳定。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1600' },
-  { id: 'tech', name: '科技安全', en: 'TECHNOLOGY', desc: '实现高水平科技自立自强，把关键核心技术牢牢掌握在自己手中。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600' },
-  { id: 'cyber', name: '网络安全', en: 'CYBERSPACE', desc: '没有网络安全就没有国家安全，构筑清朗安全的数字空间防线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600' },
-  { id: 'ecology', name: '生态安全', en: 'ECOLOGICAL', desc: '绿水青山就是金山银山，构筑尊崇自然、绿色发展的生态屏障。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600' },
-  { id: 'resource', name: '资源安全', en: 'RESOURCES', desc: '保障能源、水、粮食等核心战略资源的可持续与稳定供应。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1600' },
+  { id: 'social', name: '社会安全', en: 'SOCIAL', desc: '防范化解重大风险，打击违法犯罪，维护社会和谐稳定。', img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1600' },
+  { id: 'tech', name: '科技安全', en: 'TECHNOLOGY', desc: '实现高水平科技自立自强，把关键核心技术牢牢掌握在自己手中。', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600' },
+  { id: 'cyber', name: '网络安全', en: 'CYBERSPACE', desc: '没有网络安全就没有国家安全，构筑清朗安全的数字空间防线。', img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600' },
+  { id: 'ecology', name: '生态安全', en: 'ECOLOGICAL', desc: '绿水青山就是金山银山，构筑尊崇自然、绿色发展的生态屏障。', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600' },
+  { id: 'resource', name: '资源安全', en: 'RESOURCES', desc: '保障能源、水、粮食等核心战略资源的可持续与稳定供应。', img: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1600' },
   { id: 'nuclear', name: '核安全', en: 'NUCLEAR', desc: '坚持最高安全标准，确保核能和平开发利用万无一失。', img: `${base}static/nuclear.jpg` },
-  { id: 'overseas', name: '海外利益安全', en: 'OVERSEAS', desc: '中国脚步走到哪里，安全保护就跟到哪里，维护侨胞与资产安全。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1600' },
-  { id: 'bio', name: '生物安全', en: 'BIOLOGICAL', desc: '防范重大传染病和外来物种入侵，守护人民生命健康底线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1579154236594-c148f179fa7a?w=1600' },
-  { id: 'space', name: '太空安全', en: 'OUTER SPACE', desc: '和平探索与利用太空资源，捍卫国家在外太空的战略权益。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
-  { id: 'deepsea', name: '深海安全', en: 'DEEP SEA', desc: '提升深海进入与探测能力，科学开发海洋，维护海洋强国利益。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
-  { id: 'polar', name: '极地安全', en: 'POLAR REGIONS', desc: '积极参与极地国际治理，和平开展科考，守护极地生态环境。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
+  { id: 'overseas', name: '海外利益安全', en: 'OVERSEAS', desc: '中国脚步走到哪里，安全保护就跟到哪里，维护侨胞与资产安全。', img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1600' },
+  { id: 'bio', name: '生物安全', en: 'BIOLOGICAL', desc: '防范重大传染病和外来物种入侵，守护人民生命健康底线。', img: 'https://images.unsplash.com/photo-1579154236594-c148f179fa7a?w=1600' },
+  { id: 'space', name: '太空安全', en: 'OUTER SPACE', desc: '和平探索与利用太空资源，捍卫国家在外太空的战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
+  { id: 'deepsea', name: '深海安全', en: 'DEEP SEA', desc: '提升深海进入与探测能力，科学开发海洋，维护海洋强国利益。', img: 'https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
+  { id: 'polar', name: '极地安全', en: 'POLAR REGIONS', desc: '积极参与极地国际治理，和平开展科考，守护极地生态环境。', img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
 ]
 
 onMounted(() => {
@@ -60,7 +69,6 @@ const scrollToSection = (index: number) => {
 <template>
   <div class="scroller-container">
     
-    <!-- 侧边极简进度导航 -->
     <div class="side-indicator">
       <div 
         v-for="(_, i) in (domains.length + 2)" 
@@ -73,7 +81,6 @@ const scrollToSection = (index: number) => {
       </div>
     </div>
 
-    <!-- 序幕：极简全屏电影级海报 -->
     <section class="editorial-section hero-section" data-index="0">
       <div class="cinematic-bg"></div>
       <div class="ambient-glow"></div>
@@ -93,7 +100,6 @@ const scrollToSection = (index: number) => {
       </div>
     </section>
 
-    <!-- 16个领域：全屏 PPT 滑动级排版 -->
     <section 
       v-for="(item, index) in domains" 
       :key="item.id" 
@@ -101,16 +107,14 @@ const scrollToSection = (index: number) => {
       :data-index="index + 1"
       @click="navigateToDomain(item.id)"
     >
-      <!-- 背景动效增加沉浸感 -->
       <div class="image-wrapper">
-        <div class="bg-image" :style="{ backgroundImage: `url(${item.img})` }"></div>
+        <!-- 性能优化点：动态代理图片，并设置延迟加载 -->
+        <div class="bg-image" :style="{ backgroundImage: `url(${getOptimizedImage(item.img)})` }"></div>
         <div class="bg-gradient-mask"></div>
       </div>
       
-      <!-- 背景水印数字 -->
       <div class="watermark-num">{{ index + 1 < 10 ? '0'+(index+1) : index+1 }}</div>
       
-      <!-- 核心内容区 -->
       <div class="domain-content">
         <div class="reveal-mask"><div class="domain-en-tag delay-1">{{ item.en }}</div></div>
         <div class="reveal-mask"><h2 class="domain-title delay-2 font-serif">{{ item.name }}</h2></div>
@@ -131,7 +135,6 @@ const scrollToSection = (index: number) => {
       </div>
     </section>
     
-    <!-- 终章 -->
     <section class="editorial-section footer-section" :data-index="domains.length + 1">
       <div class="footer-content">
         <div class="reveal-mask"><h2 class="hero-title delay-1"><span class="font-serif">安而不忘危</span></h2></div>
@@ -150,7 +153,6 @@ const scrollToSection = (index: number) => {
 </template>
 
 <style scoped>
-/* 全屏滚动容器 */
 .scroller-container {
   height: 100vh;
   overflow-y: scroll;
@@ -158,16 +160,11 @@ const scrollToSection = (index: number) => {
   scroll-behavior: smooth;
   background-color: #050505;
   color: #fff;
-  /* 抵消上层可能的 padding */
   margin: -20px -15px; 
 }
 
-/* 隐藏滚动条 */
-.scroller-container::-webkit-scrollbar {
-  display: none;
-}
+.scroller-container::-webkit-scrollbar { display: none; }
 
-/* 每一屏强制占满 100vh */
 .editorial-section {
   height: 100vh;
   width: 100%;
@@ -179,13 +176,13 @@ const scrollToSection = (index: number) => {
   justify-content: center;
   overflow: hidden;
   cursor: pointer;
+  /* 性能点：启用 GPU 加速 */
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
-.font-serif {
-  font-family: 'Noto Serif SC', serif;
-}
+.font-serif { font-family: 'Noto Serif SC', serif; }
 
-/* ======== 高级遮罩动效 ======== */
 .reveal-mask {
   overflow: hidden;
   display: inline-block;
@@ -196,12 +193,11 @@ const scrollToSection = (index: number) => {
   display: inline-block;
   transform: translateY(110%);
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  /* 性能点：GPU 加速 */
   will-change: transform;
 }
 
-.is-visible .reveal-mask > * {
-  transform: translateY(0);
-}
+.is-visible .reveal-mask > * { transform: translateY(0); }
 
 .delay-1 > * { transition-delay: 0.1s; }
 .delay-2 > * { transition-delay: 0.2s; }
@@ -215,11 +211,8 @@ const scrollToSection = (index: number) => {
   transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
 }
 
-.is-visible .expand-line {
-  width: 100%;
-}
+.is-visible .expand-line { width: 100%; }
 
-/* ======== 侧边进度导航 ======== */
 .side-indicator {
   position: fixed;
   right: 40px;
@@ -241,10 +234,7 @@ const scrollToSection = (index: number) => {
   position: relative;
 }
 
-.nav-dot.active {
-  background: #c5a059;
-  height: 40px;
-}
+.nav-dot.active { background: #c5a059; height: 40px; }
 
 .dot-num {
   position: absolute;
@@ -257,11 +247,7 @@ const scrollToSection = (index: number) => {
   letter-spacing: 1px;
 }
 
-/* ======== Hero 屏 ======== */
-.hero-section {
-  background: #050505;
-  cursor: default;
-}
+.hero-section { background: #050505; cursor: default; }
 
 .cinematic-bg {
   position: absolute;
@@ -308,17 +294,9 @@ const scrollToSection = (index: number) => {
   text-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.hero-section .expand-line {
-  margin: 30px auto;
-  max-width: 400px;
-}
+.hero-section .expand-line { margin: 30px auto; max-width: 400px; }
 
-.hero-desc {
-  font-size: 1rem;
-  letter-spacing: 4px;
-  line-height: 2;
-  color: #a0a0a0;
-}
+.hero-desc { font-size: 1rem; letter-spacing: 4px; line-height: 2; color: #a0a0a0; }
 
 .scroll-down-hint {
   position: absolute;
@@ -352,7 +330,6 @@ const scrollToSection = (index: number) => {
   100% { transform: translateY(20px); opacity: 0; }
 }
 
-/* ======== 领域屏 ======== */
 .image-wrapper {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -365,6 +342,8 @@ const scrollToSection = (index: number) => {
   background-position: center;
   transform: scale(1.15);
   transition: transform 12s cubic-bezier(0.65, 0, 0.35, 1);
+  /* 性能点：GPU 加速 */
+  will-change: transform;
 }
 
 .is-visible .bg-image { transform: scale(1); }
@@ -382,11 +361,10 @@ const scrollToSection = (index: number) => {
   z-index: 10;
   max-width: 600px;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
-.is-visible .domain-content {
-  transform: translateY(-10px);
-}
+.is-visible .domain-content { transform: translateY(-10px); }
 
 .watermark-num {
   position: absolute;
@@ -400,41 +378,21 @@ const scrollToSection = (index: number) => {
   z-index: 1;
   transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateX(50px);
+  will-change: transform;
 }
 
 .is-visible .watermark-num { transform: translateX(0); }
 
-.domain-en-tag {
-  font-size: 0.75rem;
-  letter-spacing: 6px;
-  color: #c5a059;
-  margin-bottom: 10px;
-}
+.domain-en-tag { font-size: 0.75rem; letter-spacing: 6px; color: #c5a059; margin-bottom: 10px; }
 
-.domain-title {
-  font-size: 4rem;
-  margin: 0;
-  letter-spacing: 8px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-}
+.domain-title { font-size: 4rem; margin: 0; letter-spacing: 8px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
 
-.line-gold {
-  margin: 20px 0;
-  max-width: 80%;
-}
+.line-gold { margin: 20px 0; max-width: 80%; }
 
-.domain-desc-box {
-  margin-bottom: 40px;
-}
+.domain-desc-box { margin-bottom: 40px; }
 
-.domain-desc-box p {
-  font-size: 1rem;
-  line-height: 1.8;
-  letter-spacing: 1px;
-  color: #cccccc;
-}
+.domain-desc-box p { font-size: 1rem; line-height: 1.8; letter-spacing: 1px; color: #cccccc; }
 
-/* 按钮交互 */
 .action-btn { display: inline-block; }
 
 .magnetic-btn {
@@ -445,16 +403,9 @@ const scrollToSection = (index: number) => {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.magnetic-btn:hover {
-  transform: translateX(10px);
-}
+.magnetic-btn:hover { transform: translateX(10px); }
 
-.btn-text {
-  font-size: 0.85rem;
-  letter-spacing: 3px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
+.btn-text { font-size: 0.85rem; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; }
 
 .btn-circle {
   width: 50px; height: 50px;
@@ -466,23 +417,11 @@ const scrollToSection = (index: number) => {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.magnetic-btn:hover .btn-circle {
-  background: #a80000;
-  border-color: #a80000;
-  transform: rotate(-45deg);
-}
+.magnetic-btn:hover .btn-circle { background: #a80000; border-color: #a80000; transform: rotate(-45deg); }
 
-/* ======== 终章 ======== */
-.footer-section {
-  background: #050505;
-  text-align: center;
-  cursor: default;
-}
+.footer-section { background: #050505; text-align: center; cursor: default; }
 
-.footer-content {
-  position: relative;
-  z-index: 10;
-}
+.footer-content { position: relative; z-index: 10; }
 
 .giant-num {
   font-size: 8rem;
@@ -510,36 +449,20 @@ const scrollToSection = (index: number) => {
   margin: 0 auto;
 }
 
-.premium-link-btn:hover {
-  background: white;
-  color: #050505;
-}
+.premium-link-btn:hover { background: white; color: #050505; }
 
 .mt-10 { margin-top: 40px; }
 
-/* ======== 移动端适配 ======== */
 @media (max-width: 768px) {
   .hero-title { font-size: 2.8rem; letter-spacing: 6px; }
   .hero-desc { font-size: 0.85rem; }
-  
   .side-indicator { right: 10px; }
   .nav-dot { height: 10px; }
   .nav-dot.active { height: 25px; }
-  
-  .domain-content {
-    left: 20px; right: 20px;
-    bottom: 10%;
-  }
-  
+  .domain-content { left: 20px; right: 20px; bottom: 10%; }
   .domain-title { font-size: 2.5rem; letter-spacing: 4px; }
   .domain-desc-box p { font-size: 0.9rem; }
-  
-  .watermark-num {
-    top: 15%; bottom: auto;
-    right: 5%;
-    font-size: 40vw;
-  }
-  
+  .watermark-num { top: 15%; bottom: auto; right: 5%; font-size: 40vw; }
   .giant-num { font-size: 4rem; letter-spacing: 5px; }
 }
 </style>
