@@ -1,57 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
 
 :root {
-  --primary-red: #a80000;
-  --bg-white: #ffffff;
-  --ink-black: #111111;
-  --text-gray: #444444;
-  --border-light: #eeeeee;
+  --ink-black: #050505;
+  --deep-gray: #1a1a1a;
+  --cinnabar-red: #b32a26;
+  --gold-dust: #c5a059;
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --border-dim: rgba(255, 255, 255, 0.08);
   
   --font-serif: 'Noto Serif SC', serif;
   --font-sans: 'Inter', sans-serif;
   
-  --transition-fast: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-white);
-  color: var(--ink-black);
+  padding: 0;
+  background-color: var(--ink-black);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* 性能点：移除昂贵的混合模式，确保滑动不卡顿 */
-.app-header {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-light);
-  height: 60px !important;
+/* 隐藏滚动条 */
+::-webkit-scrollbar { display: none; }
+
+/* 全局进场动画 */
+@keyframes decodeReveal {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-10px); }
+  to { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
 }
 
-.logo-text {
-  color: var(--ink-black) !important;
-  font-weight: 900;
-}
-
-.nav-link {
-  color: var(--text-gray) !important;
-  opacity: 0.8;
-}
-
-.nav-link.active {
-  color: var(--primary-red) !important;
-  opacity: 1;
-}
-
-/* 统一进场动效 - 极简且省资源 */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.reveal-simple {
-  animation: fadeInUp 0.5s var(--transition-fast) forwards;
+.decode-text {
+  animation: decodeReveal 1.2s var(--transition-smooth) forwards;
 }
 
 .serif { font-family: var(--font-serif); }
+
+/* 玻璃拟态卡片 */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+}

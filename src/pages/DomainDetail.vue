@@ -137,95 +137,114 @@ const goBack = () => {
 
 <template>
   <div class="detail-page" v-if="currentDomain">
-    <main class="content-wrapper">
+    <main class="detail-wrapper">
       
-      <header class="page-header">
+      <header class="detail-header decode-text">
         <button class="back-btn" @click="goBack">
-          <el-icon><ArrowLeft /></el-icon> <span>返回</span>
+          <el-icon><ArrowLeft /></el-icon> <span>返回首页</span>
         </button>
-        <h1 class="title serif">{{ currentDomain.name }}</h1>
-        <div class="divider"></div>
+        <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
+        <div class="accent-line"></div>
       </header>
 
-      <section class="banner-section">
-        <div class="img-box">
+      <section class="banner-section decode-text" style="animation-delay: 0.2s">
+        <div class="img-frame">
           <img :src="currentDomain.img" :alt="currentDomain.name" />
+          <div class="frame-overlay"></div>
         </div>
       </section>
 
-      <section class="info-grid">
-        <div class="grid-item">
-          <h3 class="serif">领域定义</h3>
-          <p>{{ currentDomain.definition }}</p>
+      <div class="content-grid">
+        <div class="info-card glass-panel decode-text" style="animation-delay: 0.4s">
+          <span class="label">领域定义 / DEFINITION</span>
+          <p class="text">{{ currentDomain.definition }}</p>
         </div>
         
-        <div class="grid-item">
-          <h3 class="serif">核心要义</h3>
+        <div class="info-card glass-panel decode-text" style="animation-delay: 0.6s">
+          <span class="label">核心要义 / CORE POINTS</span>
           <ul class="point-list">
             <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
           </ul>
         </div>
 
-        <div class="grid-item full-width">
-          <div class="practice-box">
-            <h3 class="serif">中国实践</h3>
+        <div class="info-card glass-panel practice-card decode-text" style="animation-delay: 0.8s">
+          <span class="label">中国实践与成就 / CHINA PRACTICE</span>
+          <div class="practice-content">
+            <el-icon :size="24" color="#b32a26"><Star /></el-icon>
             <p>{{ currentDomain.chinaPractice }}</p>
           </div>
         </div>
-      </section>
-
+      </div>
     </main>
   </div>
 </template>
 
 <style scoped>
 .detail-page {
-  background-color: #fff;
+  background-color: var(--ink-black);
   min-height: 100vh;
-  padding: 100px 20px 80px 20px;
-  color: #111;
+  padding: 120px 40px 100px 40px;
+  color: var(--text-primary);
 }
 
-.content-wrapper {
-  max-width: 1000px;
+.detail-wrapper {
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.page-header { margin-bottom: 40px; }
+.detail-header { margin-bottom: 60px; }
 
 .back-btn {
   background: none; border: none;
   display: flex; align-items: center; gap: 8px;
-  color: #888; cursor: pointer;
-  padding: 0; margin-bottom: 20px;
+  color: var(--text-secondary); cursor: pointer;
+  font-size: 0.9rem; margin-bottom: 30px; padding: 0;
+  transition: all 0.3s;
 }
+.back-btn:hover { color: var(--cinnabar-red); transform: translateX(-5px); }
 
-.title { font-size: 3rem; margin: 0; }
-.divider { width: 40px; height: 4px; background: var(--primary-red); margin-top: 20px; }
+.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; letter-spacing: 5px; }
+.accent-line { width: 100px; height: 3px; background: var(--cinnabar-red); margin-top: 30px; }
 
-.banner-section { margin: 40px 0 60px 0; }
-.img-box { width: 100%; height: 50vh; border-radius: 8px; overflow: hidden; }
-.img-box img { width: 100%; height: 100%; object-fit: cover; }
+.banner-section { margin-bottom: 80px; }
+.img-frame { width: 100%; height: 55vh; border-radius: 4px; overflow: hidden; position: relative; }
+.img-frame img { width: 100%; height: 100%; object-fit: cover; }
+.frame-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4)); }
 
-.info-grid {
+.content-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 40px;
 }
 
-.grid-item h3 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.4rem; }
-.grid-item p { font-size: 1.1rem; line-height: 1.8; color: #333; }
+.info-card { padding: 40px; }
+.practice-card { grid-column: span 2; border-left: 4px solid var(--cinnabar-red); }
 
-.point-list { padding-left: 20px; }
-.point-list li { margin-bottom: 10px; font-size: 1.1rem; }
+.label {
+  display: block; font-size: 0.75rem; color: var(--gold-dust);
+  margin-bottom: 25px; letter-spacing: 3px; font-weight: bold;
+}
 
-.full-width { grid-column: span 2; }
-.practice-box { background: #fdf2f2; padding: 30px; border-radius: 8px; }
+.text { font-size: 1.2rem; line-height: 1.8; color: #eee; }
 
-@media (max-width: 768px) {
-  .info-grid { grid-template-columns: 1fr; }
-  .full-width { grid-column: span 1; }
-  .title { font-size: 2.2rem; }
-  .img-box { height: 35vh; }
+.point-list { list-style: none; padding: 0; margin: 0; }
+.point-list li {
+  font-size: 1.15rem; margin-bottom: 15px; padding-left: 20px;
+  position: relative; color: #ddd;
+}
+.point-list li::before {
+  content: '·'; position: absolute; left: 0;
+  color: var(--cinnabar-red); font-weight: bold;
+}
+
+.practice-content { display: flex; gap: 20px; align-items: flex-start; }
+.practice-content p { margin: 0; font-size: 1.2rem; line-height: 1.8; font-style: italic; color: #fff; }
+
+@media (max-width: 900px) {
+  .detail-page { padding: 100px 20px 60px 20px; }
+  .content-grid { grid-template-columns: 1fr; gap: 25px; }
+  .practice-card { grid-column: span 1; }
+  .img-frame { height: 40vh; }
+  .domain-title { font-size: 2.2rem; }
 }
 </style>
