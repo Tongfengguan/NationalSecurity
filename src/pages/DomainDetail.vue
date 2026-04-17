@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const router = useRouter()
 
-// 核心修正：获取基准路径
+// 获取基准路径
 const base = import.meta.env.BASE_URL
 
 const domainsData: Record<string, any> = {
@@ -28,23 +28,23 @@ const domainsData: Record<string, any> = {
   },
   'military': {
     name: '军事安全',
-    img: `${base}static/军事安全.jpg`,
+    img: `${base}static/military.jpg`,
     definition: '国家不受外部军事入侵和战争威胁的状态，以及保障这种状态的能力。',
     keyPoints: ['建设强大军队', '确保能打仗打胜仗', '防范武装颠覆', '保护军事设施安全'],
     chinaPractice: '实施强军战略，研制出歼-20、国产航母等大国重器，现代化军事体系确保了我国具备慑止战争的底气。'
   },
   'economic': {
     name: '经济安全',
-    img: `${base}static/经济安全.jpg`,
+    img: `${base}static/economic.jpg`,
     definition: '国家经济基础稳固、经济主权独立、经济运行平稳、经济发展可持续的状态。',
     keyPoints: ['国家安全的物质基础', '保障国家经济主权', '防范金融风险', '确保能源和产业链安全'],
     chinaPractice: '中国坚持稳中求进，构建“双循环”新发展格局，实施关键核心技术攻关，确保产业链供应链自主可控。'
   },
   'cultural': {
     name: '文化安全',
-    img: `${base}static/文化安全.jpg`,
+    img: `${base}static/cultural.jpg`,
     definition: '国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
-    keyPoints: ['维护意识形态安全', '弘弘传统文化', '抵制文化侵蚀', '增强国家软实力'],
+    keyPoints: ['维护意识形态安全', '弘扬传统文化', '抵制文化侵蚀', '增强国家软实力'],
     chinaPractice: '弘扬社会主义核心价值观，实施中华优秀传统文化传承发展工程，建设具有强大凝聚力的社会主义意识形态。'
   },
   'social': {
@@ -84,7 +84,7 @@ const domainsData: Record<string, any> = {
   },
   'nuclear': {
     name: '核安全',
-    img: `${base}static/核安全.jpg`,
+    img: `${base}static/nuclear.jpg`,
     definition: '对核设施、核材料采取保护措施，防止核事故、核扩散及核恐怖主义。',
     keyPoints: ['坚持安全第一', '核能和平利用', '强化核应急', '防范核恐怖威胁'],
     chinaPractice: '中国自主研发的“华龙一号”核电技术达到世界最高安全标准，保持了优异的核安全记录。'
@@ -92,14 +92,14 @@ const domainsData: Record<string, any> = {
   'overseas': {
     name: '海外利益安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=1200',
-    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁 and 侵害。',
+    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁和侵害。',
     keyPoints: ['提升保障能力', '保护海外公民', '维护合法权益', '应对跨境犯罪'],
     chinaPractice: '实施撤侨等重大行动，保护了海外同胞生命安全，体现了“中国脚步走到哪里，保护就跟到哪里”。'
   },
   'bio': {
     name: '生物安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=1200',
-    definition: '有效防范 and 应对危险生物因子威胁，保障人民生命健康 and 生态系统平衡。',
+    definition: '有效防范和应对危险生物因子威胁，保障人民生命健康和生态系统平衡。',
     keyPoints: ['防控传染病', '保障粮食安全', '实验室管理', '防范物种入侵'],
     chinaPractice: '《生物安全法》实施，建立完善了国家生物安全风险防控体系，守护物种多样性。'
   },
