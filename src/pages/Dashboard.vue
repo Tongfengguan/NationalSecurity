@@ -4,22 +4,38 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+// 辅助函数：处理本地静态图片路径
+const getImageUrl = (name: string, fallback: string) => {
+  const localImages: Record<string, string> = {
+    'nuclear': '核安全.jpg',
+    'economic': '经济安全.jpg',
+    'military': '军事安全.jpg',
+    'cultural': '文化安全.jpg'
+  }
+  
+  if (localImages[name]) {
+    // 动态引用 src/static 下的本地图片
+    return new URL(`../static/${localImages[name]}`, import.meta.url).href
+  }
+  return fallback
+}
+
 const domainSections = [
   {
     title: '核心支柱',
     items: [
       { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1200', size: 'large' },
       { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800', size: 'medium' },
-      { id: 'military', name: '军事安全', en: 'Military', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1625217527288-93919c09660a?w=800', size: 'small' }
+      { id: 'military', name: '军事安全', en: 'Military', img: getImageUrl('military', 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1625217527288-93919c09660a?w=800'), size: 'small' }
     ]
   },
   {
     title: '民生防线',
     items: [
-      { id: 'economic', name: '经济安全', en: 'Economic', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1548331553-9031737e96b8?w=800', size: 'medium' },
-      { id: 'cultural', name: '文化安全', en: 'Cultural', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473444473528-96759000465d?w=800', size: 'small' },
+      { id: 'economic', name: '经济安全', en: 'Economic', img: getImageUrl('economic', 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1548331553-9031737e96b8?w=800'), size: 'medium' },
+      { id: 'cultural', name: '文化安全', en: 'Cultural', img: getImageUrl('cultural', 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473444473528-96759000465d?w=800'), size: 'small' },
       { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800', size: 'medium' },
-      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800', size: 'large' }
+      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', size: 'large' }
     ]
   },
   {
@@ -28,7 +44,7 @@ const domainSections = [
       { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200', size: 'large' },
       { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', size: 'small' },
       { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800', size: 'medium' },
-      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517420812313-8001a889944c?w=1200', size: 'medium' }
+      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: getImageUrl('nuclear', 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517420812313-8001a889944c?w=1200'), size: 'medium' }
     ]
   },
   {
