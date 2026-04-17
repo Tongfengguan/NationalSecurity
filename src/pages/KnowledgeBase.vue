@@ -3,267 +3,228 @@ import { onMounted } from 'vue'
 
 onMounted(() => {
   window.scrollTo(0, 0)
+  
+  // 简单的进场动画触发
+  setTimeout(() => {
+    const reveals = document.querySelectorAll('.fade-up')
+    reveals.forEach(el => el.classList.add('is-visible'))
+  }, 100)
 })
 </script>
 
 <template>
-  <div class="knowledge-container">
-    <div class="dynamic-grid-bg"></div>
-    
-    <div class="knowledge-content">
-      <header class="page-header reveal-text is-visible">
-        <span class="category-label">国家安全 · 官方档案</span>
-        <h1 class="main-title">国家安全知识百科</h1>
-        <div class="ornament-line"></div>
+  <div class="knowledge-wrapper">
+    <main class="knowledge-main">
+      
+      <header class="page-header fade-up delay-1">
+        <h1 class="main-title serif">知识档案</h1>
+        <p class="subtitle">国家安全法律体系与核心概览</p>
       </header>
 
       <div class="dossier-list">
-        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.1s">
+        
+        <section class="dossier-item fade-up delay-1">
           <div class="item-header">
-            <el-icon><Flag /></el-icon>
-            <h3>基本定义</h3>
+            <span class="item-num">01</span>
+            <h3 class="serif">基本定义</h3>
           </div>
           <div class="item-body">
-            根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。
+            <p>根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。</p>
           </div>
         </section>
 
-        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.15s">
+        <section class="dossier-item fade-up delay-2">
           <div class="item-header">
-            <el-icon><Promotion /></el-icon>
-            <h3>总体国家安全观</h3>
+            <span class="item-num">02</span>
+            <h3 class="serif">总体国家安全观</h3>
           </div>
           <div class="item-body">
-            2014年4月15日，习近平总书记在中央国家安全委员会第一次会议上首次提出。强调坚持以<b>人民安全</b>为宗旨，以<b>政治安全</b>为根本，以<b>经济安全</b>为基础，以<b>军事、文化、社会安全</b>为保障，以<b>促进国际安全</b>为依托。
+            <p>2014年4月15日首次提出。强调坚持以<b>人民安全</b>为宗旨，以<b>政治安全</b>为根本，以<b>经济安全</b>为基础，以<b>军事、文化、社会安全</b>为保障，以<b>促进国际安全</b>为依托。</p>
           </div>
         </section>
 
-        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.2s">
+        <section class="dossier-item fade-up delay-3">
           <div class="item-header">
-            <el-icon><ScaleToOriginal /></el-icon>
-            <h3>中国国家安全法律体系</h3>
+            <span class="item-num">03</span>
+            <h3 class="serif">法律体系</h3>
           </div>
           <div class="item-body">
-            中国已构建起以《宪法》为根本，以《国家安全法》为骨干，涵盖《反间谍法》、《网络安全法》、《生物安全法》、《数据安全法》、《反外国制裁法》等一系列专项法律的完备体系。
+            <p>中国已构建起以《宪法》为根本，以《国家安全法》为骨干，涵盖《反间谍法》、《网络安全法》、《生物安全法》、《数据安全法》、《反外国制裁法》等一系列专项法律的完备体系。</p>
           </div>
         </section>
 
-        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.25s">
+        <section class="dossier-item fade-up delay-1">
           <div class="item-header">
-            <el-icon><Stamp /></el-icon>
-            <h3>公民法定义务</h3>
+            <span class="item-num">04</span>
+            <h3 class="serif">公民义务</h3>
           </div>
           <div class="item-body">
-            <ul class="premium-list">
-              <li>遵守宪法、法律法规关于国家安全的有关规定；</li>
-              <li>及时报告危害国家安全活动的线索；</li>
-              <li>如实提供所知悉的涉及危害国家安全活动的证据；</li>
-              <li>为国家安全工作提供便利条件或者其他协助；</li>
-              <li>向国家安全机关、公安机关和有关军事机关提供必要的支持和协助；</li>
-              <li>保守所知悉的国家秘密。</li>
+            <ul class="minimal-list">
+              <li>遵守宪法、法律法规关于国家安全的有关规定</li>
+              <li>及时报告危害国家安全活动的线索</li>
+              <li>如实提供所知悉的涉及危害国家安全活动的证据</li>
+              <li>为国家安全工作提供便利条件或者其他协助</li>
+              <li>向国家安全机关、公安机关提供必要的支持和协助</li>
+              <li>保守所知悉的国家秘密</li>
             </ul>
           </div>
         </section>
 
-        <section class="dossier-item reveal-text is-visible" style="transition-delay: 0.3s">
-          <div class="item-header">
-            <el-icon><Calendar /></el-icon>
-            <h3>重要时间节点</h3>
-          </div>
-          <div class="item-body">
-            <div class="timeline-mini">
-              <div class="t-item"><b>4月15日</b> 全民国家安全教育日</div>
-              <div class="t-item"><b>1月10日</b> 中国人民警察节</div>
-              <div class="t-item"><b>11月1日</b> 《反间谍法》颁布实施纪念日</div>
-            </div>
-          </div>
-        </section>
       </div>
 
-      <div class="report-section reveal-text is-visible" style="transition-delay: 0.4s">
-        <div class="report-card">
+      <div class="report-section fade-up delay-2">
+        <div class="report-inner">
           <div class="report-label">国家安全机关举报受理平台</div>
-          <div class="report-number">12339</div>
-          <div class="report-web">www.12339.gov.cn</div>
-          <p class="report-hint">国之大者 · 安而不忘危</p>
+          <div class="report-number serif">12339</div>
+          <a href="https://www.12339.gov.cn" target="_blank" class="report-link">www.12339.gov.cn</a>
         </div>
       </div>
-    </div>
+
+    </main>
   </div>
 </template>
 
 <style scoped>
-.knowledge-container {
+.knowledge-wrapper {
   min-height: 100vh;
-  background-color: var(--bg-cream);
-  padding-top: 120px; /* 增加留白，确保不被 Header 遮挡 */
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  padding: 150px 40px 100px 40px;
 }
 
-.knowledge-content {
-  max-width: 900px;
+.knowledge-main {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 40px 100px 40px;
 }
+
+.serif { font-family: var(--font-serif); }
 
 .page-header {
-  margin-bottom: 60px;
-  text-align: center;
-}
-
-.category-label {
-  font-size: 0.8rem;
-  letter-spacing: 4px;
-  color: var(--primary-red);
-  opacity: 0.7;
+  margin-bottom: 100px;
 }
 
 .main-title {
-  font-size: 3rem;
-  font-weight: 900;
-  margin: 15px 0;
-  letter-spacing: 8px;
-  color: #1a1a1a;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 300;
+  margin: 0 0 15px 0;
+  letter-spacing: 0.1em;
 }
 
-.ornament-line {
-  width: 60px;
-  height: 3px;
-  background: var(--gold-accent);
-  margin: 0 auto;
+.subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
 }
 
 .dossier-list {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 0;
 }
 
 .dossier-item {
-  background: white;
-  padding: 35px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.02);
-  border-left: 3px solid var(--primary-red);
-  transition: transform 0.3s;
-}
-
-.dossier-item:hover {
-  transform: translateX(5px);
+  border-top: 1px solid var(--border-color);
+  padding: 40px 0;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
 }
 
 .item-header {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
-  color: var(--primary-red);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.item-num {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.2em;
 }
 
 .item-header h3 {
   margin: 0;
-  font-size: 1.25rem;
-  letter-spacing: 1px;
-  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
 }
 
 .item-body {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #444;
-  text-align: justify;
+  color: #cccccc;
 }
 
-.premium-list {
-  padding-left: 20px;
+.item-body p {
+  margin: 0;
+}
+
+.minimal-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.premium-list li {
-  margin-bottom: 10px;
+.minimal-list li {
+  margin-bottom: 12px;
   position: relative;
+  padding-left: 15px;
 }
 
-.premium-list li::before {
-  content: '·';
+.minimal-list li::before {
+  content: '';
   position: absolute;
-  left: -15px;
-  color: var(--gold-accent);
-  font-weight: bold;
-}
-
-.timeline-mini {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.t-item {
-  padding: 8px 15px;
-  background: #fcfcfc;
-  border-radius: 4px;
-  font-size: 0.95rem;
-}
-
-.t-item b {
-  color: var(--primary-red);
-  margin-right: 10px;
+  left: 0;
+  top: 12px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--text-secondary);
+  border-radius: 50%;
 }
 
 .report-section {
-  margin-top: 80px;
-}
-
-.report-card {
-  background: var(--primary-red);
-  color: white;
-  padding: 50px;
+  margin-top: 100px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 60px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.report-card::after {
-  content: 'SAFE';
-  position: absolute;
-  font-size: 10rem;
-  font-weight: 900;
-  bottom: -30px;
-  right: -10px;
-  opacity: 0.05;
 }
 
 .report-label {
-  font-size: 1rem;
-  letter-spacing: 4px;
-  opacity: 0.8;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
 }
 
 .report-number {
-  font-size: 4.5rem;
-  font-weight: 900;
-  margin: 10px 0;
-  letter-spacing: 8px;
+  font-size: clamp(4rem, 8vw, 6rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin: 0 0 20px 0;
 }
 
-.report-web {
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-  opacity: 0.9;
+.report-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+  transition: border-color 0.3s;
 }
 
-.report-hint {
-  font-size: 0.85rem;
-  letter-spacing: 4px;
-  opacity: 0.7;
-  text-transform: uppercase;
+.report-link:hover {
+  border-color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
-  .knowledge-content { padding: 0 20px 60px 20px; }
-  .main-title { font-size: 1.8rem; letter-spacing: 4px; }
-  .dossier-item { padding: 25px; }
-  .report-number { font-size: 2.8rem; }
-  .report-card { padding: 30px; }
-  .report-web { font-size: 1rem; }
+  .knowledge-wrapper { padding: 120px 20px 60px 20px; }
+  .dossier-item { 
+    grid-template-columns: 1fr; 
+    gap: 20px;
+    padding: 30px 0;
+  }
 }
 </style>
