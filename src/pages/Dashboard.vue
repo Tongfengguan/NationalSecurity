@@ -8,37 +8,37 @@ const domainSections = [
   {
     title: '核心支柱',
     items: [
-      { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.unsplash.com/photo-1541872703-74c5e443d1f9?auto=format&fit=crop&w=1200', size: 'large' },
-      { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'military', name: '军事安全', en: 'Military', img: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=800', size: 'small' }
+      { id: 'political', name: '政治安全', en: 'Political', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1493106819501-66d381c466f1?w=1200', size: 'large' },
+      { id: 'homeland', name: '国土安全', en: 'Homeland', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800', size: 'medium' },
+      { id: 'military', name: '军事安全', en: 'Military', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?w=800', size: 'small' }
     ]
   },
   {
     title: '民生防线',
     items: [
-      { id: 'economic', name: '经济安全', en: 'Economic', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'cultural', name: '文化安全', en: 'Cultural', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800', size: 'small' },
-      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800', size: 'large' }
+      { id: 'economic', name: '经济安全', en: 'Economic', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800', size: 'medium' },
+      { id: 'cultural', name: '文化安全', en: 'Cultural', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800', size: 'small' },
+      { id: 'social', name: '社会安全', en: 'Social', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800', size: 'medium' },
+      { id: 'tech', name: '科技安全', en: 'Technology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', size: 'large' }
     ]
   },
   {
     title: '前沿阵地',
     items: [
-      { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200', size: 'large' },
-      { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800', size: 'small' },
-      { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: 'https://images.unsplash.com/photo-1510444317180-28105072049e?auto=format&fit=crop&w=1200', size: 'medium' }
+      { id: 'cyber', name: '网络安全', en: 'Cyber', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200', size: 'large' },
+      { id: 'ecology', name: '生态安全', en: 'Ecology', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800', size: 'small' },
+      { id: 'resource', name: '资源安全', en: 'Resource', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800', size: 'medium' },
+      { id: 'nuclear', name: '核安全', en: 'Nuclear', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517420812313-8001a889944c?w=1200', size: 'medium' }
     ]
   },
   {
     title: '新型新疆域',
     items: [
-      { id: 'overseas', name: '海外利益', en: 'Overseas', img: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=800', size: 'small' },
-      { id: 'space', name: '太空安全', en: 'Space', img: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&w=1200', size: 'large' },
-      { id: 'deepsea', name: '深海安全', en: 'Deep Sea', img: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&w=800', size: 'medium' },
-      { id: 'polar', name: '极地安全', en: 'Polar', img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?auto=format&fit=crop&w=800', size: 'small' }
+      { id: 'overseas', name: '海外利益', en: 'Overseas', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=800', size: 'medium' },
+      { id: 'bio', name: '生物安全', en: 'Biological', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=800', size: 'small' },
+      { id: 'space', name: '太空安全', en: 'Space', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=1200', size: 'large' },
+      { id: 'deepsea', name: '深海安全', en: 'Deep Sea', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800', size: 'medium' },
+      { id: 'polar', name: '极地安全', en: 'Polar', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=800', size: 'small' }
     ]
   }
 ]
@@ -63,7 +63,7 @@ const navigateToDomain = (id: string) => {
 <template>
   <div class="dashboard-root">
     
-    <!-- Hero Header: 电影开篇感 -->
+    <!-- Hero Header -->
     <header class="hero-header reveal">
       <div class="header-content">
         <h1 class="hero-title serif">总体国家安全观</h1>
@@ -72,7 +72,6 @@ const navigateToDomain = (id: string) => {
           <p class="cn">统筹发展与安全 · 铸就大国防线</p>
         </div>
       </div>
-      <div class="hero-decoration"></div>
     </header>
 
     <!-- 叙事化流式布局 -->
@@ -105,7 +104,7 @@ const navigateToDomain = (id: string) => {
       </div>
     </div>
 
-    <!-- 举报入口：权威庄重 -->
+    <!-- 举报入口 -->
     <footer class="footer-cta reveal">
       <div class="cta-inner">
         <h2 class="serif">安而不忘危</h2>
@@ -130,7 +129,6 @@ const navigateToDomain = (id: string) => {
 
 .serif { font-family: var(--font-serif); }
 
-/* ======== Hero Header ======== */
 .hero-header {
   height: 80vh;
   display: flex;
@@ -169,7 +167,6 @@ const navigateToDomain = (id: string) => {
   letter-spacing: 0.2em;
 }
 
-/* ======== Narrative Flow ======== */
 .narrative-flow {
   max-width: 1400px;
   margin: 0 auto;
@@ -196,7 +193,6 @@ const navigateToDomain = (id: string) => {
   margin-top: 15px;
 }
 
-/* 非对称网格核心 */
 .asym-grid {
   display: flex;
   flex-wrap: wrap;
@@ -264,12 +260,10 @@ const navigateToDomain = (id: string) => {
   transform: scale(1.05);
 }
 
-/* 尺寸差异实现非对称 */
 .card-large { flex: 1 1 60%; height: 450px; }
 .card-medium { flex: 1 1 35%; height: 350px; }
 .card-small { flex: 1 1 30%; height: 280px; }
 
-/* ======== Footer ======== */
 .footer-cta {
   background: #fff;
   border-top: 1px solid #eee;
@@ -306,20 +300,17 @@ const navigateToDomain = (id: string) => {
   letter-spacing: 2px;
 }
 
-/* ======== 手机端极致优化 ======== */
 @media (max-width: 768px) {
   .hero-header { height: 60vh; }
   .hero-title { font-size: 3rem; letter-spacing: 0.05em; }
   
   .asym-grid { gap: 15px; }
   
-  /* 手机端取消大尺寸，改为瀑布流感 */
   .card-large, .card-medium, .card-small {
     flex: 1 1 100%;
     height: 220px;
   }
   
-  /* 这种“错位”才是高级感的来源 */
   .domain-card:nth-child(even) {
     margin-top: -10px;
     margin-left: 20px;
