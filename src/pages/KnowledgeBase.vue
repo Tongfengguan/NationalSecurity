@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-const activeNames = ref(['1'])
+import { onMounted } from 'vue'
 
 onMounted(() => {
   window.scrollTo(0, 0)
