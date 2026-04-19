@@ -43,11 +43,11 @@ const domainsData: Record<string, any> = {
     img: `${base}static/cultural.jpg`,
     definition: '国家文化主权、文化价值观、文化资源等处于没有危险和不受内外威胁的状态。',
     keyPoints: ['维护意识形态安全', '弘扬传统文化', '抵制文化侵蚀', '增强国家软实力'],
-    chinaPractice: '弘扬社会主义核心价值观，实施中华优秀传统文化传承发展工程，建设强大凝聚力。'
+    chinaPractice: '弘扬社会主义核心价值观，实施中华优秀传统文化传承发展工程，建设具有强大凝聚力。'
   },
   'social': {
     name: '社会安全',
-    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200',
+    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200',
     definition: '防范、消除、控制直接威胁社会公共秩序和人民群众生命财产安全的各类风险。',
     keyPoints: ['维护社会和谐稳定', '打击恐怖主义', '提高公共安全能力', '处置突发社会事件'],
     chinaPractice: '常态化开展扫黑除恶斗争，平安中国建设让百姓获得感、安全感大幅提升。'
@@ -137,114 +137,122 @@ const goBack = () => {
 
 <template>
   <div class="detail-page" v-if="currentDomain">
-    <main class="detail-wrapper">
+    <main class="content-wrapper">
       
-      <header class="detail-header decode-text">
+      <header class="page-header reveal-simple">
         <button class="back-btn" @click="goBack">
-          <el-icon><ArrowLeft /></el-icon> <span>返回首页</span>
+          <el-icon><ArrowLeft /></el-icon> <span>BACK TO DOSSIER</span>
         </button>
         <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
-        <div class="accent-line"></div>
+        <div class="divider"></div>
       </header>
 
-      <section class="banner-section decode-text" style="animation-delay: 0.2s">
-        <div class="img-frame">
+      <section class="banner-section reveal-simple">
+        <div class="img-box">
           <img :src="currentDomain.img" :alt="currentDomain.name" />
-          <div class="frame-overlay"></div>
+          <div class="overlay-grad"></div>
         </div>
       </section>
 
-      <div class="content-grid">
-        <div class="info-card glass-panel decode-text" style="animation-delay: 0.4s">
-          <span class="label">领域定义 / DEFINITION</span>
+      <section class="info-grid">
+        <div class="grid-item reveal-simple">
+          <h3 class="serif">领域定义</h3>
           <p class="text">{{ currentDomain.definition }}</p>
         </div>
         
-        <div class="info-card glass-panel decode-text" style="animation-delay: 0.6s">
-          <span class="label">核心要义 / CORE POINTS</span>
+        <div class="grid-item reveal-simple">
+          <h3 class="serif">核心要义</h3>
           <ul class="point-list">
             <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
           </ul>
         </div>
 
-        <div class="info-card glass-panel practice-card decode-text" style="animation-delay: 0.8s">
-          <span class="label">中国实践与成就 / CHINA PRACTICE</span>
-          <div class="practice-content">
-            <el-icon :size="24" color="#b32a26"><Star /></el-icon>
-            <p>{{ currentDomain.chinaPractice }}</p>
+        <div class="grid-item full-width reveal-simple">
+          <div class="practice-box">
+            <h3 class="serif">中国实践与成就</h3>
+            <p class="text italic">{{ currentDomain.chinaPractice }}</p>
+            <el-icon class="bg-icon" :size="80" color="rgba(168,0,0,0.05)"><Star /></el-icon>
           </div>
         </div>
-      </div>
+      </section>
+
     </main>
   </div>
 </template>
 
 <style scoped>
 .detail-page {
-  background-color: var(--ink-black);
+  background-color: #fff;
   min-height: 100vh;
-  padding: 120px 40px 100px 40px;
-  color: var(--text-primary);
+  padding: 140px 40px 100px 40px;
+  color: #111;
+  position: relative;
 }
 
-.detail-wrapper {
-  max-width: 1200px;
+.content-wrapper {
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.detail-header { margin-bottom: 60px; }
+.page-header { margin-bottom: 60px; }
 
 .back-btn {
   background: none; border: none;
-  display: flex; align-items: center; gap: 8px;
-  color: var(--text-secondary); cursor: pointer;
-  font-size: 0.9rem; margin-bottom: 30px; padding: 0;
+  display: flex; align-items: center; gap: 10px;
+  color: #999; cursor: pointer;
+  padding: 0; margin-bottom: 30px;
+  font-size: 0.75rem; letter-spacing: 3px;
   transition: all 0.3s;
 }
-.back-btn:hover { color: var(--cinnabar-red); transform: translateX(-5px); }
+.back-btn:hover { color: #111; transform: translateX(-5px); }
 
-.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; letter-spacing: 5px; }
-.accent-line { width: 100px; height: 3px; background: var(--cinnabar-red); margin-top: 30px; }
+.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; font-weight: 700; letter-spacing: 2px; }
+.divider { width: 80px; height: 3px; background: var(--primary-red); margin-top: 30px; }
 
-.banner-section { margin-bottom: 80px; }
-.img-frame { width: 100%; height: 55vh; border-radius: 4px; overflow: hidden; position: relative; }
-.img-frame img { width: 100%; height: 100%; object-fit: cover; }
-.frame-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4)); }
+.banner-section { margin: 60px 0 80px 0; }
+.img-box { width: 100%; height: 60vh; border-radius: 4px; overflow: hidden; position: relative; }
+.img-box img { width: 100%; height: 100%; object-fit: cover; }
+.overlay-grad { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2)); }
 
-.content-grid {
+.info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
 }
 
-.info-card { padding: 40px; }
-.practice-card { grid-column: span 2; border-left: 4px solid var(--cinnabar-red); }
+.grid-item h3 { color: #111; margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; }
+.grid-item .text { font-size: 1.2rem; line-height: 2; color: #444; font-weight: 300; text-align: justify; }
 
-.label {
-  display: block; font-size: 0.75rem; color: var(--gold-dust);
-  margin-bottom: 25px; letter-spacing: 3px; font-weight: bold;
+.point-list { list-style: none; padding: 0; }
+.point-list li { 
+  margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; color: #555; 
+  position: relative; padding-left: 20px;
+}
+.point-list li::before { 
+  content: ''; position: absolute; left: 0; top: 12px;
+  width: 6px; height: 1px; background: var(--primary-red);
 }
 
-.text { font-size: 1.2rem; line-height: 1.8; color: #eee; }
-
-.point-list { list-style: none; padding: 0; margin: 0; }
-.point-list li {
-  font-size: 1.15rem; margin-bottom: 15px; padding-left: 20px;
-  position: relative; color: #ddd;
+.full-width { grid-column: span 2; }
+.practice-box { 
+  background: #fafafa; padding: 60px; border-radius: 4px; 
+  position: relative; overflow: hidden;
+  border: 1px solid #f0f0f0;
 }
-.point-list li::before {
-  content: '·'; position: absolute; left: 0;
-  color: var(--cinnabar-red); font-weight: bold;
+.practice-box h3 { color: var(--primary-red); }
+.practice-box .text { font-size: 1.25rem; color: #333; position: relative; z-index: 2; }
+.practice-box .italic { font-style: italic; }
+.bg-icon { position: absolute; bottom: -20px; right: -20px; z-index: 1; }
+
+@media (max-width: 1024px) {
+  .info-grid { grid-template-columns: 1fr; gap: 60px; }
+  .full-width { grid-column: span 1; }
 }
 
-.practice-content { display: flex; gap: 20px; align-items: flex-start; }
-.practice-content p { margin: 0; font-size: 1.2rem; line-height: 1.8; font-style: italic; color: #fff; }
-
-@media (max-width: 900px) {
-  .detail-page { padding: 100px 20px 60px 20px; }
-  .content-grid { grid-template-columns: 1fr; gap: 25px; }
-  .practice-card { grid-column: span 1; }
-  .img-frame { height: 40vh; }
-  .domain-title { font-size: 2.2rem; }
+@media (max-width: 768px) {
+  .detail-page { padding: 120px 24px 60px 24px; }
+  .domain-title { font-size: 2.8rem; }
+  .img-box { height: 40vh; }
+  .practice-box { padding: 40px 25px; }
 }
 </style>
