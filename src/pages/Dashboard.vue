@@ -1,21 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 const activeIndex = ref(0)
 const observer = ref<IntersectionObserver | null>(null)
 const base = import.meta.env.BASE_URL
-
-// 性能优化：仅在桌面端开启鼠标逻辑
-const isMobile = ref(false)
-const cursorX = ref(0)
-const cursorY = ref(0)
-const handleMouseMove = (e: MouseEvent) => {
-  if (isMobile.value) return
-  cursorX.value = e.clientX
-  cursorY.value = e.clientY
-}
 
 const domains = [
   { id: 'political', name: '政治安全', en: 'POLITICAL', desc: '政权安全和制度安全是核心，坚持党的领导，捍卫国家根本制度。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1600' },
@@ -23,7 +14,7 @@ const domains = [
   { id: 'military', name: '军事安全', en: 'MILITARY', desc: '强军兴军，铸就捍卫国家主权与和平的坚固钢铁长城。', img: `${base}static/military.jpg` },
   { id: 'economic', name: '经济安全', en: 'ECONOMIC', desc: '国计民生所在，保障产业链供应链与金融体系的自主可控。', img: `${base}static/economic.jpg` },
   { id: 'cultural', name: '文化安全', en: 'CULTURAL', desc: '坚定文化自信，弘扬中华优秀传统文化，抵御不良侵蚀。', img: `${base}static/cultural.jpg` },
-  { id: 'social', name: '社会安全', en: 'SOCIAL', desc: '防范化解重大风险，打击违法犯罪，维护社会和谐稳定。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1600' },
+  { id: 'social', name: '社会安全', en: 'SOCIAL', desc: '防范化解重大风险，打击违法犯罪，维护社会和谐稳定。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1600' },
   { id: 'tech', name: '科技安全', en: 'TECHNOLOGY', desc: '实现高水平科技自立自强，把关键核心技术牢牢掌握在自己手中。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600' },
   { id: 'cyber', name: '网络安全', en: 'CYBERSPACE', desc: '没有网络安全就没有国家安全，构筑清朗安全的数字空间防线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200' },
   { id: 'ecology', name: '生态安全', en: 'ECOLOGICAL', desc: '绿水青山就是金山银山，构筑尊崇自然、绿色发展的生态屏障。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600' },
@@ -32,14 +23,18 @@ const domains = [
   { id: 'overseas', name: '海外利益安全', en: 'OVERSEAS', desc: '中国脚步走到哪里，安全保护就跟到哪里，维护侨胞与资产安全。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200' },
   { id: 'bio', name: '生物安全', en: 'BIOLOGICAL', desc: '防范重大传染病和外来物种入侵，守护人民生命健康底线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1600' },
   { id: 'space', name: '太空安全', en: 'OUTER SPACE', desc: '和平探索与利用太空资源，捍卫国家在外太空的战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
-  { id: 'deepsea', name: '深海安全', en: 'DEEP SEA', desc: '提升深海进入与探测能力，科学开发海洋，维护海洋强国利益。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
-  { id: 'polar', name: '极地安全', en: 'POLAR REGIONS', desc: '积极参与极地国际治理，和平开展科考，守护极地生态环境。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
+  { id: 'deepsea', name: '深海安全', en: 'DEEP SEA', desc: '提升深海进入与探测能力，科学开发海洋，维护海洋强国利益。', img: 'https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
+  { id: 'polar', name: '极地安全', en: 'POLAR REGIONS', desc: '积极参与极地国际治理，和平开展科考，守护极地生态环境。', img: 'https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
 ]
 
-onMounted(() => {
-  isMobile.value = window.innerWidth <= 768
-  if (!isMobile.value) {
-    window.addEventListener('mousemove', handleMouseMove)
+onMounted(async () => {
+  // 🚀 核心优化：如果带有返回参数，自动定位到对应 PPT 页
+  const returnIdx = route.query.fromIndex
+  if (returnIdx !== undefined) {
+    await nextTick()
+    setTimeout(() => {
+      scrollToSection(Number(returnIdx))
+    }, 100)
   }
 
   observer.value = new IntersectionObserver((entries) => {
@@ -51,29 +46,31 @@ onMounted(() => {
         entry.target.classList.remove('is-visible')
       }
     })
-  }, { threshold: 0.3 }) // 降低阈值，减少重绘压力
+  }, { threshold: 0.5 })
 
   document.querySelectorAll('.ppt-section').forEach(s => observer.value?.observe(s))
 })
 
 onUnmounted(() => {
-  window.removeEventListener('mousemove', handleMouseMove)
   observer.value?.disconnect()
 })
 
-const navigateToDomain = (id: string) => {
-  router.push(`/domain/${id}`)
+const navigateToDomain = (id: string, index: number) => {
+  // 将当前的屏数索引传给详情页
+  router.push({
+    path: `/domain/${id}`,
+    query: { backIndex: index }
+  })
 }
 
 const scrollToSection = (index: number) => {
   const sections = document.querySelectorAll('.ppt-section')
-  sections[index]?.scrollIntoView({ behavior: 'smooth' })
+  sections[index]?.scrollIntoView({ behavior: 'auto' }) // 返回时使用 auto 避免和页面转场冲突
 }
 </script>
 
 <template>
-  <div class="ppt-container" :style="{ cursor: isMobile ? 'auto' : 'none' }">
-    <div v-if="!isMobile" class="custom-cursor" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
+  <div class="ppt-container">
     
     <nav class="ppt-nav">
       <div 
@@ -87,6 +84,7 @@ const scrollToSection = (index: number) => {
       </div>
     </nav>
 
+    <!-- 序幕 -->
     <section class="ppt-section hero" data-index="0">
       <div class="hero-bg"></div>
       <div class="content">
@@ -94,19 +92,20 @@ const scrollToSection = (index: number) => {
         <h1 class="hero-title serif reveal-item delay-1">总体国家安全观</h1>
         <div class="hero-line reveal-item delay-2"></div>
         <p class="hero-subtitle reveal-item delay-3">以人民安全为宗旨 · 以政治安全为根本</p>
-        <div class="scroll-prompt reveal-item delay-4">
+        <div class="scroll-indicator reveal-item delay-4">
           <div class="scroll-line"></div>
           <span class="scroll-text">向下滚动</span>
         </div>
       </div>
     </section>
 
+    <!-- 16个领域 PPT -->
     <section 
       v-for="(item, index) in domains" 
       :key="item.id" 
       class="ppt-section domain-page"
       :data-index="index + 1"
-      @click="navigateToDomain(item.id)"
+      @click="navigateToDomain(item.id, index + 1)"
     >
       <div class="bg-wrapper">
         <div class="bg-image" :style="{ backgroundImage: `url(${item.img})` }"></div>
@@ -130,6 +129,7 @@ const scrollToSection = (index: number) => {
       </div>
     </section>
     
+    <!-- 结尾 -->
     <section class="ppt-section footer-page" :data-index="domains.length + 1">
       <div class="content text-center reveal-item">
         <h2 class="final-title serif">安而不忘危</h2>
@@ -141,6 +141,7 @@ const scrollToSection = (index: number) => {
         <button class="premium-button" @click.stop="$router.push('/knowledge')">进入知识库</button>
       </div>
     </section>
+
   </div>
 </template>
 
@@ -151,18 +152,7 @@ const scrollToSection = (index: number) => {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   background: var(--ink-black);
-  margin: -70px 0 0 0;
-}
-
-.custom-cursor {
-  width: 40px; height: 40px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s;
+  margin: -60px 0 0 0;
 }
 
 .ppt-container::-webkit-scrollbar { display: none; }
@@ -174,7 +164,6 @@ const scrollToSection = (index: number) => {
   scroll-snap-stop: always;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
-  /* GPU 加速 */
   transform: translateZ(0);
 }
 
