@@ -70,7 +70,7 @@ const domainsData: Record<string, any> = {
   'ecology': {
     name: '生态安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200',
-    definition: '生态环境能够支撑国家生存和发展的基本状态，环境风险处于可控范围。',
+    definition: '生态环境能够支撑国家生存 and 发展的基本状态，环境风险处于可控范围。',
     keyPoints: ['守住保护红线', '应对气候变化', '保障大气土壤安全', '保护生物多样性'],
     chinaPractice: '提出双碳目标，三江源国家公园建立，彰显保护中华水塔和生态安全的决心。'
   },
@@ -154,7 +154,7 @@ const goBack = () => {
         </div>
         <div class="title-wrap">
           <div class="classification-stamp">CLASSIFIED</div>
-          <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
+          <h2 class="domain-title serif">{{ currentDomain.name }}</h2>
         </div>
         <div class="border-heavy"></div>
       </header>
@@ -211,13 +211,22 @@ const goBack = () => {
 .back-link:hover { color: var(--alert-red); }
 .doc-id { font-size: 0.65rem; color: #333; letter-spacing: 1px; }
 
-.title-wrap { position: relative; display: flex; align-items: flex-end; gap: 30px; }
+.title-wrap { position: relative; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .classification-stamp { 
-  border: 2px solid var(--alert-red); color: var(--alert-red); padding: 2px 10px; font-size: 0.7rem; font-weight: 900; 
-  transform: rotate(-10deg); letter-spacing: 2px;
+  border: 1px solid var(--alert-red); color: var(--alert-red); padding: 2px 8px; font-size: 0.6rem; font-weight: 900; 
+  letter-spacing: 2px; flex-shrink: 0;
 }
-.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; color: #fff; line-height: 1; }
-.border-heavy { width: 100%; height: 8px; background: #fff; margin-top: 20px; }
+/* 🚀 核心修复：显式强制标题可见 */
+.domain-title { 
+  font-size: clamp(2rem, 6vw, 4.5rem); 
+  margin: 0; 
+  color: #ffffff !important; 
+  line-height: 1.1; 
+  letter-spacing: 2px;
+  display: block !important;
+  opacity: 1 !important;
+}
+.border-heavy { width: 100%; height: 4px; background: #fff; margin-top: 20px; }
 
 .scan-section { margin-bottom: 80px; }
 .img-container { width: 100%; height: 50vh; position: relative; overflow: hidden; border: 1px solid #222; }
@@ -237,23 +246,24 @@ const goBack = () => {
 
 .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
 .data-block h3 { font-size: 0.8rem; color: var(--alert-red); margin-bottom: 25px; letter-spacing: 3px; }
-.mono-text { font-size: 1rem; color: #888; line-height: 1.8; text-align: justify; }
+.mono-text { font-size: 1rem; color: #ccc; line-height: 1.8; text-align: justify; }
 
 .point-list { list-style: none; padding: 0; }
-.point-list li { font-size: 0.9rem; color: #555; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 10px; }
+.point-list li { font-size: 0.95rem; color: #aaa; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 10px; }
 
 .wide-block { grid-column: span 2; }
 .highlight-block { border-top: 2px solid #fff; padding-top: 40px; }
 .practice-content { display: flex; gap: 40px; align-items: flex-start; }
 .barcode { width: 100px; height: 100px; background: url("https://upload.wikimedia.org/wikipedia/commons/e/e9/UPC-A-barcode.svg") center/contain no-repeat; filter: invert(1) opacity(0.3); flex-shrink: 0; }
-.practice-content p { font-size: 1.4rem; line-height: 1.8; color: #fff; margin: 0; }
+.practice-content p { font-size: clamp(1.1rem, 3vw, 1.4rem); line-height: 1.8; color: #fff; margin: 0; }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .dossier-page { padding: 100px 20px 60px 20px; }
   .data-grid { grid-template-columns: 1fr; gap: 40px; }
   .wide-block { grid-column: span 1; }
   .practice-content { flex-direction: column; gap: 20px; }
   .img-container { height: 35vh; }
-  .domain-title { font-size: 2.2rem; }
+  .domain-title { font-size: 2rem; }
+  .title-wrap { gap: 10px; }
 }
 </style>
