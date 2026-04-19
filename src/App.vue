@@ -1,11 +1,25 @@
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const transitionName = ref('slide-left')
+
+// 智能判定滑动方向：进入详情向右滑，返回首页向左滑
+watch(() => route.path, (to, from) => {
+  if (to === '/' && from !== '/') {
+    transitionName.value = 'slide-right'
+  } else {
+    transitionName.value = 'slide-left'
+  }
+})
 </script>
 
 <template>
   <el-container class="app-container">
+    <!-- 全屏纹理层：优化为 pointer-events: none -->
+    <div class="grain-overlay"></div>
+
     <el-header class="app-header">
       <div class="logo" @click="$router.push('/')">
         <el-icon :size="22" color="#b32a26"><StarFilled /></el-icon>
@@ -19,7 +33,7 @@ const route = useRoute()
 
     <el-main class="app-main">
       <router-view v-slot="{ Component }">
-        <transition name="page-zoom" mode="out-in">
+        <transition :name="transitionName" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
@@ -34,14 +48,15 @@ const route = useRoute()
   flex-direction: column;
   background: var(--ink-black);
   position: relative;
+  overflow-x: hidden;
 }
 
-/* 增加全屏胶片颗粒感纹理，提升高级感 */
-.app-container::before {
+/* 性能点：静态颗粒感叠加层 */
+.grain-overlay {
   content: "";
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
 }
@@ -50,68 +65,48 @@ const route = useRoute()
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: transparent;
-  padding: 0 60px;
-  height: 90px;
+  background: rgba(0, 0, 0, 0.4); /* 移除 exclusion，改用半透明，极大提升性能 */
+  backdrop-filter: blur(20px);
+  padding: 0 40px;
+  height: 70px;
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  mix-blend-mode: exclusion; 
-  transition: all 0.5s var(--transition-smooth);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.logo { 
-  display: flex; 
-  align-items: center; 
-  gap: 14px; 
-  cursor: pointer;
-  transition: transform 0.3s var(--transition-smooth);
-}
-.logo:hover { transform: scale(1.05); }
+.logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.logo-text { font-size: 1.1rem; font-weight: 900; color: #fff; letter-spacing: 2px; }
 
-.logo-text { 
-  font-size: 1.2rem; 
-  font-weight: 900; 
-  color: #fff; 
-  letter-spacing: 4px;
-  text-transform: uppercase;
-}
-
-.nav-links { display: flex; gap: 40px; }
+.nav-links { display: flex; gap: 30px; }
 .nav-link { 
-  text-decoration: none; 
-  color: #fff; 
-  font-size: 0.85rem; 
-  opacity: 0.4; 
-  font-weight: 500; 
-  transition: all 0.4s var(--transition-smooth);
+  text-decoration: none; color: #fff; font-size: 0.85rem; 
+  opacity: 0.4; font-weight: 500; transition: all 0.4s;
   letter-spacing: 2px;
   text-transform: uppercase;
-  position: relative;
 }
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -6px; left: 0;
-  width: 0; height: 1px;
-  background: var(--cinnabar-red);
-  transition: width 0.4s var(--transition-smooth);
-}
-.nav-link:hover, .nav-link.active { opacity: 1; }
-.nav-link.active::after { width: 100%; }
+.nav-link:hover, .nav-link.active { opacity: 1; color: #fff; }
+.nav-link.active { color: var(--cinnabar-red); }
 
 .app-main { flex: 1; padding: 0; }
 
-/* 页面切换：极致丝滑的缩放平移 */
-.page-zoom-enter-active, .page-zoom-leave-active {
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+/* 🚀 极速水平转场动效 (PPT Paging style) */
+.slide-left-enter-active, .slide-left-leave-active,
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.page-zoom-enter-from { opacity: 0; transform: scale(1.02) translateY(20px); filter: blur(10px); }
-.page-zoom-leave-to { opacity: 0; transform: scale(0.98) translateY(-20px); filter: blur(10px); }
+
+/* 向左滑入 (Forward) */
+.slide-left-enter-from { opacity: 0; transform: translate3d(30px, 0, 0); }
+.slide-left-leave-to { opacity: 0; transform: translate3d(-30px, 0, 0); }
+
+/* 向右滑入 (Backward) */
+.slide-right-enter-from { opacity: 0; transform: translate3d(-30px, 0, 0); }
+.slide-right-leave-to { opacity: 0; transform: translate3d(30px, 0, 0); }
 
 @media (max-width: 768px) {
-  .app-header { padding: 0 24px; height: 70px; }
-  .logo-text { font-size: 1rem; letter-spacing: 2px; }
-  .nav-links { gap: 20px; }
+  .app-header { padding: 0 20px; height: 60px; }
+  .logo-text { font-size: 0.95rem; }
+  .nav-links { gap: 15px; }
 }
 </style>
