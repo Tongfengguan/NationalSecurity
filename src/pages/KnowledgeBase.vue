@@ -7,162 +7,139 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="knowledge-page">
-    <main class="content-wrapper">
-      
-      <header class="page-header reveal-simple">
-        <span class="category-tag">OFFICIAL ARCHIVES</span>
-        <h1 class="main-title serif">知识档案库</h1>
-        <p class="subtitle">汇聚国家安全法律体系与总体国家安全观核心要义</p>
-        <div class="accent-line"></div>
+  <div class="terminal-container">
+    <div class="terminal-window">
+      <header class="terminal-header">
+        <div class="window-controls">
+          <span class="ctrl close"></span>
+          <span class="ctrl mini"></span>
+          <span class="ctrl full"></span>
+        </div>
+        <div class="window-title mono">SECURITY_LOG_VIEWER v1.0.4</div>
       </header>
 
-      <div class="dossier-grid">
-        <section class="dossier-card large reveal-simple">
-          <div class="card-head">
-            <span class="num">01</span>
-            <h3 class="serif">基本定义</h3>
+      <main class="terminal-body mono">
+        <div class="log-entry reveal-snappy">
+          <span class="prompt">root@national_security:~$</span> cat ./definitions/basic.txt
+          <div class="log-content">
+            <span class="label">[ SYSTEM_DATA ]</span> 根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。
           </div>
-          <div class="card-body">
-            <p>根据《中华人民共和国国家安全法》，国家安全是指国家政权、主权、统一和领土完整、人民福祉、经济社会可持续发展和国家其他重大利益相对处于没有危险和不受内外威胁的状态，以及保障持续安全状态的能力。</p>
-          </div>
-        </section>
+        </div>
 
-        <section class="dossier-card reveal-simple">
-          <div class="card-head">
-            <span class="num">02</span>
-            <h3 class="serif">总体观</h3>
+        <div class="log-entry reveal-snappy" style="transition-delay: 0.2s">
+          <span class="prompt">root@national_security:~$</span> cat ./doctrine/core_concept.txt
+          <div class="log-content">
+            <span class="label">[ DOCTRINE ]</span> 2014年4月15日提出。强调以人民安全为宗旨，以政治安全为根本，以经济安全为基础，以军事、文化、社会安全为保障。
           </div>
-          <div class="card-body">
-            <p>2014年4月15日提出。强调以<b>人民安全</b>为宗旨，以<b>政治安全</b>为根本，以<b>经济安全</b>为基础。</p>
-          </div>
-        </section>
+        </div>
 
-        <section class="dossier-card reveal-simple">
-          <div class="card-head">
-            <span class="num">03</span>
-            <h3 class="serif">法律体系</h3>
-          </div>
-          <div class="card-body">
-            <p>构建起以《宪法》为根本，以《国家安全法》为骨干的一系列专项法律体系。</p>
-          </div>
-        </section>
-
-        <section class="dossier-card wide reveal-simple">
-          <div class="card-head">
-            <span class="num">04</span>
-            <h3 class="serif">公民法定义务</h3>
-          </div>
-          <div class="card-body">
-            <div class="duty-grid">
-              <div class="duty-item">遵守宪法法律规定</div>
-              <div class="duty-item">及时报告危害线索</div>
-              <div class="duty-item">如实提供活动证据</div>
-              <div class="duty-item">提供便利条件协助</div>
-              <div class="duty-item">保守所知国家秘密</div>
+        <div class="log-entry reveal-snappy" style="transition-delay: 0.4s">
+          <span class="prompt">root@national_security:~$</span> ls /legal/专项法律/
+          <div class="log-content">
+            <div class="grid-list">
+              <span>> 反间谍法.sh</span>
+              <span>> 网络安全法.sh</span>
+              <span>> 生物安全法.sh</span>
+              <span>> 数据安全法.sh</span>
+              <span>> 反外国制裁法.sh</span>
             </div>
           </div>
-        </section>
-      </div>
-
-      <footer class="report-section reveal-simple">
-        <div class="report-card">
-          <span class="label">NATIONAL REPORTING HOTLINE</span>
-          <h2 class="number serif">12339</h2>
-          <div class="divider-short"></div>
-          <p class="desc">维护国家安全 · 人人有责</p>
         </div>
-      </footer>
 
-    </main>
+        <div class="log-entry reveal-snappy" style="transition-delay: 0.6s">
+          <span class="prompt">root@national_security:~$</span> cat ./obligations/citizen.log
+          <div class="log-content">
+            <ul class="terminal-list">
+              <li>- 遵守宪法法律关于国家安全的规定</li>
+              <li>- 及时报告危害国家安全活动的线索</li>
+              <li>- 如实提供涉及危害国家安全活动的证据</li>
+              <li>- 保持所知悉的国家秘密</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="alert-section reveal-snappy" style="transition-delay: 0.8s">
+          <div class="alert-header">!! EMERGENCY_REPORTING_CHANNEL !!</div>
+          <div class="alert-body">
+            <span class="blink">></span> HOTLINE: <span class="highlight">12339</span>
+          </div>
+          <div class="alert-footer">STATUS: ACTIVE_LISTENING</div>
+        </div>
+        
+        <div class="cursor-line">
+          <span class="prompt">root@national_security:~$</span> <span class="blink">_</span>
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.knowledge-page {
-  background-color: #fff;
+.terminal-container {
   min-height: 100vh;
-  padding: 160px 40px 100px 40px;
-  color: #111;
+  background-color: #000;
+  padding: 100px 20px;
 }
 
-.content-wrapper {
-  max-width: 1200px;
+.terminal-window {
+  max-width: 900px;
   margin: 0 auto;
+  border: 1px solid #333;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+  background: #050505;
 }
 
-.page-header { text-align: center; margin-bottom: 120px; }
-.category-tag { font-size: 0.8rem; letter-spacing: 6px; color: var(--gold-dust); font-weight: 600; }
-.main-title { font-size: clamp(3rem, 8vw, 6rem); margin: 20px 0; font-weight: 700; color: #111; }
-.subtitle { font-size: 1.1rem; color: #666; letter-spacing: 2px; font-weight: 300; }
-.accent-line { width: 60px; height: 3px; background: var(--cinnabar-red); margin: 40px auto 0 auto; }
-
-/* Bento Grid */
-.dossier-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(300px, auto);
-  gap: 30px;
+.terminal-header {
+  background: #1a1a1a;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #333;
 }
 
-.dossier-card {
-  background: #fff;
-  border: 1px solid #f0f0f0;
-  padding: 50px;
-  display: flex; flex-direction: column;
-  transition: all 0.5s var(--transition-smooth);
-}
-.dossier-card:hover { 
-  border-color: var(--cinnabar-red);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-  transform: translateY(-10px);
+.window-controls { display: flex; gap: 8px; }
+.ctrl { width: 10px; height: 10px; border-radius: 50%; }
+.close { background: #ff5f56; }
+.mini { background: #ffbd2e; }
+.full { background: #27c93f; }
+
+.window-title { font-size: 0.7rem; color: #666; letter-spacing: 1px; }
+
+.terminal-body {
+  padding: 40px;
+  color: #ccc;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-.dossier-card.large { grid-row: span 2; }
-.dossier-card.wide { grid-column: span 2; }
+.log-entry { margin-bottom: 40px; }
+.prompt { color: #0f0; margin-right: 15px; }
+.log-content { margin-top: 15px; padding-left: 20px; border-left: 2px solid #111; }
+.label { color: var(--alert-red); font-weight: bold; margin-right: 10px; }
 
-.card-head { display: flex; align-items: center; gap: 20px; margin-bottom: 35px; }
-.num { font-size: 0.8rem; font-weight: 900; color: var(--cinnabar-red); letter-spacing: 2px; }
-.card-head h3 { font-size: 1.8rem; margin: 0; font-weight: 700; color: #111; }
+.grid-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; color: #0f0; }
+.terminal-list { list-style: none; padding: 0; }
+.terminal-list li { color: #888; margin-bottom: 8px; }
 
-.card-body p { font-size: 1.2rem; line-height: 2; color: #444; font-weight: 300; text-align: justify; }
-
-.duty-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+.alert-section {
+  margin-top: 60px;
+  border: 2px solid var(--alert-red);
+  padding: 30px;
+  text-align: center;
+  position: relative;
 }
-.duty-item {
-  padding: 20px; background: #fafafa;
-  border-left: 3px solid #eee;
-  font-size: 1rem; color: #333; font-weight: 500;
-  transition: all 0.3s;
-}
-.dossier-card:hover .duty-item { border-left-color: var(--cinnabar-red); background: #fffcfc; }
 
-/* Report Section */
-.report-section { margin-top: 120px; }
-.report-card {
-  background: #fafafa;
-  padding: 100px 40px; text-align: center;
-  border-radius: 4px; border: 1px solid #f0f0f0;
-}
-.label { font-size: 0.85rem; letter-spacing: 6px; color: #999; margin-bottom: 25px; display: block; }
-.number { font-size: clamp(4rem, 12vw, 10rem); color: var(--cinnabar-red); line-height: 1; letter-spacing: 15px; }
-.divider-short { width: 40px; height: 1px; background: #ddd; margin: 40px auto; }
-.desc { font-size: 1.1rem; color: #666; letter-spacing: 4px; font-weight: 300; }
+.alert-header { background: var(--alert-red); color: #fff; font-weight: 900; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 2px 15px; font-size: 0.7rem; }
+.alert-body { font-size: 2.5rem; font-weight: 900; color: var(--alert-red); }
+.highlight { color: #fff; text-shadow: 0 0 20px var(--alert-red); }
+.alert-footer { font-size: 0.7rem; color: #444; margin-top: 15px; letter-spacing: 2px; }
 
-@media (max-width: 1024px) {
-  .dossier-grid { grid-template-columns: 1fr 1fr; }
-  .dossier-card.large { grid-row: span 1; }
-  .dossier-card.wide { grid-column: span 2; }
-}
+.blink { animation: blink 1s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 @media (max-width: 768px) {
-  .knowledge-page { padding: 120px 24px 60px 24px; }
-  .dossier-grid { grid-template-columns: 1fr; }
-  .dossier-card.wide { grid-column: span 1; }
-  .duty-grid { grid-template-columns: 1fr; }
-  .main-title { font-size: 2.8rem; }
-  .report-card { padding: 60px 20px; }
-  .number { font-size: 4.5rem; letter-spacing: 8px; }
+  .terminal-body { padding: 20px; font-size: 0.85rem; }
+  .alert-body { font-size: 1.8rem; }
 }
 </style>

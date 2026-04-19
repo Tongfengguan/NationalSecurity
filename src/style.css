@@ -1,49 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Noto+Serif+SC:wght@700;900&family=Inter:wght@400;700;900&display=swap');
 
 :root {
-  --ink-black: #050505;
-  --deep-gray: #1a1a1a;
-  --cinnabar-red: #b32a26;
-  --gold-dust: #c5a059;
-  --text-primary: #ffffff;
-  --text-secondary: #999999;
-  --border-dim: rgba(255, 255, 255, 0.08);
+  --bg-base: #000000;
+  --text-main: #f4f4f0;
+  --text-muted: #444444;
+  --alert-red: #ff003c;
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --border-hard: #222222;
   
-  --font-serif: 'Noto Serif SC', serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Noto Serif SC', serif;
   
-  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-snappy: steps(4, end);
+  --ease-mech: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--ink-black);
-  color: var(--text-primary);
+  background-color: var(--bg-base);
+  color: var(--text-main);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  /* 终端网格背景 */
+  background-image: 
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
 
 /* 隐藏滚动条 */
 ::-webkit-scrollbar { display: none; }
 
-/* 全局进场动画 */
-@keyframes decodeReveal {
-  from { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-10px); }
-  to { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
+/* 粗野主义核心：禁止圆角 */
+* {
+  border-radius: 0 !important;
 }
 
-.decode-text {
-  animation: decodeReveal 1.2s var(--transition-smooth) forwards;
+/* CRT 扫描线 */
+body::after {
+  content: " ";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/*Snappy 机械进场动效 */
+.reveal-snappy {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s var(--ease-mech);
+}
+
+.is-visible .reveal-snappy {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .serif { font-family: var(--font-serif); }
-
-/* 玻璃拟态卡片 */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-dim);
-  border-radius: 4px;
-}
+.mono { font-family: var(--font-mono); }

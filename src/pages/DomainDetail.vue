@@ -48,7 +48,7 @@ const domainsData: Record<string, any> = {
   },
   'social': {
     name: '社会安全',
-    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200',
+    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200',
     definition: '防范、消除、控制直接威胁社会公共秩序和人民群众生命财产安全的各类风险。',
     keyPoints: ['维护社会和谐稳定', '打击恐怖主义', '提高公共安全能力', '处置突发社会事件'],
     chinaPractice: '常态化开展扫黑除恶斗争，平安中国建设让百姓获得感、安全感大幅提升。'
@@ -127,10 +127,6 @@ const domainsData: Record<string, any> = {
 
 const currentDomain = computed(() => domainsData[props.id] || null)
 
-onMounted(() => {
-  window.scrollTo(0, 0)
-})
-
 const goBack = () => {
   const index = route.query.backIndex
   router.push({
@@ -141,149 +137,119 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="detail-page" v-if="currentDomain">
-    <div class="ambient-glow top-right"></div>
-    
-    <main class="content-wrapper">
-      <header class="page-header dynamic-reveal">
-        <!-- 🚀 修正：调用带有索引参数的 goBack -->
-        <button class="back-link" @click="goBack">
-          <el-icon><ArrowLeft /></el-icon> <span>BACK TO DOSSIER</span>
-        </button>
-        <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
-        <div class="divider"></div>
+  <div class="dossier-page" v-if="currentDomain">
+    <main class="dossier-layout">
+      
+      <!-- 档案页眉 -->
+      <header class="dossier-header reveal-snappy">
+        <div class="header-top">
+          <button class="back-link mono" @click="goBack">
+            <span class="blink">&lt;</span> EXIT_TO_MAIN
+          </button>
+          <div class="doc-id mono">DOC_REF: NS-2026-{{ id.toUpperCase() }}</div>
+        </div>
+        <div class="title-wrap">
+          <div class="classification-stamp">CLASSIFIED</div>
+          <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
+        </div>
+        <div class="border-heavy"></div>
       </header>
 
-      <section class="banner-section dynamic-reveal" style="animation-delay: 0.15s">
-        <div class="img-box">
-          <img :src="currentDomain.img" :alt="currentDomain.name" class="zoom-img" />
-          <div class="overlay-grad"></div>
+      <!-- 视觉扫描区 -->
+      <section class="scan-section reveal-snappy" style="transition-delay: 0.1s">
+        <div class="img-container">
+          <img :src="currentDomain.img" :alt="currentDomain.name" />
+          <div class="scan-line"></div>
+          <div class="overlay-grid"></div>
         </div>
       </section>
 
-      <div class="info-layout">
-        <div class="main-info">
-          <section class="info-block dynamic-reveal" style="animation-delay: 0.3s">
-            <h3 class="block-title serif">领域定义</h3>
-            <p class="block-text">{{ currentDomain.definition }}</p>
-          </section>
-
-          <section class="info-block dynamic-reveal" style="animation-delay: 0.45s">
-            <h3 class="block-title serif">核心要义</h3>
-            <ul class="point-list">
-              <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
-            </ul>
-          </section>
+      <!-- 核心数据区 -->
+      <div class="data-grid">
+        <div class="data-block reveal-snappy" style="transition-delay: 0.2s">
+          <h3 class="mono">> DEFINITION</h3>
+          <p class="mono-text">{{ currentDomain.definition }}</p>
+        </div>
+        
+        <div class="data-block reveal-snappy" style="transition-delay: 0.3s">
+          <h3 class="mono">> CORE_INTEL</h3>
+          <ul class="point-list mono">
+            <li v-for="point in currentDomain.keyPoints" :key="point">
+              [ CONFIDENTIAL ] {{ point }}
+            </li>
+          </ul>
         </div>
 
-        <aside class="side-info dynamic-reveal" style="animation-delay: 0.6s">
-          <div class="practice-card">
-            <h3 class="card-title serif">中国实践与成就</h3>
-            <div class="card-divider"></div>
-            <p class="card-text">{{ currentDomain.chinaPractice }}</p>
-            <el-icon class="card-icon" :size="40" color="rgba(179, 42, 38, 0.2)"><Star /></el-icon>
+        <div class="data-block wide-block highlight-block reveal-snappy" style="transition-delay: 0.4s">
+          <h3 class="mono">> CHINA_PRACTICE</h3>
+          <div class="practice-content">
+            <div class="barcode"></div>
+            <p class="serif">{{ currentDomain.chinaPractice }}</p>
           </div>
-        </aside>
+        </div>
       </div>
     </main>
   </div>
 </template>
 
 <style scoped>
-.detail-page {
-  background-color: var(--ink-black);
+.dossier-page {
+  background-color: #000;
   min-height: 100vh;
-  padding: 180px 40px 100px 40px;
-  position: relative;
-  overflow-x: hidden;
+  padding: 120px 40px 100px 40px;
 }
 
-.ambient-glow {
-  position: absolute;
-  width: 50vw; height: 50vw;
-  background: radial-gradient(circle, rgba(179, 42, 38, 0.03) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+.dossier-layout { max-width: 1100px; margin: 0 auto; position: relative; }
+
+.dossier-header { margin-bottom: 60px; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.back-link { background: none; border: none; color: #555; cursor: pointer; font-size: 0.7rem; letter-spacing: 2px; transition: color 0.3s; }
+.back-link:hover { color: var(--alert-red); }
+.doc-id { font-size: 0.65rem; color: #333; letter-spacing: 1px; }
+
+.title-wrap { position: relative; display: flex; align-items: flex-end; gap: 30px; }
+.classification-stamp { 
+  border: 2px solid var(--alert-red); color: var(--alert-red); padding: 2px 10px; font-size: 0.7rem; font-weight: 900; 
+  transform: rotate(-10deg); letter-spacing: 2px;
 }
-.top-right { top: -10%; right: -10%; }
+.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; color: #fff; line-height: 1; }
+.border-heavy { width: 100%; height: 8px; background: #fff; margin-top: 20px; }
 
-.content-wrapper { max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
+.scan-section { margin-bottom: 80px; }
+.img-container { width: 100%; height: 50vh; position: relative; overflow: hidden; border: 1px solid #222; }
+.img-container img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.5) brightness(0.6); }
 
-.page-header { margin-bottom: 80px; }
-.back-link { 
-  background: none; border: none; 
-  display: flex; align-items: center; gap: 10px; 
-  color: #666; font-size: 0.75rem; letter-spacing: 3px; 
-  cursor: pointer; transition: all 0.3s;
-  padding: 0; margin-bottom: 30px;
+.scan-line { 
+  position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--alert-red); 
+  box-shadow: 0 0 15px var(--alert-red); animation: scan 4s linear infinite; z-index: 5;
 }
-.back-link:hover { color: #fff; transform: translateX(-5px); }
+@keyframes scan { from { top: 0; } to { top: 100%; } }
 
-.domain-title { font-size: clamp(3rem, 10vw, 8rem); margin: 0; line-height: 1; letter-spacing: 2px; }
-.divider { width: 100px; height: 2px; background: var(--cinnabar-red); margin-top: 40px; }
-
-.banner-section { margin-bottom: 100px; }
-.img-box { width: 100%; height: 60vh; position: relative; overflow: hidden; }
-
-/* 🚀 图片缩移动画 */
-.zoom-img { 
-  width: 100%; height: 100%; object-fit: cover; 
-  animation: dynamicZoom 20s infinite alternate linear;
-}
-
-@keyframes dynamicZoom {
-  from { transform: scale(1); }
-  to { transform: scale(1.1) rotate(1deg); }
+.overlay-grid { 
+  position: absolute; inset: 0; z-index: 2;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-.image-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5)); }
-
-.info-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 100px; }
-
-.info-block { margin-bottom: 60px; }
-.block-title { font-size: 1.8rem; color: #fff; margin-bottom: 30px; letter-spacing: 2px; }
-.block-text { font-size: 1.25rem; line-height: 2; color: #aaa; font-weight: 300; }
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.data-block h3 { font-size: 0.8rem; color: var(--alert-red); margin-bottom: 25px; letter-spacing: 3px; }
+.mono-text { font-size: 1rem; color: #888; line-height: 1.8; text-align: justify; }
 
 .point-list { list-style: none; padding: 0; }
-.point-list li { 
-  font-size: 1.15rem; margin-bottom: 20px; color: #ddd; 
-  position: relative; padding-left: 20px; font-weight: 300;
-}
-.point-list li::before { 
-  content: '·'; position: absolute; left: 0; 
-  color: var(--cinnabar-red); font-weight: bold; font-size: 1.5rem; line-height: 1;
-}
+.point-list li { font-size: 0.9rem; color: #555; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 10px; }
 
-.practice-card { 
-  background: rgba(255,255,255,0.02); 
-  border: 1px solid rgba(255,255,255,0.05); 
-  padding: 50px; position: relative; 
-}
-.card-title { font-size: 1.5rem; color: #fff; margin-bottom: 25px; }
-.card-divider { width: 40px; height: 1px; background: var(--gold-dust); margin-bottom: 25px; }
-.card-text { font-size: 1.1rem; line-height: 1.8; color: #888; font-style: italic; }
-.card-icon { position: absolute; bottom: 30px; right: 30px; }
+.wide-block { grid-column: span 2; }
+.highlight-block { border-top: 2px solid #fff; padding-top: 40px; }
+.practice-content { display: flex; gap: 40px; align-items: flex-start; }
+.barcode { width: 100px; height: 100px; background: url("https://upload.wikimedia.org/wikipedia/commons/e/e9/UPC-A-barcode.svg") center/contain no-repeat; filter: invert(1) opacity(0.3); flex-shrink: 0; }
+.practice-content p { font-size: 1.4rem; line-height: 1.8; color: #fff; margin: 0; }
 
-/* 🚀 进场动画 */
-.dynamic-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: dynamicFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes dynamicFadeUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 1024px) {
-  .info-layout { grid-template-columns: 1fr; gap: 60px; }
-}
-
-@media (max-width: 768px) {
-  .detail-page { padding: 120px 24px 60px 24px; }
-  .domain-title { font-size: 3rem; }
-  .image-frame { height: 40vh; }
-  .block-title { font-size: 1.5rem; }
-  .block-text { font-size: 1.1rem; }
+@media (max-width: 900px) {
+  .dossier-page { padding: 100px 20px 60px 20px; }
+  .data-grid { grid-template-columns: 1fr; gap: 40px; }
+  .wide-block { grid-column: span 1; }
+  .practice-content { flex-direction: column; gap: 20px; }
+  .img-container { height: 35vh; }
+  .domain-title { font-size: 2.2rem; }
 }
 </style>
