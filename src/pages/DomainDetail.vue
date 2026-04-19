@@ -47,7 +47,7 @@ const domainsData: Record<string, any> = {
   },
   'social': {
     name: '社会安全',
-    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200',
+    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200',
     definition: '防范、消除、控制直接威胁社会公共秩序和人民群众生命财产安全的各类风险。',
     keyPoints: ['维护社会和谐稳定', '打击恐怖主义', '提高公共安全能力', '处置突发社会事件'],
     chinaPractice: '常态化开展扫黑除恶斗争，平安中国建设让百姓获得感、安全感大幅提升。'
@@ -90,21 +90,21 @@ const domainsData: Record<string, any> = {
   'overseas': {
     name: '海外利益安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=1200',
-    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁和侵害。',
+    definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁 and 侵害。',
     keyPoints: ['提升保障能力', '保护海外公民', '维护合法权益', '应对跨境犯罪'],
     chinaPractice: '实施也门撤侨等重大行动，有力保护同胞生命安全，中国保护如影随形。'
   },
   'bio': {
     name: '生物安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1200',
-    definition: '有效防范和应对危险生物因子威胁，保障人民生命健康和生态系统平衡。',
+    definition: '有效防范 and 应对危险生物因子威胁，保障人民生命健康 and 生态系统平衡。',
     keyPoints: ['防控传染病', '保障粮食安全', '实验室管理', '防范物种入侵'],
     chinaPractice: '《生物安全法》实施，完善国家生物安全风险防控体系，守护物种多样性。'
   },
   'space': {
     name: '太空安全',
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200',
-    definition: '国家在太空领域的资产、活动及权益不受威胁，拥有进入、利用和控制太空的能力。',
+    definition: '国家在太空领域的资产、活动及权益不受威胁，拥有进入、利用 and 控制太空的能力。',
     keyPoints: ['维护太空主权', '防止外空武器化', '保护基础设施', '提升防御能力'],
     chinaPractice: '天宫空间站建成，北三全球组网，中国为维护太空权益做出重大贡献。'
   },
@@ -139,7 +139,7 @@ const goBack = () => {
   <div class="detail-page" v-if="currentDomain">
     <main class="content-wrapper">
       
-      <header class="page-header reveal-simple">
+      <header class="page-header dynamic-reveal">
         <button class="back-btn" @click="goBack">
           <el-icon><ArrowLeft /></el-icon> <span>BACK TO DOSSIER</span>
         </button>
@@ -147,27 +147,27 @@ const goBack = () => {
         <div class="divider"></div>
       </header>
 
-      <section class="banner-section reveal-simple">
+      <section class="banner-section dynamic-reveal" style="animation-delay: 0.15s">
         <div class="img-box">
-          <img :src="currentDomain.img" :alt="currentDomain.name" />
+          <img :src="currentDomain.img" :alt="currentDomain.name" class="zoom-img" />
           <div class="overlay-grad"></div>
         </div>
       </section>
 
       <section class="info-grid">
-        <div class="grid-item reveal-simple">
+        <div class="grid-item dynamic-reveal" style="animation-delay: 0.3s">
           <h3 class="serif">领域定义</h3>
           <p class="text">{{ currentDomain.definition }}</p>
         </div>
         
-        <div class="grid-item reveal-simple">
+        <div class="grid-item dynamic-reveal" style="animation-delay: 0.45s">
           <h3 class="serif">核心要义</h3>
           <ul class="point-list">
             <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
           </ul>
         </div>
 
-        <div class="grid-item full-width reveal-simple">
+        <div class="grid-item full-width dynamic-reveal" style="animation-delay: 0.6s">
           <div class="practice-box">
             <h3 class="serif">中国实践与成就</h3>
             <p class="text italic">{{ currentDomain.chinaPractice }}</p>
@@ -189,10 +189,7 @@ const goBack = () => {
   position: relative;
 }
 
-.content-wrapper {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+.content-wrapper { max-width: 1100px; margin: 0 auto; }
 
 .page-header { margin-bottom: 60px; }
 
@@ -209,40 +206,49 @@ const goBack = () => {
 .domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; font-weight: 700; letter-spacing: 2px; }
 .divider { width: 80px; height: 3px; background: var(--primary-red); margin-top: 30px; }
 
-.banner-section { margin: 60px 0 80px 0; }
-.img-box { width: 100%; height: 60vh; border-radius: 4px; overflow: hidden; position: relative; }
-.img-box img { width: 100%; height: 100%; object-fit: cover; }
-.overlay-grad { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2)); }
-
-.info-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 80px;
+.banner-section { margin: 60px 0 80px 0; perspective: 1000px; }
+.img-box { 
+  width: 100%; height: 60vh; border-radius: 4px; overflow: hidden; position: relative; 
+  box-shadow: 0 40px 80px rgba(0,0,0,0.1);
 }
 
+/* 🚀 图片缩移动画 */
+.zoom-img { 
+  width: 100%; height: 100%; object-fit: cover; 
+  animation: dynamicZoom 20s infinite alternate linear;
+}
+
+@keyframes dynamicZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1) rotate(1deg); }
+}
+
+.overlay-grad { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2)); }
+
+.info-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; }
 .grid-item h3 { color: #111; margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; }
 .grid-item .text { font-size: 1.2rem; line-height: 2; color: #444; font-weight: 300; text-align: justify; }
 
 .point-list { list-style: none; padding: 0; }
-.point-list li { 
-  margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; color: #555; 
-  position: relative; padding-left: 20px;
-}
-.point-list li::before { 
-  content: ''; position: absolute; left: 0; top: 12px;
-  width: 6px; height: 1px; background: var(--primary-red);
-}
+.point-list li { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; color: #555; position: relative; padding-left: 20px; }
+.point-list li::before { content: ''; position: absolute; left: 0; top: 12px; width: 6px; height: 1px; background: var(--primary-red); }
 
 .full-width { grid-column: span 2; }
-.practice-box { 
-  background: #fafafa; padding: 60px; border-radius: 4px; 
-  position: relative; overflow: hidden;
-  border: 1px solid #f0f0f0;
-}
+.practice-box { background: #fafafa; padding: 60px; border-radius: 4px; position: relative; overflow: hidden; border: 1px solid #f0f0f0; }
 .practice-box h3 { color: var(--primary-red); }
 .practice-box .text { font-size: 1.25rem; color: #333; position: relative; z-index: 2; }
-.practice-box .italic { font-style: italic; }
 .bg-icon { position: absolute; bottom: -20px; right: -20px; z-index: 1; }
+
+/* 🚀 元素独立进场动画 */
+.dynamic-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: dynamicFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dynamicFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
 
 @media (max-width: 1024px) {
   .info-grid { grid-template-columns: 1fr; gap: 60px; }
@@ -253,6 +259,5 @@ const goBack = () => {
   .detail-page { padding: 120px 24px 60px 24px; }
   .domain-title { font-size: 2.8rem; }
   .img-box { height: 40vh; }
-  .practice-box { padding: 40px 25px; }
 }
 </style>
