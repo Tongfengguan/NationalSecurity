@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const props = defineProps<{
   id: string
 }>()
 
 const router = useRouter()
+const route = useRoute()
 const base = import.meta.env.BASE_URL
 
 const domainsData: Record<string, any> = {
@@ -92,11 +93,11 @@ const domainsData: Record<string, any> = {
     img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=1200',
     definition: '国家在海外的公民、机构、企业、资产及正当权益不受威胁 and 侵害。',
     keyPoints: ['提升保障能力', '保护海外公民', '维护合法权益', '应对跨境犯罪'],
-    chinaPractice: '实施也门撤侨等重大行动，有力保护同胞生命安全，中国保护如影随形。'
+    chinaPractice: '实施也门撤侨等重大行动，有力保护同胞生命安全，中国保护如影随形. '
   },
   'bio': {
     name: '生物安全',
-    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1200',
+    img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1600',
     definition: '有效防范 and 应对危险生物因子威胁，保障人民生命健康 and 生态系统平衡。',
     keyPoints: ['防控传染病', '保障粮食安全', '实验室管理', '防范物种入侵'],
     chinaPractice: '《生物安全法》实施，完善国家生物安全风险防控体系，守护物种多样性。'
@@ -131,16 +132,22 @@ onMounted(() => {
 })
 
 const goBack = () => {
-  router.push('/')
+  const index = route.query.backIndex
+  router.push({
+    path: '/',
+    query: { fromIndex: index }
+  })
 }
 </script>
 
 <template>
   <div class="detail-page" v-if="currentDomain">
+    <div class="ambient-glow top-right"></div>
+    
     <main class="content-wrapper">
-      
       <header class="page-header dynamic-reveal">
-        <button class="back-btn" @click="goBack">
+        <!-- 🚀 修正：调用带有索引参数的 goBack -->
+        <button class="back-link" @click="goBack">
           <el-icon><ArrowLeft /></el-icon> <span>BACK TO DOSSIER</span>
         </button>
         <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
@@ -154,63 +161,69 @@ const goBack = () => {
         </div>
       </section>
 
-      <section class="info-grid">
-        <div class="grid-item dynamic-reveal" style="animation-delay: 0.3s">
-          <h3 class="serif">领域定义</h3>
-          <p class="text">{{ currentDomain.definition }}</p>
-        </div>
-        
-        <div class="grid-item dynamic-reveal" style="animation-delay: 0.45s">
-          <h3 class="serif">核心要义</h3>
-          <ul class="point-list">
-            <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
-          </ul>
+      <div class="info-layout">
+        <div class="main-info">
+          <section class="info-block dynamic-reveal" style="animation-delay: 0.3s">
+            <h3 class="block-title serif">领域定义</h3>
+            <p class="block-text">{{ currentDomain.definition }}</p>
+          </section>
+
+          <section class="info-block dynamic-reveal" style="animation-delay: 0.45s">
+            <h3 class="block-title serif">核心要义</h3>
+            <ul class="point-list">
+              <li v-for="point in currentDomain.keyPoints" :key="point">{{ point }}</li>
+            </ul>
+          </section>
         </div>
 
-        <div class="grid-item full-width dynamic-reveal" style="animation-delay: 0.6s">
-          <div class="practice-box">
-            <h3 class="serif">中国实践与成就</h3>
-            <p class="text italic">{{ currentDomain.chinaPractice }}</p>
-            <el-icon class="bg-icon" :size="80" color="rgba(168,0,0,0.05)"><Star /></el-icon>
+        <aside class="side-info dynamic-reveal" style="animation-delay: 0.6s">
+          <div class="practice-card">
+            <h3 class="card-title serif">中国实践与成就</h3>
+            <div class="card-divider"></div>
+            <p class="card-text">{{ currentDomain.chinaPractice }}</p>
+            <el-icon class="card-icon" :size="40" color="rgba(179, 42, 38, 0.2)"><Star /></el-icon>
           </div>
-        </div>
-      </section>
-
+        </aside>
+      </div>
     </main>
   </div>
 </template>
 
 <style scoped>
 .detail-page {
-  background-color: #fff;
+  background-color: var(--ink-black);
   min-height: 100vh;
-  padding: 140px 40px 100px 40px;
-  color: #111;
+  padding: 180px 40px 100px 40px;
   position: relative;
+  overflow-x: hidden;
 }
 
-.content-wrapper { max-width: 1100px; margin: 0 auto; }
+.ambient-glow {
+  position: absolute;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(179, 42, 38, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.top-right { top: -10%; right: -10%; }
 
-.page-header { margin-bottom: 60px; }
+.content-wrapper { max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
 
-.back-btn {
-  background: none; border: none;
-  display: flex; align-items: center; gap: 10px;
-  color: #999; cursor: pointer;
+.page-header { margin-bottom: 80px; }
+.back-link { 
+  background: none; border: none; 
+  display: flex; align-items: center; gap: 10px; 
+  color: #666; font-size: 0.75rem; letter-spacing: 3px; 
+  cursor: pointer; transition: all 0.3s;
   padding: 0; margin-bottom: 30px;
-  font-size: 0.75rem; letter-spacing: 3px;
-  transition: all 0.3s;
 }
-.back-btn:hover { color: #111; transform: translateX(-5px); }
+.back-link:hover { color: #fff; transform: translateX(-5px); }
 
-.domain-title { font-size: clamp(3rem, 8vw, 6rem); margin: 0; font-weight: 700; letter-spacing: 2px; }
-.divider { width: 80px; height: 3px; background: var(--primary-red); margin-top: 30px; }
+.domain-title { font-size: clamp(3rem, 10vw, 8rem); margin: 0; line-height: 1; letter-spacing: 2px; }
+.divider { width: 100px; height: 2px; background: var(--cinnabar-red); margin-top: 40px; }
 
-.banner-section { margin: 60px 0 80px 0; perspective: 1000px; }
-.img-box { 
-  width: 100%; height: 60vh; border-radius: 4px; overflow: hidden; position: relative; 
-  box-shadow: 0 40px 80px rgba(0,0,0,0.1);
-}
+.banner-section { margin-bottom: 100px; }
+.img-box { width: 100%; height: 60vh; position: relative; overflow: hidden; }
 
 /* 🚀 图片缩移动画 */
 .zoom-img { 
@@ -223,23 +236,35 @@ const goBack = () => {
   to { transform: scale(1.1) rotate(1deg); }
 }
 
-.overlay-grad { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2)); }
+.image-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5)); }
 
-.info-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; }
-.grid-item h3 { color: #111; margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; }
-.grid-item .text { font-size: 1.2rem; line-height: 2; color: #444; font-weight: 300; text-align: justify; }
+.info-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 100px; }
+
+.info-block { margin-bottom: 60px; }
+.block-title { font-size: 1.8rem; color: #fff; margin-bottom: 30px; letter-spacing: 2px; }
+.block-text { font-size: 1.25rem; line-height: 2; color: #aaa; font-weight: 300; }
 
 .point-list { list-style: none; padding: 0; }
-.point-list li { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; color: #555; position: relative; padding-left: 20px; }
-.point-list li::before { content: ''; position: absolute; left: 0; top: 12px; width: 6px; height: 1px; background: var(--primary-red); }
+.point-list li { 
+  font-size: 1.15rem; margin-bottom: 20px; color: #ddd; 
+  position: relative; padding-left: 20px; font-weight: 300;
+}
+.point-list li::before { 
+  content: '·'; position: absolute; left: 0; 
+  color: var(--cinnabar-red); font-weight: bold; font-size: 1.5rem; line-height: 1;
+}
 
-.full-width { grid-column: span 2; }
-.practice-box { background: #fafafa; padding: 60px; border-radius: 4px; position: relative; overflow: hidden; border: 1px solid #f0f0f0; }
-.practice-box h3 { color: var(--primary-red); }
-.practice-box .text { font-size: 1.25rem; color: #333; position: relative; z-index: 2; }
-.bg-icon { position: absolute; bottom: -20px; right: -20px; z-index: 1; }
+.practice-card { 
+  background: rgba(255,255,255,0.02); 
+  border: 1px solid rgba(255,255,255,0.05); 
+  padding: 50px; position: relative; 
+}
+.card-title { font-size: 1.5rem; color: #fff; margin-bottom: 25px; }
+.card-divider { width: 40px; height: 1px; background: var(--gold-dust); margin-bottom: 25px; }
+.card-text { font-size: 1.1rem; line-height: 1.8; color: #888; font-style: italic; }
+.card-icon { position: absolute; bottom: 30px; right: 30px; }
 
-/* 🚀 元素独立进场动画 */
+/* 🚀 进场动画 */
 .dynamic-reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -251,13 +276,14 @@ const goBack = () => {
 }
 
 @media (max-width: 1024px) {
-  .info-grid { grid-template-columns: 1fr; gap: 60px; }
-  .full-width { grid-column: span 1; }
+  .info-layout { grid-template-columns: 1fr; gap: 60px; }
 }
 
 @media (max-width: 768px) {
   .detail-page { padding: 120px 24px 60px 24px; }
-  .domain-title { font-size: 2.8rem; }
-  .img-box { height: 40vh; }
+  .domain-title { font-size: 3rem; }
+  .image-frame { height: 40vh; }
+  .block-title { font-size: 1.5rem; }
+  .block-text { font-size: 1.1rem; }
 }
 </style>
