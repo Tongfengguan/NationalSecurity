@@ -1,70 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Noto+Serif+SC:wght@700;900&family=Inter:wght@400;700;900&display=swap');
 
 :root {
-  --bg-base: #000000;
-  --text-main: #f4f4f0;
-  --text-muted: #444444;
+  --ink-black: #050505;
+  --deep-gray: #1a1a1a;
+  --cinnabar-red: #b32a26;
+  --gold-dust: #c5a059;
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --border-dim: rgba(255, 255, 255, 0.08);
   --alert-red: #ff003c;
-  --grid-line: rgba(255, 255, 255, 0.05);
-  --border-hard: #222222;
+  
   --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Noto Serif SC', serif;
-  --ease-mech: cubic-bezier(0.19, 1, 0.22, 1);
+  
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-mech: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 body {
   margin: 0; padding: 0;
-  background-color: var(--bg-base);
-  color: var(--text-main);
+  background-color: var(--ink-black);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
   background-image: 
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 50px 50px;
-  cursor: none; /* 强制使用自定义准心 */
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
 ::-webkit-scrollbar { display: none; }
-* { border-radius: 0 !important; }
+* { border-radius: 0 !important; -webkit-tap-highlight-color: transparent; }
 
-/* 🚀 HUD 动态准心 - 炫技点：增加沉浸式操作感 */
-.hud-cursor {
-  position: fixed;
-  width: 40px; height: 40px;
-  border: 1px solid var(--alert-red);
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s var(--ease-mech), height 0.3s var(--ease-mech), opacity 0.3s;
-}
-.hud-cursor::before, .hud-cursor::after {
-  content: ""; position: absolute; background: var(--alert-red);
-}
-.hud-cursor::before { top: 50%; left: -10px; right: -10px; height: 1px; }
-.hud-cursor::after { left: 50%; top: -10px; bottom: -10px; width: 1px; }
-
-/* 鼠标按下或悬停在交互元素时的锁定动效 */
-.hud-cursor.locked {
-  width: 25px; height: 25px; border-width: 2px;
-  animation: lock-rotate 4s linear infinite;
-}
-@keyframes lock-rotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-/* 🚀 数据解密文字动画 */
-@keyframes decrypt {
-  0% { color: var(--alert-red); opacity: 0; }
-  20% { content: "$#!@?*"; opacity: 1; }
-  100% { opacity: 1; }
+/* 🚀 移动端手势优化：增加点击反馈 */
+.btn-active-effect:active {
+  background: var(--alert-red) !important;
+  color: white !important;
+  transform: scale(0.95);
+  transition: 0.1s;
 }
 
+/* 全局进场动画 */
 .reveal-snappy {
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.4s var(--ease-mech);
+  transition: all 0.4s var(--transition-mech);
 }
 .is-visible .reveal-snappy { opacity: 1; transform: translateY(0); }
 
 .serif { font-family: var(--font-serif); }
 .mono { font-family: var(--font-mono); }
+
+/* CRT 扫描线优化 */
+body::after {
+  content: " ";
+  position: fixed; inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 3px;
+  pointer-events: none; z-index: 9999; opacity: 0.2;
+}
