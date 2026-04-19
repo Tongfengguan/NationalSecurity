@@ -8,7 +8,7 @@ const activeIndex = ref(0)
 const observer = ref<IntersectionObserver | null>(null)
 const base = import.meta.env.BASE_URL
 
-// 🚀 文本解密函数 - 炫技点：模拟实时解密
+// 🚀 文本解密函数
 const scrambleText = (targetText: string, duration = 800) => {
   const chars = '!<>-_\\/[]{}—=+*^?#________'
   const text = ref('')
@@ -50,12 +50,12 @@ const domains = [
   { id: 'nuclear', name: '核安全', en: 'NUCLEAR_CONTROL', desc: 'SAFE_ENERGY / 坚持最高安全标准，确保万无一失。', img: `${base}static/nuclear.jpg` },
   { id: 'overseas', name: '海外利益', en: 'OVERSEAS_INTEREST', desc: 'GLOBAL_PROTECT / 中国脚步走到哪里，安全保护就跟到哪里。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200' },
   { id: 'bio', name: '生物安全', en: 'BIO_DEFENSE', desc: 'LIFE_SECURITY / 防范重大传染病和物种入侵。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1600' },
-  { id: 'space', name: '太空安全', en: 'SPACE_STRAT', desc: 'ORBIT_权益 / 和平探索与利用太空资源，捍卫战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
-  { id: 'deepsea', name: '深海安全', en: 'DEEP_SEA_MIS', desc: 'ABYSS_EXPLORE / 提升深海进入与探测能力。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
-  { id: 'polar', name: '极地安全', en: 'POLAR_治理', desc: 'ICE_GOVERNANCE / 积极参与极地国际治理，和平开展科考。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
+  { id: 'space', name: '太空安全', en: 'SPACE_STRAT', desc: 'ORBIT_SOVEREIGNTY / 和平探索与利用太空资源，捍卫战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
+  { id: 'deepsea', name: '深海安全', en: 'DEEP_SEA_MISSION', desc: 'ABYSS_EXPLORE / 提升深海进入与探测能力。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
+  { id: 'polar', name: '极地安全', en: 'POLAR_SECURITY', desc: 'ICE_GOVERNANCE / 积极参与极地国际治理，和平开展科考。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
 ]
 
-// 存储解密状态的响应式对象
+// 存储解密状态
 const decodedTitles = ref<Record<number, any>>({})
 
 onMounted(async () => {
@@ -71,7 +71,6 @@ onMounted(async () => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible')
         activeIndex.value = index
-        // 🚀 触发标题解密
         if (index > 0 && index <= domains.length && !decodedTitles.value[index]) {
           decodedTitles.value[index] = scrambleText(domains[index - 1].name)
         }
@@ -102,12 +101,13 @@ const scrollToSection = (index: number) => {
   <div class="command-container">
     
     <div class="hud-side-nav">
-      <div v-for="(_, i) in (domains.length + 2)" :key="i" class="hud-nav-item" :class="{ active: activeIndex === i }" @click="scrollToSection(i)">
+      <!-- 🚀 修正：侧边导航仅对应现有页面 -->
+      <div v-for="(_, i) in (domains.length + 1)" :key="i" class="hud-nav-item" :class="{ active: activeIndex === i }" @click="scrollToSection(i)">
         <span class="mono">{{ i < 10 ? '0'+i : i }}</span>
       </div>
     </div>
 
-    <!-- Hero HUD：加入 3D 视角网格 -->
+    <!-- Hero HUD -->
     <section class="ppt-section hero" data-index="0">
       <div class="perspective-grid"></div>
       <div class="content">
@@ -145,7 +145,6 @@ const scrollToSection = (index: number) => {
         </div>
         <div class="text-group">
           <div class="en-code mono reveal-snappy">> {{ item.en }}</div>
-          <!-- 🚀 解密标题展示 -->
           <h2 class="title serif">{{ decodedTitles[index+1]?.value || item.name }}</h2>
           <div class="divider-hard reveal-snappy"></div>
           <p class="description mono reveal-snappy">{{ item.desc }}</p>
@@ -153,21 +152,6 @@ const scrollToSection = (index: number) => {
             > OPEN_ENCRYPTED_FILE
           </button>
         </div>
-      </div>
-    </section>
-
-    <!-- Final -->
-    <section class="ppt-section footer-page" :data-index="domains.length + 1">
-      <div class="content text-center">
-        <h2 class="hero-title serif">安而不忘危</h2>
-        <div class="divider-hard centered"></div>
-        <div class="hotline-hud mono">
-          <span class="l">SECURE_CHANNEL</span>
-          <span class="n">12339</span>
-        </div>
-        <button class="access-btn large mono btn-active-effect" @click.stop="$router.push('/knowledge')">
-          > FULL_ARCHIVE_ACCESS
-        </button>
       </div>
     </section>
 
@@ -179,10 +163,9 @@ const scrollToSection = (index: number) => {
   height: 100vh; overflow-y: scroll;
   scroll-snap-type: y mandatory;
   background: #000; margin: -60px 0 0 0;
-  perspective: 1000px; /* 开启 3D 空间 */
+  perspective: 1000px;
 }
 
-/* 🚀 3D 视角网格 */
 .perspective-grid {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
   background-image: 
@@ -244,8 +227,6 @@ const scrollToSection = (index: number) => {
 .access-btn:hover { background: var(--alert-red); border-color: var(--alert-red); }
 
 .watermark { position: absolute; right: 30px; bottom: 30px; font-size: 15vw; font-weight: 900; color: #080808; pointer-events: none; }
-
-.hotline-hud .n { font-size: clamp(3.5rem, 12vw, 7rem); color: var(--alert-red); font-weight: 900; letter-spacing: 5px; }
 
 @media (max-width: 768px) {
   .hud-corner { display: none; }
