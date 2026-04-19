@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const props = defineProps<{
@@ -127,6 +127,10 @@ const domainsData: Record<string, any> = {
 
 const currentDomain = computed(() => domainsData[props.id] || null)
 
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 const goBack = () => {
   const index = route.query.backIndex
   router.push({
@@ -141,7 +145,7 @@ const goBack = () => {
     <main class="dossier-layout">
       
       <!-- 档案页眉 -->
-      <header class="dossier-header reveal-snappy">
+      <header class="dossier-header">
         <div class="header-top">
           <button class="back-link mono" @click="goBack">
             <span class="blink">&lt;</span> EXIT_TO_MAIN
@@ -156,7 +160,7 @@ const goBack = () => {
       </header>
 
       <!-- 视觉扫描区 -->
-      <section class="scan-section reveal-snappy" style="transition-delay: 0.1s">
+      <section class="scan-section">
         <div class="img-container">
           <img :src="currentDomain.img" :alt="currentDomain.name" />
           <div class="scan-line"></div>
@@ -166,12 +170,12 @@ const goBack = () => {
 
       <!-- 核心数据区 -->
       <div class="data-grid">
-        <div class="data-block reveal-snappy" style="transition-delay: 0.2s">
+        <div class="data-block">
           <h3 class="mono">> DEFINITION</h3>
           <p class="mono-text">{{ currentDomain.definition }}</p>
         </div>
         
-        <div class="data-block reveal-snappy" style="transition-delay: 0.3s">
+        <div class="data-block">
           <h3 class="mono">> CORE_INTEL</h3>
           <ul class="point-list mono">
             <li v-for="point in currentDomain.keyPoints" :key="point">
@@ -180,7 +184,7 @@ const goBack = () => {
           </ul>
         </div>
 
-        <div class="data-block wide-block highlight-block reveal-snappy" style="transition-delay: 0.4s">
+        <div class="data-block wide-block highlight-block">
           <h3 class="mono">> CHINA_PRACTICE</h3>
           <div class="practice-content">
             <div class="barcode"></div>
