@@ -10,19 +10,18 @@ const bootLogs = ref<string[]>([])
 // 实时 HUD 逻辑
 const systemTime = ref('')
 const systemCoords = ref('39.9042° N, 116.4074° E')
+const threatLevel = ref('MINIMAL')
 const isMobile = ref(false)
 const cursorX = ref(0)
 const cursorY = ref(0)
 const isLocked = ref(false)
 let timeInterval: any = null
 
-// 🚀 模拟启动序列
 const startBoot = async () => {
   const steps = [
     '> INITIALIZING_KERNEL_0.4.2...',
     '> LOADING_RSA_KEYS_4096_BIT...',
     '> LINKING_SATELLITE_CHINASAT_12...',
-    '> BYPASSING_PROXY_LAYERS...',
     '> ACCESS_GRANTED_ROOT@SEC_CORE'
   ]
   for (const step of steps) {
@@ -45,7 +44,7 @@ const handleMouseMove = (e: MouseEvent) => {
   isLocked.value = ['BUTTON', 'A', 'EL-CARD'].includes(target.tagName) || !!target.closest('.ppt-nav')
 }
 
-// 🚀 物理声效 (极简高频音)
+// 物理声效
 const playSound = (type: 'click' | 'hover') => {
   try {
     const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
@@ -53,15 +52,13 @@ const playSound = (type: 'click' | 'hover') => {
     const gain = audioCtx.createGain()
     osc.connect(gain)
     gain.connect(audioCtx.destination)
-    
     osc.type = 'sine'
     osc.frequency.setValueAtTime(type === 'click' ? 800 : 1200, audioCtx.currentTime)
     gain.gain.setValueAtTime(0.05, audioCtx.currentTime)
     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1)
-    
     osc.start()
     osc.stop(audioCtx.currentTime + 0.1)
-  } catch (e) { /* 忽略静音政策报错 */ }
+  } catch (e) {}
 }
 
 onMounted(() => {
@@ -70,10 +67,16 @@ onMounted(() => {
   updateTime()
   timeInterval = setInterval(() => {
     updateTime()
+    // 随机微调坐标
     if (Math.random() > 0.8) {
       const lat = (39.9 + Math.random() * 0.1).toFixed(4)
       const lng = (116.4 + Math.random() * 0.1).toFixed(4)
       systemCoords.value = `${lat}° N, ${lng}° E`
+    }
+    // 随机改变威胁等级描述，营造真实感
+    if (Math.random() > 0.95) {
+      const levels = ['MINIMAL', 'STABLE', 'MONITORING', 'ACTIVE']
+      threatLevel.value = levels[Math.floor(Math.random() * levels.length)]
     }
   }, 1000)
 
@@ -94,7 +97,6 @@ watch(() => route.path, () => {
 <template>
   <el-container class="app-container" :style="{ cursor: isMobile ? 'auto' : 'none' }" @click="playSound('hover')">
     
-    <!-- 🚀 开机引导屏 -->
     <transition name="boot-fade">
       <div v-if="isBooting" class="boot-screen mono">
         <div class="boot-content">
@@ -104,7 +106,6 @@ watch(() => route.path, () => {
       </div>
     </transition>
 
-    <!-- 全球准心 -->
     <div v-if="!isMobile && !isBooting" class="hud-cursor" :class="{ locked: isLocked }" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
     
     <div class="crt-overlay"></div>
@@ -113,11 +114,11 @@ watch(() => route.path, () => {
       <div class="header-left">
         <div class="logo" @click="$router.push('/')">
           <div class="logo-symbol pulse"></div>
-          <span class="logo-text mono">CNS_TERMINAL_V2</span>
+          <span class="logo-text mono">CNS_TERMINAL_V3</span>
         </div>
       </div>
 
-      <div class="header-center">
+      <div class="header-center mobile-hide">
         <div class="nav-links">
           <router-link to="/" class="nav-link mono" :class="{ active: route.path === '/' }">
             <span class="bracket">[</span> DASHBOARD <span class="bracket">]</span>
@@ -129,9 +130,9 @@ watch(() => route.path, () => {
       </div>
 
       <div class="header-right mono">
-        <div class="hud-data">
-          <div class="data-row"><span class="label">SEC_LEVEL:</span> <span class="val danger">ULTRA</span></div>
-          <div class="data-row"><span class="label">LOC:</span> <span class="val">{{ systemCoords }}</span></div>
+        <div class="hud-status">
+          <div class="status-row"><span class="label">THREAT_LVL:</span> <span class="val danger">{{ threatLevel }}</span></div>
+          <div class="status-row"><span class="label">LOC_TRACE:</span> <span class="val">{{ systemCoords }}</span></div>
         </div>
       </div>
     </el-header>
@@ -152,7 +153,6 @@ watch(() => route.path, () => {
   background: var(--bg-base); position: relative;
 }
 
-/* 🚀 引导屏样式 */
 .boot-screen {
   position: fixed; inset: 0; background: #000; z-index: 5000;
   display: flex; align-items: center; justify-content: center;
@@ -172,27 +172,27 @@ watch(() => route.path, () => {
 .app-header {
   display: flex; align-items: center; justify-content: space-between;
   background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
-  padding: 0 30px; height: 60px;
+  padding: 0 25px; height: 60px;
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 1000; border-bottom: 1px solid #111;
 }
 
 .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
 .logo-symbol { width: 10px; height: 10px; background: var(--alert-red); }
-.logo-text { font-size: 0.9rem; font-weight: 900; color: #fff; letter-spacing: 1px; }
+.logo-text { font-size: 0.8rem; font-weight: 900; color: #fff; letter-spacing: 1px; }
 
 .pulse { animation: pulse 2s infinite ease-in-out; }
-@keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--alert-red); } 50% { opacity: 0.3; box-shadow: 0 0 15px var(--alert-red); } }
+@keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 5px var(--alert-red); } 50% { opacity: 0.3; box-shadow: 0 0 15px var(--alert-red); } 100% { opacity: 1; box-shadow: 0 0 5px var(--alert-red); } }
 
 .nav-links { display: flex; gap: 15px; }
-.nav-link { text-decoration: none; color: #333; font-size: 0.75rem; transition: 0.2s; font-weight: bold; }
+.nav-link { text-decoration: none; color: #444; font-size: 0.7rem; transition: 0.2s; font-weight: bold; }
 .nav-link.active { color: var(--alert-red); }
 .nav-link .bracket { opacity: 0; }
 .nav-link.active .bracket { opacity: 1; }
 
-.hud-data { display: flex; flex-direction: column; align-items: flex-end; }
-.data-row { font-size: 0.6rem; line-height: 1.2; color: #444; }
-.data-row .danger { color: var(--alert-red); font-weight: 900; }
+.hud-status { display: flex; flex-direction: column; align-items: flex-end; }
+.status-row { font-size: 0.6rem; line-height: 1.2; color: #444; letter-spacing: 1px; }
+.status-row .danger { color: var(--alert-red); font-weight: 900; }
 
 .app-main { flex: 1; padding: 0; margin-top: 60px; }
 
@@ -204,7 +204,7 @@ watch(() => route.path, () => {
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 @media (max-width: 768px) {
-  .header-right { display: none; }
+  .mobile-hide { display: none; }
   .app-header { padding: 0 15px; }
 }
 </style>

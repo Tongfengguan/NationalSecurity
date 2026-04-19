@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const props = defineProps<{
@@ -9,6 +9,14 @@ const props = defineProps<{
 const router = useRouter()
 const route = useRoute()
 const base = import.meta.env.BASE_URL
+
+// 🚀 战术扫描雷达逻辑
+const scanValue = ref(85)
+onMounted(() => {
+  setInterval(() => {
+    scanValue.value = 80 + Math.floor(Math.random() * 15)
+  }, 2000)
+})
 
 const domainsData: Record<string, any> = {
   'political': {
@@ -127,16 +135,9 @@ const domainsData: Record<string, any> = {
 
 const currentDomain = computed(() => domainsData[props.id] || null)
 
-onMounted(() => {
-  window.scrollTo(0, 0)
-})
-
 const goBack = () => {
   const index = route.query.backIndex
-  router.push({
-    path: '/',
-    query: { fromIndex: index }
-  })
+  router.push({ path: '/', query: { fromIndex: index } })
 }
 </script>
 
@@ -144,51 +145,75 @@ const goBack = () => {
   <div class="dossier-page" v-if="currentDomain">
     <main class="dossier-layout">
       
-      <!-- 档案页眉 -->
       <header class="dossier-header">
         <div class="header-top">
           <button class="back-link mono" @click="goBack">
-            <span class="blink">&lt;</span> EXIT_TO_MAIN
+            <span class="blink">&lt;</span> EXIT_TO_DASHBOARD
           </button>
-          <div class="doc-id mono">DOC_REF: NS-2026-{{ id.toUpperCase() }}</div>
+          <div class="doc-id mono">NODE_ID: {{ id.toUpperCase() }}</div>
         </div>
-        <div class="title-wrap">
-          <div class="classification-stamp">CLASSIFIED</div>
-          <h2 class="domain-title serif">{{ currentDomain.name }}</h2>
+        <div class="title-row">
+          <div class="stamp-box">
+            <div class="stamp">CLASSIFIED</div>
+          </div>
+          <h1 class="domain-title serif">{{ currentDomain.name }}</h1>
         </div>
-        <div class="border-heavy"></div>
+        <div class="status-bar">
+          <div class="bar-fill" :style="{ width: scanValue + '%' }"></div>
+          <span class="mono">SEC_SCAN: {{ scanValue }}%</span>
+        </div>
       </header>
 
-      <!-- 视觉扫描区 -->
-      <section class="scan-section">
-        <div class="img-container">
+      <!-- 核心视觉区：卫星图模拟 -->
+      <section class="visual-grid">
+        <div class="sat-view">
           <img :src="currentDomain.img" :alt="currentDomain.name" />
-          <div class="scan-line"></div>
-          <div class="overlay-grid"></div>
+          <div class="scan-horizontal"></div>
+          <div class="hud-corners"><span></span><span></span><span></span><span></span></div>
+          <div class="sat-label mono">LIVE_SATELLITE_FEED_01</div>
+        </div>
+        
+        <!-- 🚀 战术数据面板 -->
+        <div class="data-panel glass-panel mono">
+          <div class="panel-header">CORE_METRICS</div>
+          <div class="metrics">
+            <div class="m-row"><span>DEFENSE_INDEX:</span> <span class="val">9.4/10</span></div>
+            <div class="m-row"><span>STABILITY:</span> <span class="val green">OPTIMAL</span></div>
+            <div class="m-row"><span>MONITORING:</span> <span class="val">24/7</span></div>
+          </div>
+          <div class="radar-box">
+            <div class="radar-circle"></div>
+            <div class="radar-sweep"></div>
+          </div>
         </div>
       </section>
 
-      <!-- 核心数据区 -->
-      <div class="data-grid">
-        <div class="data-block">
+      <div class="intel-grid">
+        <div class="intel-block glass-panel">
           <h3 class="mono">> DEFINITION</h3>
           <p class="mono-text">{{ currentDomain.definition }}</p>
         </div>
         
-        <div class="data-block">
-          <h3 class="mono">> CORE_INTEL</h3>
+        <div class="intel-block glass-panel">
+          <h3 class="mono">> CORE_DIRECTIVES</h3>
           <ul class="point-list mono">
             <li v-for="point in currentDomain.keyPoints" :key="point">
-              [ CONFIDENTIAL ] {{ point }}
+              [ SECURED ] {{ point }}
             </li>
           </ul>
         </div>
 
-        <div class="data-block wide-block highlight-block">
-          <h3 class="mono">> CHINA_PRACTICE</h3>
-          <div class="practice-content">
-            <div class="barcode"></div>
+        <div class="intel-block wide highlight-box">
+          <h3 class="mono">> CHINA_PRACTICE_AND_ACHIEVEMENTS</h3>
+          <div class="practice-wrap">
             <p class="serif">{{ currentDomain.chinaPractice }}</p>
+            <!-- 🚀 动态红色签章 -->
+            <div class="official-seal">
+              <div class="seal-inner">
+                <span>中国国家安全</span>
+                <span class="small">OFFICIAL_SEAL</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -197,73 +222,71 @@ const goBack = () => {
 </template>
 
 <style scoped>
-.dossier-page {
-  background-color: #000;
-  min-height: 100vh;
-  padding: 120px 40px 100px 40px;
-}
-
-.dossier-layout { max-width: 1100px; margin: 0 auto; position: relative; }
+.dossier-page { background-color: #000; min-height: 100vh; padding: 120px 40px 100px 40px; color: #fff; }
+.dossier-layout { max-width: 1200px; margin: 0 auto; position: relative; }
 
 .dossier-header { margin-bottom: 60px; }
-.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.back-link { background: none; border: none; color: #555; cursor: pointer; font-size: 0.7rem; letter-spacing: 2px; transition: color 0.3s; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #111; padding-bottom: 10px; }
+.back-link { background: none; border: none; color: #444; cursor: pointer; font-size: 0.7rem; letter-spacing: 2px; transition: 0.3s; }
 .back-link:hover { color: var(--alert-red); }
-.doc-id { font-size: 0.65rem; color: #333; letter-spacing: 1px; }
+.doc-id { font-size: 0.65rem; color: #222; }
 
-.title-wrap { position: relative; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.classification-stamp { 
-  border: 1px solid var(--alert-red); color: var(--alert-red); padding: 2px 8px; font-size: 0.6rem; font-weight: 900; 
-  letter-spacing: 2px; flex-shrink: 0;
-}
-/* 🚀 核心修复：显式强制标题可见 */
-.domain-title { 
-  font-size: clamp(2rem, 6vw, 4.5rem); 
-  margin: 0; 
-  color: #ffffff !important; 
-  line-height: 1.1; 
-  letter-spacing: 2px;
-  display: block !important;
-  opacity: 1 !important;
-}
-.border-heavy { width: 100%; height: 4px; background: #fff; margin-top: 20px; }
+.title-row { display: flex; align-items: center; gap: 40px; margin-bottom: 30px; }
+.stamp-box { border: 1px solid var(--alert-red); padding: 5px; opacity: 0.8; transform: rotate(-5deg); }
+.stamp { border: 2px solid var(--alert-red); color: var(--alert-red); padding: 5px 15px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; }
+.domain-title { font-size: clamp(3rem, 10vw, 6rem); margin: 0; line-height: 1; }
 
-.scan-section { margin-bottom: 80px; }
-.img-container { width: 100%; height: 50vh; position: relative; overflow: hidden; border: 1px solid #222; }
-.img-container img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.5) brightness(0.6); }
+.status-bar { height: 2px; background: #111; width: 100%; position: relative; margin-top: 40px; }
+.bar-fill { height: 100%; background: var(--alert-red); transition: width 0.3s ease; box-shadow: 0 0 10px var(--alert-red); }
+.status-bar span { position: absolute; right: 0; top: -20px; font-size: 0.6rem; color: #444; }
 
-.scan-line { 
-  position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--alert-red); 
-  box-shadow: 0 0 15px var(--alert-red); animation: scan 4s linear infinite; z-index: 5;
-}
-@keyframes scan { from { top: 0; } to { top: 100%; } }
+.visual-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 80px; }
+.sat-view { position: relative; height: 50vh; border: 1px solid #111; overflow: hidden; }
+.sat-view img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.4) contrast(1.2); }
+.scan-horizontal { position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: var(--alert-red); box-shadow: 0 0 15px var(--alert-red); animation: scanH 6s linear infinite; }
+@keyframes scanH { from { top: 0; } to { top: 100%; } }
+.sat-label { position: absolute; bottom: 20px; right: 20px; font-size: 0.6rem; color: rgba(255,255,255,0.2); }
 
-.overlay-grid { 
-  position: absolute; inset: 0; z-index: 2;
-  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
+.data-panel { border: 1px solid #111; padding: 30px; display: flex; flex-direction: column; }
+.panel-header { font-size: 0.7rem; color: #444; margin-bottom: 25px; border-bottom: 1px solid #111; padding-bottom: 10px; }
+.metrics { display: flex; flex-direction: column; gap: 15px; font-size: 0.8rem; margin-bottom: 40px; }
+.metrics .val { color: #fff; float: right; font-weight: 700; }
+.metrics .val.green { color: #0f0; text-shadow: 0 0 5px #0f0; }
 
-.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
-.data-block h3 { font-size: 0.8rem; color: var(--alert-red); margin-bottom: 25px; letter-spacing: 3px; }
-.mono-text { font-size: 1rem; color: #ccc; line-height: 1.8; text-align: justify; }
+.radar-box { width: 120px; height: 120px; border: 1px solid #111; border-radius: 50%; margin: auto; position: relative; overflow: hidden; }
+.radar-circle { position: absolute; inset: 10px; border: 1px solid #111; border-radius: 50%; }
+.radar-sweep { position: absolute; inset: 0; background: conic-gradient(from 0deg, var(--alert-red) 0deg, transparent 90deg); opacity: 0.2; animation: sweep 3s linear infinite; }
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+.intel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.intel-block { padding: 40px; border: 1px solid #111; transition: 0.3s; }
+.intel-block:hover { border-color: #222; background: rgba(255,255,255,0.01); }
+.intel-block h3 { font-size: 0.8rem; color: var(--alert-red); margin-bottom: 25px; letter-spacing: 2px; }
+.mono-text { font-size: 1.05rem; line-height: 1.8; color: #888; }
 .point-list { list-style: none; padding: 0; }
-.point-list li { font-size: 0.95rem; color: #aaa; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 10px; }
+.point-list li { font-size: 0.95rem; color: #666; margin-bottom: 15px; border-bottom: 1px solid #080808; padding-bottom: 10px; }
 
-.wide-block { grid-column: span 2; }
-.highlight-block { border-top: 2px solid #fff; padding-top: 40px; }
-.practice-content { display: flex; gap: 40px; align-items: flex-start; }
-.barcode { width: 100px; height: 100px; background: url("https://upload.wikimedia.org/wikipedia/commons/e/e9/UPC-A-barcode.svg") center/contain no-repeat; filter: invert(1) opacity(0.3); flex-shrink: 0; }
-.practice-content p { font-size: clamp(1.1rem, 3vw, 1.4rem); line-height: 1.8; color: #fff; margin: 0; }
+.wide { grid-column: span 2; }
+.highlight-box { border-top: 2px solid #fff; padding-top: 60px; background: none; }
+.practice-wrap { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; }
+.practice-wrap p { font-size: 1.6rem; line-height: 1.6; color: #fff; margin: 0; max-width: 800px; }
 
-@media (max-width: 768px) {
-  .dossier-page { padding: 100px 20px 60px 20px; }
-  .data-grid { grid-template-columns: 1fr; gap: 40px; }
-  .wide-block { grid-column: span 1; }
-  .practice-content { flex-direction: column; gap: 20px; }
-  .img-container { height: 35vh; }
-  .domain-title { font-size: 2rem; }
-  .title-wrap { gap: 10px; }
+.official-seal { 
+  width: 120px; height: 120px; border: 3px double var(--alert-red); color: var(--alert-red); 
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  text-align: center; font-weight: 900; font-size: 0.9rem; transform: rotate(15deg);
+  box-shadow: 0 0 10px rgba(255,0,60,0.1); opacity: 0.6; flex-shrink: 0;
+}
+.seal-inner { padding: 10px; border: 1px solid var(--alert-red); border-radius: 50%; width: 100px; height: 100px; display: flex; flex-direction: column; justify-content: center; }
+.seal-inner .small { font-size: 0.5rem; margin-top: 5px; opacity: 0.7; }
+
+@media (max-width: 900px) {
+  .dossier-page { padding: 100px 24px 60px 24px; }
+  .visual-grid { grid-template-columns: 1fr; }
+  .intel-grid { grid-template-columns: 1fr; }
+  .wide { grid-column: span 1; }
+  .practice-wrap { flex-direction: column; align-items: center; text-align: center; }
+  .domain-title { font-size: 2.5rem; }
+  .title-row { flex-direction: column; gap: 15px; align-items: flex-start; }
 }
 </style>
