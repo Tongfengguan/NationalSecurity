@@ -8,13 +8,12 @@ const activeIndex = ref(0)
 const observer = ref<IntersectionObserver | null>(null)
 const base = import.meta.env.BASE_URL
 
-// 🚀 文本解密函数
+// 🚀 核心动效：文本解密函数
 const scrambleText = (targetText: string, duration = 800) => {
   const chars = '!<>-_\\/[]{}—=+*^?#________'
   const text = ref('')
   let frame = 0
   const totalFrames = duration / 16
-
   const update = () => {
     if (frame >= totalFrames) {
       text.value = targetText
@@ -22,11 +21,8 @@ const scrambleText = (targetText: string, duration = 800) => {
     }
     let result = ''
     for (let i = 0; i < targetText.length; i++) {
-      if (Math.random() < frame / totalFrames) {
-        result += targetText[i]
-      } else {
-        result += chars[Math.floor(Math.random() * chars.length)]
-      }
+      if (Math.random() < frame / totalFrames) result += targetText[i]
+      else result += chars[Math.floor(Math.random() * chars.length)]
     }
     text.value = result
     frame++
@@ -55,8 +51,8 @@ const domains = [
   { id: 'polar', name: '极地安全', en: 'POLAR_SECURITY', desc: 'ICE_GOVERNANCE / 积极参与极地国际治理，和平开展科考。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
 ]
 
-// 存储解密状态
 const decodedTitles = ref<Record<number, any>>({})
+const typingIndex = ref<Record<number, number>>({}) // 打字机进度
 
 onMounted(async () => {
   const returnIdx = route.query.fromIndex
@@ -71,8 +67,17 @@ onMounted(async () => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible')
         activeIndex.value = index
+        // 🚀 触发标题解密
         if (index > 0 && index <= domains.length && !decodedTitles.value[index]) {
           decodedTitles.value[index] = scrambleText(domains[index - 1].name)
+          // 🚀 触发打字机：逐字增加显示长度
+          let charIdx = 0
+          const desc = domains[index - 1].desc
+          const timer = setInterval(() => {
+            typingIndex.value[index] = charIdx
+            if (charIdx >= desc.length) clearInterval(timer)
+            charIdx++
+          }, 30)
         }
       } else {
         entry.target.classList.remove('is-visible')
@@ -100,8 +105,11 @@ const scrollToSection = (index: number) => {
 <template>
   <div class="command-container">
     
+    <!-- 侧边预警线 -->
+    <div class="edge-warning-line left"></div>
+    <div class="edge-warning-line right"></div>
+
     <div class="hud-side-nav">
-      <!-- 🚀 修正：侧边导航仅对应现有页面 -->
       <div v-for="(_, i) in (domains.length + 1)" :key="i" class="hud-nav-item" :class="{ active: activeIndex === i }" @click="scrollToSection(i)">
         <span class="mono">{{ i < 10 ? '0'+i : i }}</span>
       </div>
@@ -111,11 +119,11 @@ const scrollToSection = (index: number) => {
     <section class="ppt-section hero" data-index="0">
       <div class="perspective-grid"></div>
       <div class="content">
-        <div class="reveal-snappy mono alert-tag">>> AUTH_SEC_LEVEL_04_ACCEPTED</div>
+        <div class="reveal-snappy mono alert-tag">>> CNS_SEC_BOOT_COMPLETED</div>
         <h1 class="hero-title serif reveal-snappy">总体国家安全观</h1>
         <div class="hero-line reveal-snappy"></div>
         <div class="scroll-arrow mono reveal-snappy">
-          INIT_SYSTEM_SCAN
+          ESTABLISHING_LINK...
           <div class="arrow-icon">v</div>
         </div>
       </div>
@@ -132,24 +140,32 @@ const scrollToSection = (index: number) => {
       <div class="hud-bg">
         <div class="bg-img" :style="{ backgroundImage: `url(${item.img})` }"></div>
         <div class="red-tint"></div>
+        <!-- 🚀 战术叠加图层 -->
+        <div class="tactical-meta mono">
+          <div class="meta-item">REF_ID: {{ item.id.toUpperCase() }}</div>
+          <div class="meta-item">GRID_COORD: {{ (Math.random()*100).toFixed(2) }}X / {{ (Math.random()*100).toFixed(2) }}Y</div>
+          <div class="meta-item">ENCRYPTION: AES_256_ACTIVE</div>
+        </div>
       </div>
       
       <div class="hud-corner top-left"></div>
       <div class="hud-corner bottom-right"></div>
-
       <div class="watermark mono">{{ index + 1 }}</div>
       
       <div class="content-box">
         <div class="status-header mono reveal-snappy">
-          <span class="pulse"></span> NODE_ACTIVE: 0x{{ (index + 100).toString(16) }}
+          <span class="pulse"></span> NODE_TRACKING_ON_STREAM
         </div>
         <div class="text-group">
           <div class="en-code mono reveal-snappy">> {{ item.en }}</div>
-          <h2 class="title serif">{{ decodedTitles[index+1]?.value || item.name }}</h2>
+          <h2 class="title serif">{{ decodedTitles[index+1]?.value || '' }}</h2>
           <div class="divider-hard reveal-snappy"></div>
-          <p class="description mono reveal-snappy">{{ item.desc }}</p>
+          <!-- 🚀 打字机正文 -->
+          <p class="description mono">
+            {{ item.desc.substring(0, typingIndex[index+1] || 0) }}<span class="blink-cursor">|</span>
+          </p>
           <button class="access-btn mono btn-active-effect">
-            > OPEN_ENCRYPTED_FILE
+            > EXEC_RETRIEVE_DART
           </button>
         </div>
       </div>
@@ -163,19 +179,22 @@ const scrollToSection = (index: number) => {
   height: 100vh; overflow-y: scroll;
   scroll-snap-type: y mandatory;
   background: #000; margin: -60px 0 0 0;
-  perspective: 1000px;
+  perspective: 1200px;
 }
+
+/* 🚀 侧边预警线 */
+.edge-warning-line {
+  position: fixed; top: 0; bottom: 0; width: 1px;
+  background: rgba(255, 0, 60, 0.1); z-index: 1002;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+}
+.edge-warning-line.left { left: 5px; }
+.edge-warning-line.right { right: 5px; }
 
 .perspective-grid {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
-  background-image: 
-    linear-gradient(rgba(255,0,60,0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,0,60,0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  transform: rotateX(60deg) scale(2);
-  transform-origin: bottom;
-  opacity: 0.5;
-  mask-image: linear-gradient(to top, black, transparent);
+  background-image: linear-gradient(rgba(255,0,60,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,60,0.1) 1px, transparent 1px);
+  background-size: 50px 50px; transform: rotateX(60deg) scale(2.5); transform-origin: bottom; opacity: 0.4;
 }
 
 .hud-side-nav {
@@ -183,57 +202,46 @@ const scrollToSection = (index: number) => {
   transform: translateY(-50%); z-index: 1001;
   display: flex; flex-direction: column; gap: 12px;
 }
-.hud-nav-item { font-size: 0.55rem; color: #222; padding: 5px; cursor: pointer; transition: 0.3s; }
-.hud-nav-item.active { color: var(--alert-red); font-weight: bold; transform: scale(1.2); }
+.hud-nav-item { font-size: 0.55rem; color: #222; cursor: pointer; transition: 0.3s; }
+.hud-nav-item.active { color: var(--alert-red); transform: scale(1.2); }
 
-.ppt-section {
-  height: 100vh; width: 100%;
-  position: relative; scroll-snap-align: start; scroll-snap-stop: always;
-  display: flex; align-items: center; justify-content: center;
-}
+.ppt-section { height: 100vh; width: 100%; position: relative; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; }
 
-.hud-corner { position: absolute; width: 15px; height: 15px; border-color: var(--alert-red); border-style: solid; z-index: 11; }
-.top-left { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
-.bottom-right { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
-
-.hud-bg { position: absolute; inset: 0; z-index: 0; }
+.hud-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .bg-img { width: 100%; height: 100%; background-size: cover; background-position: center; filter: grayscale(1) brightness(0.3); }
 .red-tint { position: absolute; inset: 0; background: rgba(255,0,60,0.05); mix-blend-mode: color; }
 
+/* 🚀 战术元数据 */
+.tactical-meta {
+  position: absolute; top: 80px; right: 80px;
+  color: var(--alert-red); font-size: 0.65rem; text-align: right;
+  opacity: 0.4; line-height: 2; letter-spacing: 1px;
+}
+
 .content-box { position: relative; z-index: 10; width: 100%; max-width: 1100px; padding: 0 100px; }
-
 .hero-title { font-size: clamp(2.5rem, 10vw, 6.5rem); font-weight: 900; margin: 0; letter-spacing: 0.1em; }
-.hero-line { width: 60px; height: 2px; background: var(--alert-red); margin: 30px auto; }
-.alert-tag { color: var(--alert-red); font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px; }
-
-.scroll-arrow { margin-top: 50px; font-size: 0.7rem; color: #444; letter-spacing: 3px; }
-.arrow-icon { animation: bounce 2s infinite; margin-top: 10px; font-size: 1.2rem; }
-@keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-5px);} 60% {transform: translateY(-3px);} }
+.alert-tag { color: var(--alert-red); font-size: 0.75rem; letter-spacing: 2px; }
 
 .status-header { font-size: 0.65rem; color: var(--alert-red); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 .pulse { width: 6px; height: 6px; background: var(--alert-red); border-radius: 50%; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } 50% { opacity: 0.4; box-shadow: 0 0 10px var(--alert-red); } 100% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-.title { font-size: clamp(2.5rem, 8vw, 5.5rem); color: #fff; line-height: 1.1; margin: 0; }
+.title { font-size: clamp(2.5rem, 8vw, 5.5rem); color: #fff; line-height: 1.1; margin: 0; height: 1.2em; }
 .divider-hard { width: 80px; height: 2px; background: #fff; margin: 30px 0; }
-.divider-hard.centered { margin: 30px auto; }
-.description { font-size: 1rem; color: #888; max-width: 450px; line-height: 1.8; margin-bottom: 40px; }
+.description { font-size: 1rem; color: #888; max-width: 450px; line-height: 1.8; margin-bottom: 40px; height: 4em; }
 
-.access-btn { 
-  background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; 
-  padding: 16px 32px; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer;
-  min-height: 48px;
-}
+.blink-cursor { color: var(--alert-red); animation: blink 1s infinite; font-weight: bold; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.access-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 16px 32px; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; }
 .access-btn:hover { background: var(--alert-red); border-color: var(--alert-red); }
 
 .watermark { position: absolute; right: 30px; bottom: 30px; font-size: 15vw; font-weight: 900; color: #080808; pointer-events: none; }
 
 @media (max-width: 768px) {
-  .hud-corner { display: none; }
-  .hud-side-nav { left: 8px; }
+  .tactical-meta, .hud-corner, .edge-warning-line { display: none; }
   .content-box { padding: 0 25px; }
-  .title { font-size: 2.5rem; }
-  .description { font-size: 0.9rem; max-width: 100%; }
-  .access-btn { width: 100%; }
+  .title { font-size: 2.2rem; }
+  .description { font-size: 0.9rem; max-width: 100%; height: auto; }
 }
 </style>
