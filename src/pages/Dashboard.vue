@@ -8,7 +8,14 @@ const activeIndex = ref(0)
 const observer = ref<IntersectionObserver | null>(null)
 const base = import.meta.env.BASE_URL
 
-// 🚀 核心动效：文本解密函数
+// 🚀 实时波形逻辑
+const waveformBars = ref<number[]>(new Array(20).fill(10))
+let waveformTimer: any = null
+const updateWaveform = () => {
+  waveformBars.value = waveformBars.value.map(() => Math.floor(Math.random() * 40) + 10)
+}
+
+// 文本解密逻辑
 const scrambleText = (targetText: string, duration = 800) => {
   const chars = '!<>-_\\/[]{}—=+*^?#________'
   const text = ref('')
@@ -52,7 +59,7 @@ const domains = [
 ]
 
 const decodedTitles = ref<Record<number, any>>({})
-const typingIndex = ref<Record<number, number>>({}) // 打字机进度
+const typingIndex = ref<Record<number, number>>({})
 
 onMounted(async () => {
   const returnIdx = route.query.fromIndex
@@ -61,16 +68,16 @@ onMounted(async () => {
     setTimeout(() => scrollToSection(Number(returnIdx)), 100)
   }
 
+  waveformTimer = setInterval(updateWaveform, 150)
+
   observer.value = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const index = parseInt(entry.target.getAttribute('data-index') || '0')
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible')
         activeIndex.value = index
-        // 🚀 触发标题解密
         if (index > 0 && index <= domains.length && !decodedTitles.value[index]) {
           decodedTitles.value[index] = scrambleText(domains[index - 1].name)
-          // 🚀 触发打字机：逐字增加显示长度
           let charIdx = 0
           const desc = domains[index - 1].desc
           const timer = setInterval(() => {
@@ -90,6 +97,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   observer.value?.disconnect()
+  if (waveformTimer) clearInterval(waveformTimer)
 })
 
 const navigateToDomain = (id: string, index: number) => {
@@ -105,25 +113,27 @@ const scrollToSection = (index: number) => {
 <template>
   <div class="command-container">
     
-    <!-- 侧边预警线 -->
-    <div class="edge-warning-line left"></div>
-    <div class="edge-warning-line right"></div>
-
     <div class="hud-side-nav">
       <div v-for="(_, i) in (domains.length + 1)" :key="i" class="hud-nav-item" :class="{ active: activeIndex === i }" @click="scrollToSection(i)">
         <span class="mono">{{ i < 10 ? '0'+i : i }}</span>
       </div>
     </div>
 
-    <!-- Hero HUD -->
+    <!-- Hero HUD：加入动态波形 -->
     <section class="ppt-section hero" data-index="0">
       <div class="perspective-grid"></div>
       <div class="content">
-        <div class="reveal-snappy mono alert-tag">>> CNS_SEC_BOOT_COMPLETED</div>
+        <div class="reveal-snappy mono alert-tag">>> CNS_SIG_INTERCEPT_ACTIVE</div>
+        
+        <!-- 🚀 动态波形组件 -->
+        <div class="waveform-container reveal-snappy">
+          <div v-for="(h, i) in waveformBars" :key="i" class="wave-bar" :style="{ height: h + 'px' }"></div>
+        </div>
+
         <h1 class="hero-title serif reveal-snappy">总体国家安全观</h1>
         <div class="hero-line reveal-snappy"></div>
         <div class="scroll-arrow mono reveal-snappy">
-          ESTABLISHING_LINK...
+          FETCHING_REMOTE_NODES
           <div class="arrow-icon">v</div>
         </div>
       </div>
@@ -140,11 +150,10 @@ const scrollToSection = (index: number) => {
       <div class="hud-bg">
         <div class="bg-img" :style="{ backgroundImage: `url(${item.img})` }"></div>
         <div class="red-tint"></div>
-        <!-- 🚀 战术叠加图层 -->
         <div class="tactical-meta mono">
           <div class="meta-item">REF_ID: {{ item.id.toUpperCase() }}</div>
-          <div class="meta-item">GRID_COORD: {{ (Math.random()*100).toFixed(2) }}X / {{ (Math.random()*100).toFixed(2) }}Y</div>
-          <div class="meta-item">ENCRYPTION: AES_256_ACTIVE</div>
+          <div class="meta-item">SIGNAL: STABLE_4.2ms</div>
+          <div class="meta-item">ENCRYPTION: AES_256</div>
         </div>
       </div>
       
@@ -154,18 +163,17 @@ const scrollToSection = (index: number) => {
       
       <div class="content-box">
         <div class="status-header mono reveal-snappy">
-          <span class="pulse"></span> NODE_TRACKING_ON_STREAM
+          <span class="pulse"></span> [ STATUS: LINK_SECURE ]
         </div>
         <div class="text-group">
           <div class="en-code mono reveal-snappy">> {{ item.en }}</div>
           <h2 class="title serif">{{ decodedTitles[index+1]?.value || '' }}</h2>
           <div class="divider-hard reveal-snappy"></div>
-          <!-- 🚀 打字机正文 -->
           <p class="description mono">
             {{ item.desc.substring(0, typingIndex[index+1] || 0) }}<span class="blink-cursor">|</span>
           </p>
           <button class="access-btn mono btn-active-effect">
-            > EXEC_RETRIEVE_DART
+            > OPEN_DATA_ARCHIVE
           </button>
         </div>
       </div>
@@ -182,14 +190,16 @@ const scrollToSection = (index: number) => {
   perspective: 1200px;
 }
 
-/* 🚀 侧边预警线 */
-.edge-warning-line {
-  position: fixed; top: 0; bottom: 0; width: 1px;
-  background: rgba(255, 0, 60, 0.1); z-index: 1002;
-  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+/* 🚀 动态波形样式 */
+.waveform-container {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  height: 60px; margin-bottom: 30px;
 }
-.edge-warning-line.left { left: 5px; }
-.edge-warning-line.right { right: 5px; }
+.wave-bar {
+  width: 2px; background: var(--alert-red);
+  transition: height 0.15s ease;
+  box-shadow: 0 0 10px var(--alert-red);
+}
 
 .perspective-grid {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
@@ -211,20 +221,24 @@ const scrollToSection = (index: number) => {
 .bg-img { width: 100%; height: 100%; background-size: cover; background-position: center; filter: grayscale(1) brightness(0.3); }
 .red-tint { position: absolute; inset: 0; background: rgba(255,0,60,0.05); mix-blend-mode: color; }
 
-/* 🚀 战术元数据 */
 .tactical-meta {
   position: absolute; top: 80px; right: 80px;
-  color: var(--alert-red); font-size: 0.65rem; text-align: right;
-  opacity: 0.4; line-height: 2; letter-spacing: 1px;
+  color: var(--alert-red); font-size: 0.6rem; text-align: right;
+  opacity: 0.4; line-height: 2; letter-spacing: 2px;
 }
 
 .content-box { position: relative; z-index: 10; width: 100%; max-width: 1100px; padding: 0 100px; }
 .hero-title { font-size: clamp(2.5rem, 10vw, 6.5rem); font-weight: 900; margin: 0; letter-spacing: 0.1em; }
+.hero-line { width: 60px; height: 2px; background: var(--alert-red); margin: 30px auto; }
 .alert-tag { color: var(--alert-red); font-size: 0.75rem; letter-spacing: 2px; }
 
-.status-header { font-size: 0.65rem; color: var(--alert-red); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.scroll-arrow { margin-top: 40px; font-size: 0.7rem; color: #444; letter-spacing: 3px; }
+.arrow-icon { animation: bounce 2s infinite; margin-top: 10px; font-size: 1.2rem; }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-5px);} 60% {transform: translateY(-3px);} }
+
+.status-header { font-size: 0.65rem; color: var(--alert-red); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
 .pulse { width: 6px; height: 6px; background: var(--alert-red); border-radius: 50%; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } 50% { opacity: 0.3; box-shadow: 0 0 10px var(--alert-red); } 100% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } }
 
 .title { font-size: clamp(2.5rem, 8vw, 5.5rem); color: #fff; line-height: 1.1; margin: 0; height: 1.2em; }
 .divider-hard { width: 80px; height: 2px; background: #fff; margin: 30px 0; }
@@ -233,13 +247,17 @@ const scrollToSection = (index: number) => {
 .blink-cursor { color: var(--alert-red); animation: blink 1s infinite; font-weight: bold; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-.access-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 16px 32px; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; }
+.access-btn { 
+  background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; 
+  padding: 16px 32px; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer;
+  min-height: 48px;
+}
 .access-btn:hover { background: var(--alert-red); border-color: var(--alert-red); }
 
 .watermark { position: absolute; right: 30px; bottom: 30px; font-size: 15vw; font-weight: 900; color: #080808; pointer-events: none; }
 
 @media (max-width: 768px) {
-  .tactical-meta, .hud-corner, .edge-warning-line { display: none; }
+  .tactical-meta, .hud-corner, .waveform-container { display: none; }
   .content-box { padding: 0 25px; }
   .title { font-size: 2.2rem; }
   .description { font-size: 0.9rem; max-width: 100%; height: auto; }
