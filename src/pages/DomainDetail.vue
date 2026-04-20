@@ -17,7 +17,16 @@ onMounted(() => {
   }, 2000);
 });
 
-const domainsData: Record<string, any> = {
+interface DomainData {
+  name: string;
+  img: string;
+  definition: string;
+  keyPoints: string[];
+  challenges: string;
+  chinaPractice: string;
+}
+
+const domainsData: Record<string, DomainData> = {
   political: {
     name: "政治安全",
     img: "https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1200",
