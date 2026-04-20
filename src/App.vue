@@ -8,7 +8,6 @@ const isBooting = ref(true)
 const bootLogs = ref<string[]>([])
 
 // 实时 HUD 逻辑
-const systemTime = ref('')
 const systemCoords = ref('39.9042° N, 116.4074° E')
 const threatLevel = ref('MINIMAL')
 const isMobile = ref(false)
@@ -31,11 +30,6 @@ const startBoot = async () => {
   setTimeout(() => isBooting.value = false, 500)
 }
 
-const updateTime = () => {
-  const now = new Date()
-  systemTime.value = now.toTimeString().split(' ')[0]
-}
-
 const handleMouseMove = (e: MouseEvent) => {
   if (isMobile.value) return
   cursorX.value = e.clientX
@@ -44,29 +38,10 @@ const handleMouseMove = (e: MouseEvent) => {
   isLocked.value = ['BUTTON', 'A', 'EL-CARD'].includes(target.tagName) || !!target.closest('.ppt-nav')
 }
 
-// 物理声效
-const playSound = (type: 'click' | 'hover') => {
-  try {
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
-    const osc = audioCtx.createOscillator()
-    const gain = audioCtx.createGain()
-    osc.connect(gain)
-    gain.connect(audioCtx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(type === 'click' ? 800 : 1200, audioCtx.currentTime)
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1)
-    osc.start()
-    osc.stop(audioCtx.currentTime + 0.1)
-  } catch (e) {}
-}
-
 onMounted(() => {
   startBoot()
   isMobile.value = window.innerWidth <= 768
-  updateTime()
   timeInterval = setInterval(() => {
-    updateTime()
     // 随机微调坐标
     if (Math.random() > 0.8) {
       const lat = (39.9 + Math.random() * 0.1).toFixed(4)
@@ -90,12 +65,11 @@ onUnmounted(() => {
 
 watch(() => route.path, () => {
   transitionName.value = 'glitch'
-  playSound('click')
 })
 </script>
 
 <template>
-  <el-container class="app-container" :style="{ cursor: isMobile ? 'auto' : 'none' }" @click="playSound('hover')">
+  <el-container class="app-container" :style="{ cursor: isMobile ? 'auto' : 'none' }">
     
     <transition name="boot-fade">
       <div v-if="isBooting" class="boot-screen mono">
