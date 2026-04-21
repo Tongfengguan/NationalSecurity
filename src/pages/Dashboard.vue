@@ -1,15 +1,39 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, shallowRef } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
 const activeIndex = ref(0)
 const observer = ref<IntersectionObserver | null>(null)
-const base = import.meta.env.BASE_URL
 
-// 🚀 文本解密函数
-const scrambleText = (targetText: string, duration = 800) => {
+// 🚀 性能优化：使用 shallowRef 存储非响应式配置数据，减少深度监听开销
+const domains = shallowRef([
+  { id: 'political', name: '政治安全', en: 'POLITICAL_SEC', desc: 'CORE_SYSTEM / 政权安全和制度安全是核心，坚持党的领导。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1600' },
+  { id: 'homeland', name: '国土安全', en: 'TERRITORY_SEC', desc: 'BORDER_CONTROL / 国家统一、边境领空领海不受侵犯。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
+  { id: 'military', name: '军事安全', en: 'MILITARY_FORCE', desc: 'IRON_WALL / 强军兴军，铸就捍卫主权与和平的坚固长城。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1600' },
+  { id: 'economic', name: '经济安全', en: 'ECON_STABILITY', desc: 'MARKET_BASE / 国计民生所在，保障产业链与金融体系自主。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600' },
+  { id: 'cultural', name: '文化安全', en: 'CULTURAL_HERITAGE', desc: 'SOUL_DEFENSE / 坚定文化自信，弘扬优秀传统文化。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
+  { id: 'social', name: '社会安全', en: 'SOCIAL_ORDER', desc: 'CIVIL_STABILITY / 防范化解重大风险，维护社会和谐。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200' },
+  { id: 'tech', name: '科技安全', en: 'TECH_FRONTIER', desc: 'INNOVATION_CORE / 实现高水平科技自立自强。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200' },
+  { id: 'cyber', name: '网络安全', en: 'CYBER_SHIELD', desc: 'NET_SOVEREIGNTY / 构筑清朗安全的数字空间防线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200' },
+  { id: 'ecology', name: '生态安全', en: 'ECOLOGY_VITAL', desc: 'GREEN_BARRIER / 绿水青山就是金山银山。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600' },
+  { id: 'resource', name: '资源安全', en: 'RESOURCE_STRAT', desc: 'STRATEGIC_SUPPLY / 保障能源、水、粮食等核心战略资源。', img: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1600' },
+  { id: 'nuclear', name: '核安全', en: 'NUCLEAR_CONTROL', desc: 'SAFE_ENERGY / 坚持最高安全标准，确保万无一失。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
+  { id: 'overseas', name: '海外利益', en: 'OVERSEAS_INTEREST', desc: 'GLOBAL_PROTECT / 中国脚步走到哪里，安全保护就跟到哪里。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200' },
+  { id: 'bio', name: '生物安全', en: 'BIO_DEFENSE', desc: 'LIFE_SECURITY / 防范重大传染病和物种入侵。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1600' },
+  { id: 'space', name: '太空安全', en: 'SPACE_STRAT', desc: 'ORBIT_SOVEREIGNTY / 和平探索与利用太空资源，捍卫战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
+  { id: 'deepsea', name: '深海安全', en: 'DEEP_SEA_MISSION', desc: 'ABYSS_EXPLORE / 提升深海进入与探测能力。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
+  { id: 'polar', name: '极地安全', en: 'POLAR_SECURITY', desc: 'ICE_GOVERNANCE / 积极参与极地国际治理，和平开展科考。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
+])
+
+const decodedTitles = ref<Record<number, any>>({})
+const typingIndex = ref<Record<number, number>>({})
+// 🚀 性能优化：按需加载背景图的状态追踪
+const loadedImages = ref<Record<number, boolean>>({})
+
+// 🚀 性能优化：使用 requestAnimationFrame 优化文本动画
+const scrambleText = (targetText: string, duration = 600) => {
   const chars = '!<>-_\\/[]{}—=+*^?#________'
   const text = ref('')
   let frame = 0
@@ -32,33 +56,11 @@ const scrambleText = (targetText: string, duration = 800) => {
   return text
 }
 
-const domains = [
-  { id: 'political', name: '政治安全', en: 'POLITICAL_SEC', desc: 'CORE_SYSTEM / 政权安全和制度安全是核心，坚持党的领导。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508062878650-88b52897f298?w=1600' },
-  { id: 'homeland', name: '国土安全', en: 'TERRITORY_SEC', desc: 'BORDER_CONTROL / 国家统一、边境领空领海不受侵犯。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1600' },
-  { id: 'military', name: '军事安全', en: 'MILITARY_FORCE', desc: 'IRON_WALL / 强军兴军，铸就捍卫主权与和平的坚固长城。', img: `${base}static/military.jpg` },
-  { id: 'economic', name: '经济安全', en: 'ECON_STABILITY', desc: 'MARKET_BASE / 国计民生所在，保障产业链与金融体系自主。', img: `${base}static/economic.jpg` },
-  { id: 'cultural', name: '文化安全', en: 'CULTURAL_HERITAGE', desc: 'SOUL_DEFENSE / 坚定文化自信，弘扬优秀传统文化。', img: `${base}static/cultural.jpg` },
-  { id: 'social', name: '社会安全', en: 'SOCIAL_ORDER', desc: 'CIVIL_STABILITY / 防范化解重大风险，维护社会和谐。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1600' },
-  { id: 'tech', name: '科技安全', en: 'TECH_FRONTIER', desc: 'INNOVATION_CORE / 实现高水平科技自立自强。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600' },
-  { id: 'cyber', name: '网络安全', en: 'CYBER_SHIELD', desc: 'NET_SOVEREIGNTY / 构筑清朗安全的数字空间防线。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200' },
-  { id: 'ecology', name: '生态安全', en: 'ECOLOGY_VITAL', desc: 'GREEN_BARRIER / 绿水青山就是金山银山。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600' },
-  { id: 'resource', name: '资源安全', en: 'RESOURCE_STRAT', desc: 'STRATEGIC_SUPPLY / 保障能源、水、粮食等核心战略资源。', img: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1600' },
-  { id: 'nuclear', name: '核安全', en: 'NUCLEAR_CONTROL', desc: 'SAFE_ENERGY / 坚持最高安全标准，确保万无一失。', img: `${base}static/nuclear.jpg` },
-  { id: 'overseas', name: '海外利益', en: 'OVERSEAS_INTEREST', desc: 'GLOBAL_PROTECT / 中国脚步走到哪里，安全保护就跟到哪里。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200' },
-  { id: 'bio', name: '生物安全', en: 'BIO_DEFENSE', desc: 'LIFE_SECURITY / 防范重大传染病和物种入侵。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1532187875605-1ef6c237ddc4?w=1600' },
-  { id: 'space', name: '太空安全', en: 'SPACE_STRAT', desc: 'ORBIT_SOVEREIGNTY / 和平探索与利用太空资源，捍卫战略权益。', img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1600' },
-  { id: 'deepsea', name: '深海安全', en: 'DEEP_SEA_MISSION', desc: 'ABYSS_EXPLORE / 提升深海进入与探测能力。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1439246854758-f686a415d9da?w=1600' },
-  { id: 'polar', name: '极地安全', en: 'POLAR_SECURITY', desc: 'ICE_GOVERNANCE / 积极参与极地国际治理，和平开展科考。', img: 'https://images.weserv.nl/?url=https://images.unsplash.com/photo-1473081556163-2a17de81fc97?w=1600' },
-]
-
-const decodedTitles = ref<Record<number, any>>({})
-const typingIndex = ref<Record<number, number>>({})
-
 onMounted(async () => {
   const returnIdx = route.query.fromIndex
   if (returnIdx !== undefined) {
     await nextTick()
-    setTimeout(() => scrollToSection(Number(returnIdx)), 100)
+    setTimeout(() => scrollToSection(Number(returnIdx)), 50)
   }
 
   observer.value = new IntersectionObserver((entries) => {
@@ -67,21 +69,30 @@ onMounted(async () => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible')
         activeIndex.value = index
-        if (index > 0 && index <= domains.length && !decodedTitles.value[index]) {
-          decodedTitles.value[index] = scrambleText(domains[index - 1].name)
+        
+        // 🚀 核心优化：只有在进入视口一定范围时才加载对应图片
+        if (index > 0) {
+          loadedImages.value[index] = true
+        }
+
+        if (index > 0 && index <= domains.value.length && !decodedTitles.value[index]) {
+          decodedTitles.value[index] = scrambleText(domains.value[index - 1].name)
           let charIdx = 0
-          const desc = domains[index - 1].desc
+          const desc = domains.value[index - 1].desc
           const timer = setInterval(() => {
             typingIndex.value[index] = charIdx
             if (charIdx >= desc.length) clearInterval(timer)
             charIdx++
-          }, 20)
+          }, 16)
         }
       } else {
         entry.target.classList.remove('is-visible')
       }
     })
-  }, { threshold: 0.5 })
+  }, { 
+    threshold: 0.15,
+    rootMargin: '200px' // 提前加载下一张，保证观感丝滑
+  })
 
   document.querySelectorAll('.ppt-section').forEach(s => observer.value?.observe(s))
 })
@@ -132,7 +143,14 @@ const scrollToSection = (index: number) => {
       @click="navigateToDomain(item.id, index + 1)"
     >
       <div class="hud-bg">
-        <div class="bg-img" :style="{ backgroundImage: `url(${item.img})` }"></div>
+        <!-- 🚀 性能优化：动态 backgroundImage 避免初始全量加载 -->
+        <div 
+          class="bg-img" 
+          :style="{ 
+            backgroundImage: loadedImages[index + 1] ? `url(${item.img})` : 'none',
+            opacity: loadedImages[index + 1] ? 1 : 0
+          }"
+        ></div>
         <div class="red-tint"></div>
       </div>
       
@@ -146,10 +164,8 @@ const scrollToSection = (index: number) => {
         </div>
         <div class="text-group">
           <div class="en-code mono">> {{ item.en }}</div>
-          <!-- 🚀 核心修复：移除 reveal-snappy 确保布局稳固 -->
           <h2 class="title serif">{{ decodedTitles[index+1]?.value || item.name }}</h2>
           
-          <!-- 🚀 分割线重构：更像真实的 HUD 元素 -->
           <div class="tactical-divider">
             <span class="line"></span>
             <span class="tag mono">DATA_STREAM</span>
@@ -174,12 +190,14 @@ const scrollToSection = (index: number) => {
   scroll-snap-type: y mandatory;
   background: #000; margin: -60px 0 0 0;
   perspective: 1200px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .perspective-grid {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
   background-image: linear-gradient(rgba(255,0,60,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,60,0.1) 1px, transparent 1px);
   background-size: 50px 50px; transform: rotateX(60deg) scale(2.5); transform-origin: bottom; opacity: 0.4;
+  will-change: transform; /* 🚀 开启 GPU 加速 */
 }
 
 .hud-side-nav {
@@ -190,11 +208,22 @@ const scrollToSection = (index: number) => {
 .hud-nav-item { font-size: 0.55rem; color: #222; padding: 5px; cursor: pointer; transition: 0.3s; }
 .hud-nav-item.active { color: var(--alert-red); font-weight: bold; transform: scale(1.2); }
 
-.ppt-section { height: 100vh; width: 100%; position: relative; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; }
+.ppt-section { 
+  height: 100vh; width: 100%; position: relative; 
+  scroll-snap-align: start; display: flex; align-items: center; justify-content: center;
+  contain: layout; /* 🚀 布局隔离，减少重排范围 */
+}
 
-.hud-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.bg-img { width: 100%; height: 100%; background-size: cover; background-position: center; filter: grayscale(1) brightness(0.3); }
-.red-tint { position: absolute; inset: 0; background: rgba(255,0,60,0.05); mix-blend-mode: color; }
+.hud-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: #000; }
+.bg-img { 
+  width: 100%; height: 100%; 
+  background-size: cover; 
+  background-position: center; 
+  filter: grayscale(1) brightness(0.3);
+  transition: opacity 1s ease-in; 
+  will-change: opacity;
+}
+.red-tint { position: absolute; inset: 0; background: rgba(255,0,60,0.05); mix-blend-mode: color; pointer-events: none; }
 
 .content-box { position: relative; z-index: 10; width: 100%; max-width: 1100px; padding: 0 100px; }
 
@@ -207,12 +236,11 @@ const scrollToSection = (index: number) => {
 @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-5px);} 60% {transform: translateY(-3px);} }
 
 .status-header { font-size: 0.65rem; color: var(--alert-red); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-.pulse { width: 6px; height: 6px; background: var(--alert-red); border-radius: 50%; animation: pulse 1.5s infinite; }
+.pulse { width: 6px; height: 6px; background: var(--alert-red); border-radius: 50%; animation: pulse 1.5s infinite; will-change: opacity; }
 @keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } 50% { opacity: 0.4; box-shadow: 0 0 10px var(--alert-red); } 100% { opacity: 1; box-shadow: 0 0 2px var(--alert-red); } }
 
 .title { font-size: clamp(2.5rem, 8vw, 5.5rem); color: #fff; line-height: 1.1; margin: 0; min-height: 1.2em; }
 
-/* 🚀 分割线重构 */
 .tactical-divider {
   display: flex; align-items: center; gap: 15px; margin: 30px 0;
 }
@@ -231,13 +259,13 @@ const scrollToSection = (index: number) => {
 .access-btn { 
   background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; 
   padding: 16px 32px; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.access-btn:hover { background: var(--alert-red); border-color: var(--alert-red); }
+.access-btn:hover { background: var(--alert-red); border-color: var(--alert-red); transform: translateX(5px); }
 
-.watermark { position: absolute; right: 30px; bottom: 30px; font-size: 15vw; font-weight: 900; color: #080808; pointer-events: none; }
+.watermark { position: absolute; right: 30px; bottom: 30px; font-size: 15vw; font-weight: 900; color: #080808; pointer-events: none; opacity: 0.2; }
 
 @media (max-width: 768px) {
-  .hud-corner { display: none; }
   .hud-side-nav { left: 8px; }
   .content-box { padding: 0 25px; }
   .title { font-size: 2.2rem; }

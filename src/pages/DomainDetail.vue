@@ -587,10 +587,11 @@ const goBack = () => {
   box-shadow: 0 0 20px var(--alert-red);
   animation: scanH 8s linear infinite;
   z-index: 5;
+  will-change: transform; /* 🚀 强制 GPU 加速 */
 }
 @keyframes scanH {
-  0% { top: 0; }
-  100% { top: 100%; }
+  0% { transform: translateY(0); }
+  100% { transform: translateY(450px); } /* 与容器高度 450px 匹配 */
 }
 .hud-corners span {
   position: absolute;
